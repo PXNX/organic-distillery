@@ -57,7 +57,7 @@ tests/                   unit and content-integrity tests
 
 - **Mirror**: every page crawled from the homepage, with real German copy, original theme CSS/JS, fonts, images and all 15 recipe PDFs. Internal URLs are rewritten to local paths.
 - **Imagery**: all mirrored images are WebP; the gin bottles have transparent cutouts, botanical drawings appear as framed specimen plates and the essences page includes a botanical gallery. Each essence detail page places a background-removed version of its herb behind the bottle, with a masked golden shimmer running down it. The bottles themselves are cut out from their white studio backgrounds, and each recipe PDF's text is embedded inline behind an expandable panel. The essences pages show a colour-coded SVG aroma wheel with the five flavour families, ten essences and their pairings.
-- **Shop**: order popup, recipe download cards and a recipe library. `SHOP_MOCK_MODE=true` keeps orders local and shows a mock receipt via a native `<dialog>`.
+- **Shop**: a persistent "Shop" action and clearly labelled order buttons open the order popup; recipe download cards and a recipe library are included. `SHOP_MOCK_MODE=true` keeps orders local and shows a mock receipt via a native `<dialog>`.
 - **Forms**: validated contact form and newsletter registration that prepare prefilled emails (no backend required). The age gate persists confirmation in `localStorage`.
 - **PWA**: manifest, icons, minimal service worker and an install hint using `beforeinstallprompt`.
 - **Theme**: follows `prefers-color-scheme` with a footer toggle; ornate light/dark palettes, subtle animations and full `prefers-reduced-motion` support.

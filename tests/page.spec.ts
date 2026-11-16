@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import ContactForm from '../src/lib/ui/ContactForm.svelte';
 import EssenceRecipe from '../src/lib/ui/EssenceRecipe.svelte';
 import FlavorWheel from '../src/lib/ui/FlavorWheel.svelte';
+import ShopButton from '../src/lib/ui/ShopButton.svelte';
 import GinAroma from '../src/lib/ui/GinAroma.svelte';
 import GinProcess from '../src/lib/ui/GinProcess.svelte';
 import MirroredPage from '../src/lib/ui/MirroredPage.svelte';
@@ -45,6 +46,12 @@ describe('MirroredPage', () => {
 		expect(body).toContain('Aroma infundieren');
 		expect(body).toContain('Schonende Destillation');
 		expect(body.match(/gin-process__step/g)).toHaveLength(5);
+	});
+
+	it('renders a clearly labelled shop button', () => {
+		const { body } = render(ShopButton);
+		expect(body).toContain('Shop');
+		expect(body).toContain('Online-Shop öffnen');
 	});
 
 	it('renders inline recipe content with a PDF download', () => {

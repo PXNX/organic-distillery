@@ -33,6 +33,27 @@ export function insertHerbBackdrop(html: string): string {
 	);
 }
 
+/** Turns vague WordPress order links into clearly labelled shop buttons. */
+export function clarifyOrderLinks(html: string): string {
+	return html
+		.replace(
+			/<a class="js-show-order" href="#">Online Bestellung<\/a>/g,
+			'<a class="js-show-order o-button o-button--shop" href="#">Zum Online-Shop</a>'
+		)
+		.replace(
+			/<a class="js-show-order" href="">Bestellen<\/a>/g,
+			'<a class="js-show-order o-button o-button--shop" href="">Jetzt bestellen</a>'
+		)
+		.replace(
+			/<a class="js-show-order" href="">www\.organic-distillery\.com<\/a>/g,
+			'<a class="js-show-order o-button o-button--shop" href="">Online bestellen</a>'
+		)
+		.replace(
+			/<a class="js-show-order" href="mailto:contact@organic-distillery\.com">contact@organic-distillery\.com<\/a>/g,
+			'<a class="js-show-order o-button o-button--shop" href="mailto:contact@organic-distillery.com">Per E-Mail bestellen</a>'
+		);
+}
+
 export interface RecipeLink {
 	href: string;
 	label: string;

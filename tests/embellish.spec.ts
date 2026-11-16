@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
 	DOCUMENTARY_URL,
 	addDocumentaryPress,
+	clarifyOrderLinks,
 	botanicalPlate,
 	essenceName,
 	extractRecipeLink,
@@ -57,6 +58,17 @@ describe('extractRecipeLink', () => {
 
 	it('leaves pages without a recipe untouched', () => {
 		expect(extractRecipeLink('<p>Hello</p>').recipe).toBeNull();
+	});
+});
+
+describe('clarifyOrderLinks', () => {
+	it('labels the order triggers as shop buttons', () => {
+		const html = clarifyOrderLinks(
+			'<a class="js-show-order" href="#">Online Bestellung</a><a class="js-show-order" href="">Bestellen</a>'
+		);
+		expect(html).toContain('Zum Online-Shop');
+		expect(html).toContain('Jetzt bestellen');
+		expect(html.match(/o-button--shop/g)).toHaveLength(2);
 	});
 });
 

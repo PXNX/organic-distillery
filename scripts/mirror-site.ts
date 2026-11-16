@@ -16,6 +16,7 @@ import {
 } from '#lib/mirror/normalize.js';
 import {
 	addDocumentaryPress,
+	clarifyOrderLinks,
 	extractContactForm,
 	extractRecipeLink,
 	insertHerbBackdrop,
@@ -79,7 +80,7 @@ while (queue.length) {
 	const plated = path.startsWith('/essenzen/')
 		? insertHerbBackdrop(wrapBotanicalPlates(rewritten, title))
 		: rewritten;
-	const { html: withoutRecipe, recipe } = extractRecipeLink(plated);
+	const { html: withoutRecipe, recipe } = extractRecipeLink(clarifyOrderLinks(plated));
 	const withoutContact =
 		path === '/kontakt' ? extractContactForm(withoutRecipe).html : withoutRecipe;
 	const html = path === '/ueber-uns' ? addDocumentaryPress(withoutContact) : withoutContact;

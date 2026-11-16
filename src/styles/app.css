@@ -503,10 +503,61 @@ img {
 	}
 }
 
-.install-hint {
+.o-button--shop {
+	border-color: var(--mystic-gold);
+	color: var(--mystic-gold);
+	font-weight: 600;
+}
+
+.o-button--shop::before {
+	content: '◇';
+	margin-right: 0.5em;
+	color: var(--mystic-gold);
+}
+
+.shop-button {
 	position: fixed;
 	right: 1rem;
 	bottom: 1rem;
+	z-index: 4400;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.6rem;
+	padding: 0.8rem 1.1rem;
+	background: var(--mystic-ink);
+	color: var(--mystic-parchment);
+	border: 1px solid var(--mystic-gold);
+	box-shadow: 0 10px 26px rgb(0 0 0 / 30%);
+	font: inherit;
+	font-size: 0.85rem;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition:
+		transform 0.2s ease,
+		background 0.2s ease,
+		color 0.2s ease;
+}
+
+.shop-button:hover {
+	transform: translateY(-3px);
+	background: var(--mystic-gold);
+	color: var(--mystic-ink);
+}
+
+.shop-button__icon {
+	color: var(--mystic-gold);
+	font-size: 1.1rem;
+}
+
+.shop-button:hover .shop-button__icon {
+	color: var(--mystic-ink);
+}
+
+.install-hint {
+	position: fixed;
+	right: 1rem;
+	bottom: 5rem;
 	z-index: 4500;
 	display: flex;
 	align-items: center;
@@ -520,7 +571,7 @@ img {
 }
 
 .install-hint--raised {
-	bottom: 4rem;
+	bottom: 5rem;
 }
 
 .install-hint__ornament {
