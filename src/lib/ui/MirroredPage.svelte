@@ -1,24 +1,33 @@
 <script lang="ts">
-	import AddToBasket from './AddToBasket.svelte';
 	import ContactForm from './ContactForm.svelte';
 	import EssenceRecipe from './EssenceRecipe.svelte';
+	import EssenceFamilies from './EssenceFamilies.svelte';
 	import FlavorWheel from './FlavorWheel.svelte';
-	import HerbBackdrop from './HerbBackdrop.svelte';
+	import ProductPage from './ProductPage.svelte';
 	import GinAroma from './GinAroma.svelte';
 	import GinProcess from './GinProcess.svelte';
 	import Newsletter from './Newsletter.svelte';
 	import RecipeCard from './RecipeCard.svelte';
-	import { botanicalPlates } from '#lib/content/plates.js';
 	import { recipeCards } from '#lib/content/recipes.js';
 	import { site } from '#lib/content/index.js';
-	import { botanicalPlate, essenceName, replaceContactLogo } from '#lib/mirror/embellish.js';
+	import { essenceName, replaceContactLogo } from '#lib/mirror/embellish.js';
+	import { productPage } from '#lib/content/product-page.js';
 	import { productForPath } from '#lib/features/basket.js';
 	import { familyForPath } from '#lib/features/flavor-wheel.js';
 	import { findPage } from '#lib/mirror/site.js';
 
 	let { path }: { path: string } = $props();
 	let page = $derived(findPage(site, path));
-	let plate = $derived(path.startsWith('/essenzen/') ? botanicalPlate(page) : null);
+	let detail = $derived(productPage(page));
+	// The essence overview replaces the mirrored product grid with the aroma compass and family grid.
+	let essenceSplit = $derived.by(() => {
+		if (path !== '/essenzen') return null;
+		const start = html.indexOf('<div class="o-essences');
+		const end = start >= 0 ? html.indexOf('<div class="o-teaser', start) : -1;
+		return start >= 0 && end > start
+			? { before: html.slice(0, start), after: html.slice(end) }
+			: null;
+	});
 	let product = $derived(productForPath(path, page.title));
 	// Render-time clean-up of WordPress leftovers: empty spacer paragraphs and the
 	// dead contact form on the home page (the working form lives on /kontakt).
@@ -30,14 +39,6 @@
 				'<p class="o-contact__cta"><a class="o-button" href="/kontakt">Nachricht schreiben</a></p>'
 			)
 	);
-	let orderPanel = $state<HTMLElement | null>(null);
-
-	// Put the basket panel inside the product card, where the old "Jetzt bestellen" link was.
-	$effect(() => {
-		if (!orderPanel) return;
-		const card = document.querySelector('.site--single .o-product');
-		if (card && orderPanel.parentElement !== card) card.append(orderPanel);
-	});
 </script>
 
 <svelte:head>
@@ -45,16 +46,15 @@
 	<meta name="description" content={page.description} />
 </svelte:head>
 
-{#if plate}
-	<HerbBackdrop src={plate.src} outline={plate.src.replace(/\.webp$/i, '-outline.webp')} />
-{/if}
-
-{@html html}
-
-{#if product}
-	<div class="order-panel" bind:this={orderPanel}>
-		<AddToBasket {product} />
-	</div>
+{#if detail}
+	<ProductPage page={detail} {product} {path} />
+{:else if essenceSplit}
+	{@html essenceSplit.before}
+	<FlavorWheel />
+	<EssenceFamilies />
+	{@html essenceSplit.after}
+{:else}
+	{@html html}
 {/if}
 
 {#if page.recipe}
@@ -80,8 +80,8 @@
 	<GinAroma variant={path.includes('ginnie') ? 'ginnie' : 'ginn'} />
 {/if}
 
-{#if path === '/essenzen' || path.startsWith('/essenzen/')}
-	<FlavorWheel highlight={path === '/essenzen' ? undefined : path} />
+{#if path.startsWith('/essenzen/')}
+	<FlavorWheel highlight={path} />
 {/if}
 
 {#if path === '/' || path === '/kontakt' || path === '/ueber-uns'}
@@ -111,19 +111,6 @@
 {/if}
 
 {#if path === '/essenzen'}
-	<section class="botanical-gallery" aria-labelledby="botanical-gallery-title">
-		<h2 id="botanical-gallery-title">Botanische Studien</h2>
-		<div class="botanical-gallery__grid">
-			{#each botanicalPlates as plate (plate.path)}
-				<a class="botanical-gallery__item" href={plate.path}>
-					<img src={plate.src} alt={plate.latin} loading="lazy" decoding="async" />
-					<span class="botanical-gallery__latin">{plate.latin}</span>
-					<span class="botanical-gallery__name">{plate.name}</span>
-				</a>
-			{/each}
-		</div>
-	</section>
-
 	<section class="recipe-library" aria-labelledby="recipe-library-title">
 		<h2 id="recipe-library-title">Rezeptkarten</h2>
 		<div class="recipe-library__grid">

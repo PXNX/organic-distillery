@@ -1,120 +1,206 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { buildWheel, flavorFamilies, type WheelEssence } from '#lib/features/flavor-wheel.js';
+	import { botanicalPlates } from '#lib/content/plates.js';
+	import { catalog } from '#lib/content/catalog.js';
+	import {
+		aromaCompass,
+		familyForPath,
+		flavorFamilies,
+		type WheelEssence
+	} from '#lib/features/flavor-wheel.js';
 
 	let { highlight }: { highlight?: string | undefined } = $props();
 
-	const wheel = buildWheel();
+	const compass = aromaCompass(600);
+	const drawingFor = (path: string) => botanicalPlates.find((plate) => plate.path === path);
+	const bottleFor = (path: string) => catalog.find((entry) => entry.path === path)?.image ?? null;
+
 	let hovered = $state<string | null>(null);
-	const active = $derived(hovered ?? highlight ?? null);
+	let pinned = $state<string | null>(null);
+	let family = $state<string | null>(null);
+	let lastPointer = 'mouse';
 
-	function open(essence: WheelEssence | undefined) {
-		if (essence) goto(essence.path);
-	}
+	const active = $derived(hovered ?? pinned ?? highlight ?? null);
+	const activeEssence = $derived(
+		active ? flavorFamilies.flatMap((f) => f.essences).find((e) => e.path === active) : undefined
+	);
+	const activeFamily = $derived(active ? familyForPath(active) : undefined);
 
-	function onKey(event: KeyboardEvent, essence: WheelEssence | undefined) {
-		if (event.key !== 'Enter' && event.key !== ' ') return;
+	const isDim = (essence: WheelEssence, familyName: string) =>
+		(family !== null && family !== familyName) || (active !== null && essence.path !== active);
+
+	function onSegmentClick(event: MouseEvent, essence: WheelEssence) {
+		// On touch the first tap previews the essence in the centre, the second opens it.
+		if (lastPointer === 'touch' && pinned !== essence.path) {
+			event.preventDefault();
+			pinned = essence.path;
+			return;
+		}
 		event.preventDefault();
-		open(essence);
+		goto(essence.path);
 	}
 
-	const isDimmed = (essence: WheelEssence | undefined) =>
-		Boolean(active && essence && essence.path !== active);
+	function toggleFamily(name: string) {
+		family = family === name ? null : name;
+		pinned = null;
+	}
 </script>
 
-<section class="flavor-wheel" aria-labelledby="flavor-wheel-title">
-	<span class="flavor-wheel__ornament" aria-hidden="true">◇</span>
-	<h2 id="flavor-wheel-title">Das Aromarad der Essenzen</h2>
-	<p class="flavor-wheel__intro">
-		Fünf Aroma-Familien, zehn Essenzen – jede mit ihrer eigenen sensorischen Signatur und passenden
-		Aromen in Küche und Bar.
-	</p>
+<section class="aroma-compass" aria-labelledby="aroma-compass-title">
+	<header class="aroma-compass__header">
+		<span class="aroma-compass__ornament" aria-hidden="true">◇</span>
+		<h2 id="aroma-compass-title">Das Aromarad</h2>
+		<p>
+			Fünf Aroma-Familien, zehn Essenzen. Fahren Sie über das Rad, um Charakter und passende Aromen
+			zu entdecken – ein Klick öffnet die Essenz.
+		</p>
+	</header>
 
-	<div class="flavor-wheel__layout">
-		<svg
-			class="flavor-wheel__svg"
-			viewBox="0 0 400 400"
-			role="img"
-			aria-label="Aromarad der Organic Distillery Essenzen"
+	<div class="aroma-compass__filters" role="group" aria-label="Nach Aroma-Familie filtern">
+		<button type="button" class:is-active={family === null} onclick={() => (family = null)}
+			>Alle</button
 		>
-			{#each wheel.outer as segment (segment.family)}
-				<path
-					d={segment.path}
-					fill={segment.color}
-					stroke="var(--mystic-parchment)"
-					stroke-width="2"
-				/>
-				<text
-					x={segment.labelX}
-					y={segment.labelY}
-					transform={`rotate(${segment.rotation} ${segment.labelX} ${segment.labelY})`}
-					text-anchor="middle"
-					dominant-baseline="middle"
-					class="flavor-wheel__family"
-					fill="#1d1d1b"
-				>
-					{segment.family}
-				</text>
-			{/each}
+		{#each flavorFamilies as entry (entry.name)}
+			<button
+				type="button"
+				class:is-active={family === entry.name}
+				style={`--chip: ${entry.color}`}
+				aria-pressed={family === entry.name}
+				onclick={() => toggleFamily(entry.name)}
+			>
+				<span aria-hidden="true"></span>{entry.name}
+			</button>
+		{/each}
+	</div>
 
-			{#each wheel.inner as segment (segment.essence?.path)}
-				<path
-					d={segment.path}
-					fill={segment.color}
-					stroke="var(--mystic-parchment)"
-					stroke-width="2"
-					class="flavor-wheel__slice"
-					class:flavor-wheel__slice--dim={isDimmed(segment.essence)}
-					class:flavor-wheel__slice--active={active === segment.essence?.path}
-					role="link"
-					tabindex="0"
-					aria-label={segment.essence?.name ?? ''}
-					onmouseenter={() => segment.essence && (hovered = segment.essence.path)}
-					onmouseleave={() => (hovered = null)}
-					onfocus={() => segment.essence && (hovered = segment.essence.path)}
-					onblur={() => (hovered = null)}
-					onclick={() => open(segment.essence)}
-					onkeydown={(event) => onKey(event, segment.essence)}
-				/>
-				{#if segment.essence}
-					<text
-						x={segment.labelX}
-						y={segment.labelY}
-						transform={`rotate(${segment.rotation} ${segment.labelX} ${segment.labelY})`}
-						text-anchor="middle"
-						dominant-baseline="middle"
-						class="flavor-wheel__essence"
-						class:flavor-wheel__essence--dim={isDimmed(segment.essence)}
+	<div class="aroma-compass__stage">
+		<div class="aroma-compass__wheel">
+			<div class="aroma-compass__sheen" aria-hidden="true"></div>
+			<svg
+				viewBox={`0 0 ${compass.size} ${compass.size}`}
+				role="group"
+				aria-label="Aromarad der Organic Distillery Essenzen"
+				onpointerdown={(event) => (lastPointer = event.pointerType)}
+			>
+				<defs>
+					{#each compass.familyArcs as arc, index (arc.family.name)}
+						<path id={`compass-family-${index}`} d={arc.label} />
+					{/each}
+					{#each compass.segments as segment, index (segment.essence.path)}
+						<path id={`compass-essence-${index}`} d={segment.label} />
+					{/each}
+				</defs>
+
+				{#each compass.familyArcs as arc, index (arc.family.name)}
+					<g
+						class="compass__family"
+						class:is-dim={family !== null && family !== arc.family.name}
+						role="button"
+						tabindex="-1"
+						aria-label={`${arc.family.name} filtern`}
+						onclick={() => toggleFamily(arc.family.name)}
+						onkeydown={(event) => event.key === 'Enter' && toggleFamily(arc.family.name)}
 					>
-						{segment.essence.name}
-					</text>
+						<path d={arc.path} style={`fill: ${arc.family.color}`} />
+						<text>
+							<textPath href={`#compass-family-${index}`} startOffset="50%" text-anchor="middle"
+								>{arc.family.name}</textPath
+							>
+						</text>
+					</g>
+				{/each}
+
+				{#each compass.segments as segment, index (segment.essence.path)}
+					{@const drawing = drawingFor(segment.essence.path)}
+					<a
+						href={segment.essence.path}
+						class="compass__segment"
+						class:is-dim={isDim(segment.essence, segment.family.name)}
+						class:is-active={active === segment.essence.path}
+						aria-label={`${segment.essence.name}: ${segment.essence.pairings.join(', ')}`}
+						onmouseenter={() => (hovered = segment.essence.path)}
+						onmouseleave={() => (hovered = null)}
+						onfocus={() => (hovered = segment.essence.path)}
+						onblur={() => (hovered = null)}
+						onclick={(event) => onSegmentClick(event, segment.essence)}
+					>
+						<path d={segment.path} style={`fill: ${segment.family.light}`} />
+						{#if drawing}
+							<image
+								href={drawing.src}
+								x={segment.x - 34}
+								y={segment.y - 30}
+								width="68"
+								height="68"
+								preserveAspectRatio="xMidYMid meet"
+							/>
+						{/if}
+						<text class="compass__name">
+							<textPath href={`#compass-essence-${index}`} startOffset="50%" text-anchor="middle"
+								>{segment.essence.name}</textPath
+							>
+						</text>
+					</a>
+				{/each}
+
+				<circle
+					class="compass__hub"
+					cx={compass.center}
+					cy={compass.center}
+					r={compass.rings.essence - 6}
+				/>
+			</svg>
+
+			<div class="aroma-compass__center" aria-live="polite">
+				{#if activeEssence && activeFamily}
+					{#key activeEssence.path}
+						<div class="compass-card" style={`--family: ${activeFamily.color}`}>
+							{#if bottleFor(activeEssence.path)}
+								<img src={bottleFor(activeEssence.path)} alt="" />
+							{/if}
+							<div>
+								<span class="compass-card__family">{activeFamily.name}</span>
+								<strong>{activeEssence.name}</strong>
+								<span class="compass-card__pairs">{activeEssence.pairings.join(' · ')}</span>
+								<a href={activeEssence.path}>Zur Essenz →</a>
+							</div>
+						</div>
+					{/key}
+				{:else}
+					<div class="compass-card compass-card--idle">
+						<span class="compass-card__glyph" aria-hidden="true">◇</span>
+						<strong>Wählen Sie ein Aroma</strong>
+					</div>
 				{/if}
-			{/each}
+			</div>
+		</div>
 
-			<circle cx="200" cy="200" r="72" fill="var(--mystic-parchment)" stroke="var(--mystic-gold)" />
-			<text x="200" y="182" text-anchor="middle" class="flavor-wheel__center-small"
-				>Das Organic Distillery</text
-			>
-			<text x="200" y="202" text-anchor="middle" class="flavor-wheel__center">Aromarad</text>
-			<text x="200" y="222" text-anchor="middle" class="flavor-wheel__center-small"
-				>der ersten Essenzen</text
-			>
-		</svg>
-
-		<div class="flavor-wheel__legend">
-			{#each flavorFamilies as family (family.name)}
-				<div class="flavor-wheel__legend-group">
-					<h3><span style={`background:${family.color}`}></span>{family.name}</h3>
+		<ol class="aroma-compass__legend">
+			{#each flavorFamilies as entry (entry.name)}
+				<li
+					class:is-dim={family !== null && family !== entry.name}
+					style={`--family: ${entry.color}`}
+				>
+					<h3>{entry.name}</h3>
 					<ul>
-						{#each family.essences as essence (essence.path)}
-							<li class:flavor-wheel__legend-item--active={active === essence.path}>
-								<a href={essence.path}>{essence.name}</a>
-								<span>{essence.pairings.join(' · ')}</span>
+						{#each entry.essences as essence (essence.path)}
+							<li>
+								<a
+									href={essence.path}
+									class:is-active={active === essence.path}
+									onmouseenter={() => (hovered = essence.path)}
+									onmouseleave={() => (hovered = null)}
+									onfocus={() => (hovered = essence.path)}
+									onblur={() => (hovered = null)}
+								>
+									<span>{essence.name}</span>
+									<small>{essence.pairings.join(' · ')}</small>
+								</a>
 							</li>
 						{/each}
 					</ul>
-				</div>
+				</li>
 			{/each}
-		</div>
+		</ol>
 	</div>
 </section>

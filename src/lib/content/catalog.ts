@@ -20,7 +20,7 @@ export const catalog: CatalogEntry[] = (() => {
 		seen.add(product.id);
 		entries.push({
 			product,
-			path: page.path.replace(/-2$/, ''),
+			path: page.path.startsWith('/gins/') ? page.path.replace(/-2$/, '') : page.path,
 			image: page.html.match(bottleImage)?.[1] ?? null,
 			group: page.path.startsWith('/gins/') ? 'Gin' : 'Essenz'
 		});

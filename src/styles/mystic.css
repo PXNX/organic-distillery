@@ -237,7 +237,7 @@ body {
 }
 
 .footer__seals img:hover {
-	transform: translateY(-4px) rotate(-6deg);
+	transform: rotate(-8deg);
 	opacity: 1;
 }
 
@@ -405,7 +405,6 @@ body .o-button:hover {
 .o-age-check input[type='submit']:hover {
 	background: var(--mystic-gold);
 	color: var(--mystic-ink);
-	transform: translateY(-2px);
 }
 
 .o-age-check.is-leaving {
@@ -432,7 +431,9 @@ body .o-button:hover {
 	.site h4::before,
 	.site h4::after {
 		content: '◇';
+		display: inline-block;
 		color: var(--mystic-gold);
+		transition: transform 0.25s ease;
 	}
 }
 

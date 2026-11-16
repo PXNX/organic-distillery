@@ -183,3 +183,63 @@ export function buildWheel(families: WheelFamily[] = flavorFamilies): WheelGeome
 
 	return { outer, inner };
 }
+
+/** An arc used as a textPath; runs counter-clockwise on the lower half so text stays upright. */
+export function labelArc(cx: number, cy: number, r: number, start: number, end: number): string {
+	const mid = (((start + end) / 2) % 360 + 360) % 360;
+	const flip = mid > 0 && mid < 180;
+	const from = polar(cx, cy, r, flip ? end : start);
+	const to = polar(cx, cy, r, flip ? start : end);
+	return `M ${from.x} ${from.y} A ${r} ${r} 0 0 ${flip ? 0 : 1} ${to.x} ${to.y}`;
+}
+
+export interface CompassFamily {
+	family: WheelFamily;
+	path: string;
+	label: string;
+}
+
+export interface CompassSegment {
+	family: WheelFamily;
+	essence: WheelEssence;
+	path: string;
+	label: string;
+	/** Centre of the drawing thumbnail inside the segment. */
+	x: number;
+	y: number;
+}
+
+/** Geometry for the aroma compass: a family ring around ten essence segments. */
+export function aromaCompass(size = 600, families: WheelFamily[] = flavorFamilies) {
+	const c = size / 2;
+	const step = 360 / families.length;
+	const start = -90 - step / 2;
+	const rings = { outer: c - 4, family: c - 42, essence: c * 0.52 };
+	const familyArcs: CompassFamily[] = [];
+	const segments: CompassSegment[] = [];
+
+	families.forEach((family, index) => {
+		const a0 = start + index * step;
+		const a1 = a0 + step;
+		familyArcs.push({
+			family,
+			path: sectorPath(c, c, rings.outer, rings.family + 2, a0 + 0.6, a1 - 0.6),
+			label: labelArc(c, c, (rings.outer + rings.family) / 2, a0, a1)
+		});
+		family.essences.forEach((essence, essenceIndex) => {
+			const s0 = a0 + essenceIndex * (step / 2);
+			const s1 = s0 + step / 2;
+			const mid = polar(c, c, (rings.family + rings.essence) / 2 + 6, (s0 + s1) / 2);
+			segments.push({
+				family,
+				essence,
+				path: sectorPath(c, c, rings.family - 2, rings.essence, s0 + 0.5, s1 - 0.5),
+				label: labelArc(c, c, rings.family - 16, s0, s1),
+				x: mid.x,
+				y: mid.y
+			});
+		});
+	});
+
+	return { size, center: c, rings, familyArcs, segments };
+}

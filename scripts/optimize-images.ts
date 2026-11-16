@@ -2,7 +2,10 @@
  * Converts mirrored imagery to WebP and cuts the bottles out of their white
  * studio backgrounds. Run after `bun run mirror` (or via `bun run images`).
  */
+import { readdir } from 'node:fs/promises';
+import { PDFParse } from 'pdf-parse';
 import sharp from 'sharp';
+import { cutoutBottle } from './bottle-cutout.js';
 
 const SITE_JSON = 'src/lib/content/site.json';
 const force = process.env.FORCE === '1';
@@ -39,104 +42,47 @@ const DRAWING_CUTOUTS = [
 const luminance = (r: number, g: number, b: number) => 0.299 * r + 0.587 * g + 0.114 * b;
 const saturation = (r: number, g: number, b: number) => Math.max(r, g, b) - Math.min(r, g, b);
 
-/**
- * Cuts a bottle out using a per-row silhouette: the first and last non-white
- * pixel of each row define the object, so white labels stay fully intact.
- */
-async function cutout(src: string, dest: string): Promise<void> {
-	const { data, info } = await sharp(src).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
-	const { width: w, height: h, channels } = info;
-	const pixels = w * h;
-	const alpha = Buffer.alloc(pixels);
-	const pixel = (x: number, y: number) => {
-		const o = (y * w + x) * channels;
-		return [data[o] ?? 0, data[o + 1] ?? 0, data[o + 2] ?? 0] as const;
-	};
-	// Dark glass, saturated cork/amber, and label ink all count as the object.
-	const isObject = (x: number, y: number) => {
-		const [r, g, b] = pixel(x, y);
-		const lum = luminance(r, g, b);
-		const sat = saturation(r, g, b);
-		return (lum < 150 && sat < 95) || (sat >= 22 && lum < 235);
-	};
-	const isPaper = (x: number, y: number) => {
-		const [r, g, b] = pixel(x, y);
-		return luminance(r, g, b) > 205 && saturation(r, g, b) < 20;
-	};
+/** Recipe PDFs embed the essence bottles larger than the mirrored product shots. */
+const ESSENCE_PDF: Record<string, string> = {
+	minze: 'Grün_Arg-Minze',
+	eucalyptus: 'Grün_Eucalyptus',
+	'rosen-monarde': 'Floral_Rosenmonarde',
+	koriander: 'Floral_Koriander',
+	'silber-wermut': 'Herbal_Silber-Wermut',
+	cistrose: 'Herbal_Cistrose',
+	mandarine: 'Zitrus_Mandarine',
+	'zitronen-verbena': 'Zitrus_Verbena',
+	brombeer: 'Fruchtig_Brombeere',
+	vogelbeere: 'Fruchtig_Vogelbeere'
+};
 
-	const rowLeft = new Int32Array(h).fill(w);
-	const rowRight = new Int32Array(h).fill(-1);
-	const leftAt = (y: number) => rowLeft[y] ?? w;
-	const rightAt = (y: number) => rowRight[y] ?? -1;
-	for (let y = 0; y < h; y++) {
-		for (let x = 0; x < w; x++) {
-			if (!isObject(x, y)) continue;
-			if (x < leftAt(y)) rowLeft[y] = x;
-			if (x > rightAt(y)) rowRight[y] = x;
-		}
-	}
+const pdfFiles = (await readdir('static/media/2017/10')).filter((name) => name.endsWith('.pdf'));
 
-	let maxWidth = 0;
-	for (let y = 0; y < h; y++) {
-		if (rightAt(y) > leftAt(y)) maxWidth = Math.max(maxWidth, rightAt(y) - leftAt(y));
-	}
-	const wide = Array.from({ length: h }, (_, y) =>
-		rightAt(y) - leftAt(y) >= maxWidth * 0.6 ? y : -1
-	).filter((y) => y >= 0);
-	const firstWide = wide[0] ?? 0;
-	const lastWide = wide[wide.length - 1] ?? h - 1;
-	const median = (values: number[]) => {
-		const sorted = [...values].sort((a, b) => a - b);
-		return sorted[Math.floor(sorted.length / 2)] ?? 0;
-	};
-	// Bottle glass is roughly straight; use its median edges through the white label.
-	const bodyLeft = median(wide.map((y) => leftAt(y)));
-	const bodyRight = median(wide.map((y) => rightAt(y)));
-
-	for (let y = 0; y < h; y++) {
-		let left = leftAt(y);
-		let right = rightAt(y);
-		if (y >= firstWide && y <= lastWide) {
-			left = bodyLeft;
-			right = bodyRight;
-		}
-		const hasObject = rightAt(y) > leftAt(y);
-		const inBottle = (hasObject || (y >= firstWide && y <= lastWide)) && y <= lastWide + 4;
-		for (let x = 0; x < w; x++) {
-			const i = y * w + x;
-			if (!inBottle || left >= right || x < left || x > right) {
-				alpha[i] = 0;
-				continue;
-			}
-			// Drop pale halo pixels hugging the silhouette edge.
-			const nearEdge = x - left <= 2 || right - x <= 2;
-			alpha[i] = nearEdge && isPaper(x, y) ? 0 : 255;
-		}
-	}
-
-	const blurred = await sharp(alpha, { raw: { width: w, height: h, channels: 1 } })
-		.blur(0.6)
-		.raw()
-		.toBuffer();
-	const stride = blurred.length / pixels;
-	const softAlpha = Buffer.from(
-		Array.from({ length: pixels }, (_, i) => blurred[i * stride] ?? 255)
+/** Returns the tall bottle image embedded in an essence's recipe PDF, if any. */
+async function pdfBottle(relative: string): Promise<Buffer | null> {
+	const key = relative.match(/organicdistillery-(.+)_front_FIN_schatten/)?.[1];
+	const pdfName = key ? ESSENCE_PDF[key] : undefined;
+	if (!pdfName) return null;
+	const file = pdfFiles.find((name) => name.normalize('NFC').includes(pdfName.normalize('NFC')));
+	if (!file) return null;
+	const parser = new PDFParse(
+		new Uint8Array(await Bun.file(`static/media/2017/10/${file}`).arrayBuffer())
 	);
-
-	const rgba = Buffer.alloc(pixels * 4);
-	for (let i = 0; i < pixels; i++) {
-		rgba[i * 4] = data[i * channels] ?? 0;
-		rgba[i * 4 + 1] = data[i * channels + 1] ?? 0;
-		rgba[i * 4 + 2] = data[i * channels + 2] ?? 0;
-		rgba[i * 4 + 3] = softAlpha[i] ?? 255;
+	const images = await parser.getImage({ imageBuffer: true, imageThreshold: 50 });
+	await parser.destroy();
+	for (const page of images.pages ?? []) {
+		for (const image of page.images ?? []) {
+			if (image.data && image.height > image.width * 2.5) return Buffer.from(image.data);
+		}
 	}
+	return null;
+}
 
-	await sharp(rgba, { raw: { width: w, height: h, channels: 4 } })
-		.resize(w * 4, h * 4, { kernel: 'mks2021' })
-		.sharpen({ sigma: 0.6, m1: 0.6, m2: 1.4 })
-		.webp({ quality: 88, effort: 5, alphaQuality: 92 })
-		.toFile(dest);
-	console.log(`cutout ${src} -> ${dest}`);
+async function cutout(relative: string, dest: string): Promise<void> {
+	const fromPdf = await pdfBottle(relative);
+	if (fromPdf) await cutoutBottle(fromPdf, dest, { scale: 3 });
+	else await cutoutBottle(`static/${relative}`, dest, { scale: 4 });
+	console.log(`cutout ${fromPdf ? 'pdf' : relative} -> ${dest}`);
 }
 
 /** Removes the white paper from a botanical drawing, keeping the pencil lines. */
@@ -279,7 +225,7 @@ for (const relative of sources) {
 	const source = `static/${relative}`;
 	if (!(await Bun.file(source).exists())) continue;
 	const dest = `static/${relative.replace(/\.(jpg|jpeg|png)$/i, '.webp')}`;
-	if (CUTOUTS.includes(relative)) await cutout(source, dest);
+	if (CUTOUTS.includes(relative)) await cutout(relative, dest);
 	else if (DRAWING_CUTOUTS.includes(relative)) await cutoutDrawing(source, dest);
 	else if (force || !(await Bun.file(dest).exists())) await convert(source, dest);
 }

@@ -81,7 +81,7 @@ body .add-to-basket__button:hover {
 }
 
 body .add-to-basket__button:active {
-	transform: scale(0.98);
+	filter: brightness(0.92);
 }
 
 body .add-to-basket__button:disabled {
@@ -484,7 +484,7 @@ body .basket a.catalog-item__name:hover {
 }
 
 .catalog-item__add:active {
-	transform: scale(0.9);
+	filter: brightness(0.9);
 }
 
 .catalog-item__add.is-added {

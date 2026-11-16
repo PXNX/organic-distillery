@@ -14,7 +14,7 @@
 /* "Paper" surfaces stay light in dark mode, so their text must stay dark too.
    Redefining the tokens locally also wins over the global dark-mode text rule. */
 [data-theme='dark']
-	:is(.botanical-gallery, .botanical-plate, .recipe-card, .o-product__img-wrapper) {
+	:is(.botanical-gallery, .botanical-plate, .recipe-card) {
 	--text: #1d1d1b;
 	--muted: #6b5636;
 	color: var(--text);
@@ -90,9 +90,6 @@
 	transition: transform 0.3s ease;
 }
 
-.o-products .o-product:hover {
-	transform: translateY(-4px);
-}
 
 .o-products .o-product img {
 	transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.25, 1.2);
@@ -100,14 +97,6 @@
 
 .o-products .o-product:hover img {
 	transform: translateY(-4px) rotate(-2deg);
-}
-
-/* Light-theme cut-outs still carry white pixels around the shoulders. */
-:root:not([data-theme='dark'])
-	:is(.o-products, .o-product__img-wrapper, .aroma-profile__bottle)
-	img:is([src*='Ginn_'], [src*='Ginnie_']) {
-	mix-blend-mode: multiply;
-	filter: none;
 }
 
 /* Text laid over photos gets a scrim and the site's serif. */
@@ -186,18 +175,6 @@
 		opacity 0.2s ease;
 }
 
-/* Essence detail pages: the herb drawing backdrop is a soft watermark, not a second image. */
-.herb-backdrop {
-	opacity: 0.16;
-	-webkit-mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%);
-	mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%);
-}
-
-[data-theme='dark'] .herb-backdrop {
-	opacity: 0.08;
-	filter: invert(1);
-}
-
 /* Footer theme switch: the icon turns over on change. */
 .footer__theme-icon {
 	display: inline-block;
@@ -232,7 +209,6 @@ body .o-button::after {
 }
 
 body .o-button:hover {
-	transform: translateY(-2px);
 	box-shadow: 0 8px 20px rgb(0 0 0 / 18%);
 }
 
@@ -242,7 +218,7 @@ body .o-button:hover::after {
 }
 
 body .o-button:active {
-	transform: translateY(0) scale(0.98);
+	box-shadow: none;
 }
 
 /* Reveal-on-scroll for sections (class set by the layout's observer). */
@@ -265,7 +241,8 @@ body .o-button:active {
 		transform: none;
 	}
 
-	.site--single .o-product__img-wrapper > img,
+	.stage__bottle,
+	.stage__shimmer,
 	.basket__ornament,
 	.recipe-section__ornament {
 		animation: none;

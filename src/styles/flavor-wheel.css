@@ -1,192 +1,571 @@
-.flavor-wheel {
-	max-width: 72rem;
-	margin: 4rem auto;
-	padding: 3rem 1.5rem;
+/* The aroma compass: family ring, ten essence segments with their drawings,
+   a live centre card and a legend that doubles as the accessible list. */
+
+.aroma-compass {
+	max-width: 76rem;
+	margin: 3rem auto;
+	padding: clamp(2rem, 4vw, 3.5rem) 1.5rem;
+	box-sizing: border-box;
+}
+
+.aroma-compass__header {
+	max-width: 40rem;
+	margin: 0 auto 1.5rem;
 	text-align: center;
 }
 
-.flavor-wheel__ornament {
+.aroma-compass__ornament {
+	display: inline-block;
 	color: var(--mystic-gold);
 	font-size: 1.5rem;
+	animation: ornament-shimmer 5s ease-in-out infinite;
 }
 
-.flavor-wheel__intro {
-	max-width: 40rem;
-	margin: 0.75rem auto 2.5rem;
-	line-height: 1.6;
+.aroma-compass__header h2 {
+	margin: 0.4rem 0 0.75rem;
+	font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+}
+
+.aroma-compass__header p {
+	margin: 0;
+	line-height: 1.7;
 	color: var(--muted);
 }
 
-.flavor-wheel__layout {
+.aroma-compass__filters {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.5rem;
+	margin-bottom: 2rem;
+}
+
+.aroma-compass__filters button {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.45rem;
+	padding: 0.45rem 0.9rem;
+	background: transparent;
+	border: 1px solid var(--hairline);
+	color: var(--muted);
+	font: inherit;
+	font-size: 0.72rem;
+	letter-spacing: 0.16em;
+	cursor: pointer;
+	transition:
+		border-color 0.2s ease,
+		color 0.2s ease,
+		background 0.2s ease;
+}
+
+.aroma-compass__filters button span {
+	width: 0.6rem;
+	height: 0.6rem;
+	border-radius: 50%;
+	background: var(--chip);
+}
+
+.aroma-compass__filters button:hover,
+.aroma-compass__filters button.is-active {
+	border-color: var(--mystic-gold);
+	color: var(--text);
+	background: color-mix(in srgb, var(--mystic-gold) 10%, transparent);
+}
+
+.aroma-compass__stage {
 	display: grid;
-	grid-template-columns: minmax(20rem, 1fr) minmax(18rem, 1fr);
-	gap: 3rem;
+	grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+	gap: clamp(2rem, 4vw, 3.5rem);
 	align-items: center;
 }
 
-@keyframes wheel-arrive {
-	from {
-		opacity: 0;
-		transform: rotate(-10deg) scale(0.94);
-	}
-	to {
-		opacity: 1;
-		transform: none;
-	}
-}
-
-@keyframes wheel-ring-glow {
-	0%,
-	100% {
-		stroke-width: 1;
-		opacity: 0.6;
-	}
-	50% {
-		stroke-width: 2.5;
-		opacity: 1;
-	}
-}
-
-.flavor-wheel__svg {
+.aroma-compass__wheel {
+	position: relative;
 	width: 100%;
-	max-width: 30rem;
-	height: auto;
+	max-width: 40rem;
+	aspect-ratio: 1;
 	margin: 0 auto;
-	filter: drop-shadow(0 14px 26px var(--shadow));
-	transform-origin: center;
-	animation: wheel-arrive 0.9s cubic-bezier(0.2, 0.9, 0.25, 1.2) both;
 }
 
-.flavor-wheel__svg > circle {
-	animation: wheel-ring-glow 5s ease-in-out infinite;
+.aroma-compass__wheel svg {
+	position: relative;
+	z-index: 1;
+	display: block;
+	width: 100%;
+	height: 100%;
+	overflow: visible;
 }
 
-.flavor-wheel__family {
+/* A slow golden glint travelling around the rim. */
+.aroma-compass__sheen {
+	position: absolute;
+	inset: -1.5%;
+	z-index: 0;
+	border-radius: 50%;
+	background: conic-gradient(
+		from 0deg,
+		transparent 0 78%,
+		rgb(201 168 106 / 0%) 80%,
+		rgb(244 224 176 / 90%) 86%,
+		rgb(201 168 106 / 0%) 92%,
+		transparent 94% 100%
+	);
+	-webkit-mask: radial-gradient(circle, transparent 66%, #000 67%, #000 70%, transparent 71%);
+	mask: radial-gradient(circle, transparent 66%, #000 67%, #000 70%, transparent 71%);
+	animation: compass-sheen 9s linear infinite;
+}
+
+.compass__family {
+	cursor: pointer;
+	transition: opacity 0.3s ease;
+}
+
+.compass__family path {
+	stroke: var(--page-bg);
+	stroke-width: 2;
+}
+
+.compass__family text {
 	font-family: 'Ductus W03 Medium', Georgia, serif;
-	font-size: 11px;
-	letter-spacing: 0.08em;
-}
-
-.flavor-wheel__essence {
-	font-family: Georgia, serif;
-	font-size: 8.5px;
-	fill: #2a2420;
+	font-size: 17px;
+	letter-spacing: 0.18em;
+	fill: #1d1d1b;
+	dominant-baseline: central;
 	pointer-events: none;
 }
 
-.flavor-wheel__slice {
+.compass__segment {
 	cursor: pointer;
-	transform-origin: 200px 200px;
+	outline: none;
 	transition:
-		opacity 0.25s ease,
-		transform 0.3s cubic-bezier(0.2, 0.9, 0.25, 1.2);
+		opacity 0.3s ease,
+		filter 0.3s ease;
 }
 
-.flavor-wheel__slice:hover {
-	transform: scale(1.018);
+.compass__segment path {
+	stroke: var(--page-bg);
+	stroke-width: 2;
+	transition: stroke 0.25s ease;
 }
 
-.flavor-wheel__slice--dim,
-.flavor-wheel__essence--dim {
-	opacity: 0.35;
+.compass__segment image {
+	opacity: 0.85;
+	mix-blend-mode: multiply;
+	transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.25, 1.2);
+	transform-box: fill-box;
+	transform-origin: center;
 }
 
-.flavor-wheel__slice--active {
+.compass__name {
+	font-family: 'Ductus W03 Medium', Georgia, serif;
+	font-size: 15px;
+	fill: #2a2420;
+	dominant-baseline: central;
+	pointer-events: none;
+}
+
+.compass__segment.is-active path,
+.compass__segment:focus-visible path {
 	stroke: var(--mystic-gold);
-	stroke-width: 3;
+	stroke-width: 4;
 }
 
-.flavor-wheel__center {
-	font-family: 'Ductus W03 Medium', Georgia, serif;
-	font-size: 19px;
-	fill: var(--text);
+.compass__segment.is-active image {
+	transform: scale(1.12) rotate(-4deg);
 }
 
-.flavor-wheel__center-small {
-	font-family: Georgia, serif;
-	font-size: 10px;
-	fill: var(--muted);
+.compass__segment.is-dim,
+.compass__family.is-dim {
+	opacity: 0.3;
+	filter: saturate(0.4);
 }
 
-.flavor-wheel__legend {
+.compass__hub {
+	fill: var(--panel-bg);
+	stroke: var(--mystic-gold);
+	stroke-width: 1.5;
+}
+
+.aroma-compass__center {
+	position: absolute;
+	inset: 28%;
+	z-index: 2;
 	display: grid;
-	gap: 1.25rem;
-	text-align: left;
-	animation: rise-in 0.5s ease-out 0.15s both;
+	place-items: center;
+	pointer-events: none;
 }
 
-.flavor-wheel__legend li {
-	animation: rise-in 0.4s ease-out both;
-}
-
-.flavor-wheel__legend li:nth-child(1) {
-	animation-delay: 0.2s;
-}
-.flavor-wheel__legend li:nth-child(2) {
-	animation-delay: 0.26s;
-}
-
-.flavor-wheel__legend-group h3 {
-	display: flex;
+.compass-card {
+	display: grid;
+	grid-template-columns: auto 1fr;
 	align-items: center;
-	gap: 0.6rem;
-	margin-bottom: 0.5rem;
-	font-size: 0.8rem;
-	letter-spacing: 0.14em;
+	gap: 0.75rem;
+	width: 100%;
+	text-align: left;
+	animation: compass-card-in 0.3s ease-out both;
 }
 
-.flavor-wheel__legend-group h3::before,
-.flavor-wheel__legend-group h3::after {
-	display: none;
+.compass-card img {
+	height: clamp(5rem, 14vw, 9rem);
+	width: auto;
+	filter: drop-shadow(0 8px 10px rgb(0 0 0 / 25%));
 }
 
-.flavor-wheel__legend-group h3 span {
-	width: 0.9rem;
-	height: 0.9rem;
-	border: 1px solid var(--hairline);
+.compass-card > div {
+	display: grid;
+	gap: 0.25rem;
+	min-width: 0;
 }
 
-.flavor-wheel__legend ul {
-	padding: 0;
-	margin: 0;
-	list-style: none;
+.compass-card__family {
+	justify-self: start;
+	padding: 0.15rem 0.45rem;
+	background: var(--mystic-ink);
+	color: var(--family);
+	font-size: 0.6rem;
+	letter-spacing: 0.16em;
 }
 
-.flavor-wheel__legend li {
-	padding: 0.35rem 0;
-	border-bottom: 1px solid var(--hairline);
-}
-
-.flavor-wheel__legend li a {
+.compass-card strong {
 	font-family: 'Ductus W03 Medium', Georgia, serif;
-	font-size: 1rem;
+	font-weight: 400;
+	font-size: clamp(1rem, 2.2vw, 1.35rem);
+	line-height: 1.15;
 	color: var(--text);
+}
+
+.compass-card__pairs {
+	font-size: 0.72rem;
+	line-height: 1.4;
+	color: var(--muted);
+}
+
+.compass-card a {
+	pointer-events: auto;
+	font-size: 0.72rem;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var(--mystic-gold);
 	text-decoration: none;
 }
 
-.flavor-wheel__legend li a:hover {
-	color: var(--mystic-gold);
+.compass-card--idle {
+	grid-template-columns: 1fr;
+	justify-items: center;
+	text-align: center;
 }
 
-.flavor-wheel__legend li span {
-	display: block;
+.compass-card__glyph {
+	font-size: 2.2rem;
+	color: var(--mystic-gold);
+	animation: ornament-shimmer 4s ease-in-out infinite;
+}
+
+/* Legend */
+.aroma-compass__legend {
+	display: grid;
+	gap: 1rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.aroma-compass__legend > li {
+	padding-left: 1rem;
+	border-left: 3px solid var(--family);
+	transition: opacity 0.3s ease;
+}
+
+.aroma-compass__legend > li.is-dim {
+	opacity: 0.35;
+}
+
+.aroma-compass__legend h3 {
+	margin: 0 0 0.35rem;
+	font-family: inherit;
+	font-size: 0.7rem;
+	letter-spacing: 0.2em;
+	color: var(--muted);
+}
+
+.aroma-compass__legend h3::before,
+.aroma-compass__legend h3::after {
+	content: none !important;
+}
+
+.aroma-compass__legend ul {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.5rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.aroma-compass__legend a {
+	display: grid;
+	gap: 0.1rem;
+	padding: 0.5rem 0.65rem;
+	border: 1px solid transparent;
+	color: var(--text);
+	text-decoration: none;
+	transition:
+		border-color 0.2s ease,
+		background 0.2s ease;
+}
+
+.aroma-compass__legend a:hover,
+.aroma-compass__legend a.is-active {
+	border-color: color-mix(in srgb, var(--mystic-gold) 50%, transparent);
+	background: color-mix(in srgb, var(--mystic-gold) 8%, transparent);
+}
+
+.aroma-compass__legend a span {
+	font-family: 'Ductus W03 Medium', Georgia, serif;
+	font-size: 1.05rem;
+}
+
+.aroma-compass__legend a small {
 	font-size: 0.72rem;
 	color: var(--muted);
 }
 
-.flavor-wheel__legend-item--active {
-	padding-left: 0.75rem;
-	border-left: 3px solid var(--mystic-gold);
-	background: color-mix(in srgb, var(--mystic-gold) 8%, transparent);
+@keyframes compass-sheen {
+	to {
+		transform: rotate(360deg);
+	}
 }
 
-.flavor-wheel__legend-item--active a {
+@keyframes compass-card-in {
+	from {
+		opacity: 0;
+		transform: scale(0.94);
+	}
+}
+
+@media (max-width: 960px) {
+	.aroma-compass__stage {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 560px) {
+	.aroma-compass {
+		padding: 2rem 0.75rem;
+	}
+
+	.compass__name {
+		display: none;
+	}
+
+	.aroma-compass__center {
+		inset: 27%;
+	}
+
+	.compass-card {
+		grid-template-columns: 1fr;
+		justify-items: center;
+		text-align: center;
+	}
+
+	.compass-card img {
+		display: none;
+	}
+
+	.compass-card__pairs {
+		display: none;
+	}
+
+	.aroma-compass__legend ul {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.aroma-compass__sheen {
+		animation: none;
+	}
+}
+
+/* Family overview below the compass */
+.essence-families {
+	max-width: 76rem;
+	margin: 0 auto 3rem;
+	padding: 0 1.5rem;
+	box-sizing: border-box;
+}
+
+.essence-families > h2 {
+	margin: 0;
+	text-align: center;
+	font-size: clamp(1.6rem, 3vw, 2.1rem);
+}
+
+.essence-families__intro {
+	margin: 0.5rem 0 2rem;
+	text-align: center;
+	font-size: 0.75rem;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--muted);
+}
+
+.essence-family {
+	display: grid;
+	grid-template-columns: 9rem 1fr;
+	gap: 1.25rem;
+	align-items: start;
+	padding: 1.25rem 0;
+	border-top: 1px solid var(--hairline);
+}
+
+.essence-family__name {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	margin: 0.6rem 0 0;
+	font-family: inherit;
+	font-size: 0.75rem;
+	letter-spacing: 0.2em;
+	color: var(--text);
+}
+
+.essence-family__name::before,
+.essence-family__name::after {
+	content: none !important;
+}
+
+.essence-family__name span {
+	width: 0.8rem;
+	height: 0.8rem;
+	transform: rotate(45deg);
+	background: var(--family);
+}
+
+.essence-family ul {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.essence-tile {
+	position: relative;
+	display: flex;
+	align-items: stretch;
+	background: var(--panel-bg);
+	border: 1px solid var(--hairline);
+	transition:
+		border-color 0.2s ease,
+		box-shadow 0.25s ease;
+}
+
+.essence-tile:hover {
+	border-color: var(--mystic-gold);
+	box-shadow: 0 10px 24px var(--shadow);
+}
+
+.essence-tile__link {
+	display: flex;
+	flex: 1;
+	align-items: center;
+	gap: 1rem;
+	min-width: 0;
+	padding: 0.75rem 0.5rem 0.75rem 0.75rem;
+	color: var(--text);
+	text-decoration: none;
+}
+
+.essence-tile__bottle {
+	display: grid;
+	place-items: center;
+	flex: none;
+	width: 4.5rem;
+	height: 6.5rem;
+	background: radial-gradient(
+		ellipse at 50% 70%,
+		color-mix(in srgb, var(--family-light) 70%, transparent),
+		transparent 70%
+	);
+}
+
+.essence-tile__bottle img {
+	height: 6rem;
+	width: auto;
+	transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.25, 1.2);
+}
+
+.essence-tile:hover .essence-tile__bottle img {
+	transform: translateY(-3px) rotate(-3deg);
+}
+
+.essence-tile__text {
+	display: grid;
+	gap: 0.3rem;
+	min-width: 0;
+}
+
+.essence-tile__text strong {
+	font-family: 'Ductus W03 Medium', Georgia, serif;
+	font-weight: 400;
+	font-size: 1.2rem;
+}
+
+.essence-tile__text small {
+	font-size: 0.8rem;
+	line-height: 1.45;
+	color: var(--muted);
+}
+
+.essence-tile__add {
+	display: grid;
+	align-content: center;
+	justify-items: center;
+	gap: 0.2rem;
+	width: 5.5rem;
+	flex: none;
+	background: transparent;
+	border: 0;
+	border-left: 1px solid var(--hairline);
+	color: var(--text);
+	font: inherit;
+	font-size: 0.8rem;
+	cursor: pointer;
+	transition:
+		background 0.2s ease,
+		color 0.2s ease;
+}
+
+.essence-tile__add span:last-child {
+	font-size: 1.3rem;
+	line-height: 1;
 	color: var(--mystic-gold);
 }
 
-@media (max-width: 860px) {
-	.flavor-wheel__layout {
+.essence-tile__add:hover,
+.essence-tile__add.is-added {
+	background: var(--mystic-gold);
+	color: var(--mystic-ink);
+}
+
+.essence-tile__add:hover span:last-child,
+.essence-tile__add.is-added span:last-child {
+	color: var(--mystic-ink);
+}
+
+.essence-tile__add.is-added span:last-child {
+	animation: tick-draw 0.4s ease-out both;
+}
+
+@media (max-width: 760px) {
+	.essence-family {
 		grid-template-columns: 1fr;
-		gap: 2rem;
+		gap: 0.75rem;
+	}
+
+	.essence-family ul {
+		grid-template-columns: 1fr;
 	}
 }

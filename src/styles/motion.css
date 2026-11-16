@@ -138,9 +138,7 @@
 	.site h1:hover::after,
 	.site h2:hover::before,
 	.site h2:hover::after {
-		display: inline-block;
 		transform: rotate(18deg) scale(1.1);
-		transition: transform 0.25s ease;
 	}
 }
 

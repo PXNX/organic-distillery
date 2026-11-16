@@ -3,7 +3,6 @@ import { describe, expect, it } from 'vitest';
 import ContactForm from '../src/lib/ui/ContactForm.svelte';
 import EssenceRecipe from '../src/lib/ui/EssenceRecipe.svelte';
 import FlavorWheel from '../src/lib/ui/FlavorWheel.svelte';
-import HerbBackdrop from '../src/lib/ui/HerbBackdrop.svelte';
 import BasketButton from '../src/lib/ui/BasketButton.svelte';
 import GinAroma from '../src/lib/ui/GinAroma.svelte';
 import GinProcess from '../src/lib/ui/GinProcess.svelte';
@@ -46,7 +45,7 @@ describe('MirroredPage', () => {
 
 	it('explains the gin-making process in four steps', () => {
 		const { body } = render(GinProcess);
-		expect(body).toContain('Vom Kraut zum Flaschengeist');
+		expect(body).toContain('Vom Kraut zur Ginnie');
 		expect(body).toContain('Aroma infundieren');
 		expect(body).toContain('Schonende Destillation');
 		expect(body.match(/gin-process__step/g)).toHaveLength(5);
@@ -76,12 +75,21 @@ describe('MirroredPage', () => {
 		expect(body).not.toContain('recipe-section__toggle');
 	});
 
-	it('renders a full-screen herb backdrop with an outline mask', () => {
-		const { body } = render(HerbBackdrop, {
-			props: { src: '/media/herb.webp', outline: '/media/herb-outline.webp' }
-		});
-		expect(body).toContain('herb-backdrop');
-		expect(body).toContain("--outline: url('/media/herb-outline.webp')");
+	it('renders essence pages as a product stage with a shimmering drawing', () => {
+		const { body } = render(MirroredPage, { props: { path: '/essenzen/mandarine-geist' } });
+		expect(body).toContain('stage__shimmer');
+		expect(body).toContain("--outline: url('/media/2017/10/Citrus_Nobilis_Mandarine-outline.webp')");
+		expect(body).toContain('Citrus Nobilis');
+		expect(body).toContain('Passt zu');
+		expect(body).toContain('In den Warenkorb');
+		expect(body).not.toContain('js-show-order');
+	});
+
+	it('renders gin pages with an ornament stage and the other gin', () => {
+		const { body } = render(MirroredPage, { props: { path: '/gins/ginnie' } });
+		expect(body).toContain('stage__ornament');
+		expect(body).toContain('Ginnie_500ml.webp');
+		expect(body).toContain('Der zweite Gin');
 	});
 
 	it('renders the colour-coded flavour wheel', () => {

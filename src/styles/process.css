@@ -3,52 +3,266 @@
 	margin: 4rem auto;
 	padding: 3rem 1.5rem;
 	text-align: center;
-	background: var(--page-bg);
 }
 
 .gin-process__ornament {
+	display: inline-block;
 	color: var(--mystic-gold);
 	font-size: 1.5rem;
 }
 
 .gin-process__intro {
-	max-width: 38rem;
-	margin: 0.75rem auto 3rem;
+	max-width: 40rem;
+	margin: 0.75rem auto 2rem;
 	line-height: 1.6;
 	color: var(--muted);
 }
 
-.gin-process__steps {
+/* The engraved still */
+.gin-process__figure {
 	position: relative;
+	margin: 0 auto 2.5rem;
+	padding: clamp(0.75rem, 2vw, 1.5rem);
+	background:
+		radial-gradient(ellipse at 45% 60%, color-mix(in srgb, var(--mystic-gold) 14%, transparent), transparent 65%),
+		var(--mystic-parchment);
+	border: 1px solid var(--mystic-gold);
+	outline: 1px solid color-mix(in srgb, var(--mystic-gold) 35%, transparent);
+	outline-offset: -8px;
+	box-shadow: 0 14px 32px var(--shadow);
+}
+
+.still {
+	display: block;
+	width: 100%;
+	height: auto;
+	overflow: visible;
+}
+
+.still__ground {
+	fill: none;
+	stroke: #9a7640;
+	stroke-width: 1;
+	stroke-dasharray: 2 5;
+}
+
+.still__line {
+	stroke: #6b4a22;
+	stroke-width: 1.6;
+	stroke-linejoin: round;
+	stroke-linecap: round;
+	fill: none;
+}
+
+.still__fill-paper {
+	fill: #efe6d2;
+}
+
+.still__fill-ink {
+	fill: #2a2420;
+}
+
+.still__fill-water {
+	fill: color-mix(in srgb, #9fb7b4 35%, #f4f0e6);
+}
+
+.still__copper {
+	fill: url(#still-copper);
+}
+
+.still__pipe {
+	stroke: #b87333;
+	stroke-width: 7;
+}
+
+.still__hatch {
+	fill: url(#still-hatch);
+	stroke: none;
+}
+
+.still__hatch-copper {
+	fill: url(#still-hatch);
+	opacity: 0.8;
+}
+
+.still__sheen {
+	fill: none;
+	stroke: #fff4dc;
+	stroke-width: 3;
+	stroke-linecap: round;
+	opacity: 0.6;
+}
+
+.still__wash {
+	fill: none;
+	stroke: rgb(255 240 210 / 55%);
+	stroke-width: 2;
+	stroke-dasharray: 6 6;
+	animation: still-wash 3s ease-in-out infinite;
+}
+
+.still__leaf {
+	fill: #8a9a5b;
+	stroke: #4f5a2c;
+	stroke-width: 1;
+}
+
+.still__sprig {
+	transform-origin: 120px 300px;
+	animation: still-sway 5s ease-in-out infinite;
+}
+
+.still__berries circle {
+	fill: #3b3f5c;
+	stroke: #23253a;
+}
+
+.still__flow {
+	fill: none;
+	stroke: var(--mystic-gold);
+	stroke-width: 1.5;
+	stroke-dasharray: 4 7;
+	animation: still-flow 1.6s linear infinite;
+}
+
+.still__flames path {
+	fill: #e8a33c;
+	stroke: #b5521f;
+	stroke-width: 1;
+	transform-box: fill-box;
+	transform-origin: 50% 100%;
+	animation: still-flame 0.9s ease-in-out infinite alternate;
+}
+
+.still__flames path:nth-child(2) {
+	fill: #f2c25a;
+	animation-delay: -0.3s;
+}
+
+.still__flames path:nth-child(3) {
+	animation-delay: -0.6s;
+}
+
+.still__porthole {
+	fill: rgb(244 224 176 / 75%);
+	stroke: #6b4a22;
+	stroke-width: 3;
+}
+
+.still__porthole-glint {
+	fill: #fff;
+	opacity: 0.8;
+}
+
+.still__coil {
+	fill: none;
+	stroke: #b87333;
+	stroke-width: 5;
+	stroke-linecap: round;
+}
+
+.still__vapour circle {
+	fill: #fff8e8;
+	stroke: var(--mystic-gold);
+	stroke-width: 1;
+	opacity: 0;
+}
+
+.still__bottle {
+	fill: url(#still-glass);
+}
+
+.still__gin {
+	fill: rgb(214 186 120 / 55%);
+	transform-box: fill-box;
+	transform-origin: 50% 100%;
+	animation: still-fill 9s ease-in-out infinite;
+}
+
+.still__label {
+	fill: #1d1d1b;
+	stroke: #d9d0bd;
+	stroke-width: 1;
+}
+
+.still__label-text {
+	fill: #e9e3d3;
+	font-family: 'Ductus W03 Medium', Georgia, serif;
+	font-size: 11px;
+}
+
+.still__cork {
+	fill: #c79a6a;
+	stroke: #7a5634;
+}
+
+.still__drop {
+	fill: #e9cf8f;
+	animation: still-drop 1.8s ease-in infinite;
+}
+
+.still__drop--late {
+	animation-delay: 0.9s;
+}
+
+.still__marker circle {
+	fill: var(--mystic-ink);
+	stroke: var(--mystic-gold);
+	stroke-width: 1.5;
+	transition: fill 0.25s ease;
+}
+
+.still__marker text {
+	fill: #e9e3d3;
+	font-family: 'Ductus W03 Medium', Georgia, serif;
+	font-size: 12px;
+}
+
+.still__marker.is-active circle {
+	fill: var(--mystic-gold);
+}
+
+.still__marker.is-active text {
+	fill: #111110;
+}
+
+/* Hovering a step spotlights its part of the drawing (opacity only, no layout). */
+.still__part {
+	transition:
+		opacity 0.3s ease,
+		filter 0.3s ease;
+}
+
+.still__part.is-dim {
+	opacity: 0.35;
+	filter: saturate(0.4);
+}
+
+.still__part.is-active {
+	filter: drop-shadow(0 0 6px rgb(201 168 106 / 70%));
+}
+
+/* Step cards */
+.gin-process__steps {
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
-	gap: 1.5rem;
+	gap: 1rem;
 	padding: 0;
 	margin: 0;
 	list-style: none;
-	counter-reset: step;
-}
-
-.gin-process__steps::before {
-	content: '';
-	position: absolute;
-	top: 7.5rem;
-	left: 8%;
-	right: 8%;
-	height: 1px;
-	background: linear-gradient(
-		90deg,
-		transparent,
-		var(--mystic-gold) 12%,
-		var(--mystic-gold) 88%,
-		transparent
-	);
-	opacity: 0.55;
 }
 
 .gin-process__step {
 	position: relative;
-	padding: 0 0.5rem;
+	padding: 1.25rem 1rem 1rem;
+	text-align: left;
+	background: var(--panel-bg);
+	border: 1px solid var(--hairline);
+	border-top: 2px solid var(--hairline);
+	cursor: default;
+	transition:
+		border-color 0.25s ease,
+		box-shadow 0.25s ease;
 	animation: rise-in 0.5s ease-out both;
 }
 
@@ -64,66 +278,47 @@
 	animation-delay: 0.21s;
 }
 
-.gin-process__image {
-	display: grid;
-	place-items: center;
-	width: 100%;
-	height: 12rem;
-	overflow: hidden;
-	margin-bottom: 1.5rem;
-	padding: 0.75rem;
-	box-sizing: border-box;
-	background: var(--plate-bg);
-	border: 1px solid var(--hairline);
+.gin-process__step.is-active,
+.gin-process__step:focus-visible {
+	border-color: var(--mystic-gold);
 	box-shadow: 0 10px 24px var(--shadow);
+	outline: none;
 }
 
-.gin-process__image img {
-	display: block;
-	width: 100%;
-	height: 100%;
-	object-fit: contain;
-	mix-blend-mode: multiply;
+.gin-process__number {
+	display: inline-grid;
+	place-items: center;
+	width: 2rem;
+	height: 2rem;
+	margin-bottom: 0.6rem;
+	border-radius: 50%;
+	background: var(--mystic-ink);
+	border: 1px solid var(--mystic-gold);
+	color: #e9e3d3;
+	font-family: 'Ductus W03 Medium', Georgia, serif;
+	font-size: 0.85rem;
+	transition:
+		background 0.25s ease,
+		color 0.25s ease;
+}
+
+.gin-process__step.is-active .gin-process__number {
+	background: var(--mystic-gold);
+	color: var(--mystic-ink);
+}
+
+.gin-process__step h3 {
+	margin: 0 0 0.4rem;
+	font-size: 1.15rem;
 }
 
 .gin-process__step h3::before,
 .gin-process__step h3::after {
-	display: none;
-}
-
-.gin-process__step:last-child .gin-process__image img {
-	mix-blend-mode: normal;
-	filter: drop-shadow(0 8px 10px rgb(0 0 0 / 20%));
-}
-
-.gin-process__number {
-	position: relative;
-	isolation: isolate;
-	display: grid;
-	place-items: center;
-	width: 2.5rem;
-	height: 2.5rem;
-	margin: 0 auto 1rem;
-	font-family: Georgia, serif;
-	color: var(--mystic-gold);
-}
-
-.gin-process__number::before {
-	content: '';
-	position: absolute;
-	inset: 0;
-	z-index: -1;
-	background: var(--page-bg);
-	border: 1px solid var(--mystic-gold);
-	transform: rotate(45deg);
-}
-
-.gin-process__step h3 {
-	margin-bottom: 0.5rem;
-	font-size: 1.15rem;
+	content: none !important;
 }
 
 .gin-process__step p {
+	margin: 0;
 	font-size: 0.88rem;
 	line-height: 1.6;
 	color: var(--muted);
@@ -133,13 +328,13 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: 1rem;
-	max-width: 42rem;
-	margin: 3rem auto 0;
-	padding: 1.5rem;
-	text-align: left;
-	background: var(--panel-bg);
-	border: 1px solid var(--hairline);
+	gap: 0.75rem;
+	max-width: 46rem;
+	margin: 2.5rem auto 0;
+	padding: 1.25rem 1.5rem;
+	background: var(--mystic-ink);
+	color: var(--mystic-parchment);
+	border: 1px solid var(--mystic-gold);
 }
 
 .gin-process__note span {
@@ -149,33 +344,96 @@
 
 .gin-process__note p {
 	margin: 0;
+	text-align: left;
 	line-height: 1.6;
+	color: var(--mystic-parchment);
 }
 
-[data-theme='dark'] .gin-process__image img {
-	filter: invert(1) grayscale(1);
+.gin-process__note strong {
+	color: var(--mystic-gold);
 }
 
-[data-theme='dark'] .gin-process__step:last-child .gin-process__image img {
-	filter: drop-shadow(0 8px 10px rgb(0 0 0 / 45%));
+@keyframes still-flame {
+	from {
+		transform: scaleY(0.85) skewX(-3deg);
+	}
+	to {
+		transform: scaleY(1.12) skewX(3deg);
+	}
+}
+
+@keyframes still-flow {
+	to {
+		stroke-dashoffset: -22;
+	}
+}
+
+@keyframes still-sway {
+	0%,
+	100% {
+		transform: rotate(-1.5deg);
+	}
+	50% {
+		transform: rotate(1.5deg);
+	}
+}
+
+@keyframes still-wash {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(2px);
+	}
+}
+
+@keyframes still-drop {
+	0% {
+		transform: translateY(0);
+		opacity: 0;
+	}
+	15% {
+		opacity: 1;
+	}
+	80% {
+		transform: translateY(16px);
+		opacity: 1;
+	}
+	100% {
+		transform: translateY(20px);
+		opacity: 0;
+	}
+}
+
+@keyframes still-fill {
+	0% {
+		transform: scaleY(0.15);
+	}
+	80%,
+	100% {
+		transform: scaleY(1);
+	}
 }
 
 @media (max-width: 900px) {
 	.gin-process__steps {
 		grid-template-columns: repeat(2, 1fr);
 	}
-
-	.gin-process__steps::before {
-		display: none;
-	}
 }
 
 @media (max-width: 560px) {
+	.gin-process {
+		padding: 2rem 1rem;
+	}
+
 	.gin-process__steps {
 		grid-template-columns: 1fr;
 	}
+}
 
-	.gin-process__image {
-		height: 12rem;
+@media (prefers-reduced-motion: reduce) {
+	.still__vapour {
+		display: none;
 	}
 }
