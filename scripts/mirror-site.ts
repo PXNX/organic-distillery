@@ -19,7 +19,6 @@ import {
 	clarifyOrderLinks,
 	extractContactForm,
 	extractRecipeLink,
-	insertHerbBackdrop,
 	wrapBotanicalPlates
 } from '#lib/mirror/embellish.js';
 import type { MirroredPage as Page, MirroredSite as Site } from '#lib/mirror/types.js';
@@ -77,9 +76,7 @@ while (queue.length) {
 	const content = $('.js-site').first().clone();
 	content.find('.site-head, .site-footer').remove();
 	const rewritten = rewrite(content.html() || '');
-	const plated = path.startsWith('/essenzen/')
-		? insertHerbBackdrop(wrapBotanicalPlates(rewritten, title))
-		: rewritten;
+	const plated = path.startsWith('/essenzen/') ? wrapBotanicalPlates(rewritten, title) : rewritten;
 	const { html: withoutRecipe, recipe } = extractRecipeLink(clarifyOrderLinks(plated));
 	const withoutContact =
 		path === '/kontakt' ? extractContactForm(withoutRecipe).html : withoutRecipe;
@@ -142,5 +139,6 @@ for (const page of pages) {
 }
 
 await import('./optimize-images.js');
+await import('./extract-recipes.js');
 
 console.log(`\nMirrored ${pages.length} pages and ${assetPaths.size} media files.`);

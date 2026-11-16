@@ -20,20 +20,6 @@ export function addDocumentaryPress(html: string): string {
 	return html.replace(pressList, `$1${item}`);
 }
 
-/** Places the page's botanical drawing behind the essence bottle. */
-export function insertHerbBackdrop(html: string): string {
-	if (html.includes('essence-herb')) return html;
-	const drawing =
-		html.match(/<img[^>]*class="single-column__img"[^>]*src="([^"]+)"[^>]*>/)?.[1] ??
-		html.match(/<img[^>]*src="([^"]+)"[^>]*class="single-column__img"[^>]*>/)?.[1];
-	if (!drawing) return html;
-	const outline = drawing.replace(/\.webp$/i, '-outline.webp');
-	return html.replace(
-		'<div class="o-product__img-wrapper">',
-		`<div class="o-product__img-wrapper"><div class="essence-herb" style="--herb: url('${drawing}'); --outline: url('${outline}')"><img src="${drawing}" alt="" aria-hidden="true" loading="lazy" decoding="async"><span class="essence-herb__shimmer"></span></div>`
-	);
-}
-
 /** Turns vague WordPress order links into clearly labelled shop buttons. */
 export function clarifyOrderLinks(html: string): string {
 	return html
@@ -59,6 +45,7 @@ export interface RecipeLink {
 	href: string;
 	label: string;
 	text?: string;
+	images?: string[];
 }
 
 const drawingBlock =

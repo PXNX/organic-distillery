@@ -25,6 +25,9 @@ export function parseSite(value: unknown): MirroredSite {
 			if ('text' in recipe && !isString(recipe.text)) {
 				throw new TypeError(`Page ${index} has an invalid recipe text`);
 			}
+			if ('images' in recipe && (!Array.isArray(recipe.images) || !recipe.images.every(isString))) {
+				throw new TypeError(`Page ${index} has invalid recipe images`);
+			}
 		}
 	}
 	return value as unknown as MirroredSite;

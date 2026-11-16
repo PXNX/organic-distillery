@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import ContactForm from '../src/lib/ui/ContactForm.svelte';
 import EssenceRecipe from '../src/lib/ui/EssenceRecipe.svelte';
 import FlavorWheel from '../src/lib/ui/FlavorWheel.svelte';
+import HerbBackdrop from '../src/lib/ui/HerbBackdrop.svelte';
 import ShopButton from '../src/lib/ui/ShopButton.svelte';
 import GinAroma from '../src/lib/ui/GinAroma.svelte';
 import GinProcess from '../src/lib/ui/GinProcess.svelte';
@@ -57,16 +58,30 @@ describe('MirroredPage', () => {
 		expect(body).toContain('Online-Shop öffnen');
 	});
 
-	it('renders inline recipe content with a PDF download', () => {
+	it('renders an always-visible coloured recipe section with images', () => {
 		const { body } = render(EssenceRecipe, {
 			props: {
 				title: 'Eucalyptus Geist',
-				recipe: { href: '/media/recipe.pdf', label: 'Rezeptkarte', text: 'Lamm und Kräuter.' }
+				recipe: {
+					href: '/media/recipe.pdf',
+					label: 'Rezeptkarte',
+					text: 'Lamm und Kräuter.',
+					images: ['/media/recipes/eucalyptus-1.webp']
+				}
 			}
 		});
-		expect(body).toContain('Rezept');
-		expect(body).toContain('Eucalyptus Geist');
-		expect(body).toContain('/media/recipe.pdf');
+		expect(body).toContain('recipe-section');
+		expect(body).toContain('Lamm und Kräuter.');
+		expect(body).toContain('/media/recipes/eucalyptus-1.webp');
+		expect(body).not.toContain('recipe-section__toggle');
+	});
+
+	it('renders a full-screen herb backdrop with an outline mask', () => {
+		const { body } = render(HerbBackdrop, {
+			props: { src: '/media/herb.webp', outline: '/media/herb-outline.webp' }
+		});
+		expect(body).toContain('herb-backdrop');
+		expect(body).toContain("--outline: url('/media/herb-outline.webp')");
 	});
 
 	it('renders the colour-coded flavour wheel', () => {

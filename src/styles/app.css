@@ -72,7 +72,7 @@ img[src*='Ginnie_'] {
 .o-product__img-wrapper {
 	position: relative;
 	isolation: isolate;
-	background: var(--mystic-parchment);
+	background: color-mix(in srgb, var(--mystic-parchment) 82%, transparent);
 	padding: 1rem;
 	box-sizing: border-box;
 	overflow: hidden;
@@ -84,22 +84,27 @@ img[src*='Ginnie_'] {
 	mix-blend-mode: multiply;
 }
 
-.essence-herb {
-	position: absolute;
-	inset: -65%;
+.herb-backdrop {
+	position: fixed;
+	inset: 0;
 	z-index: 0;
 	pointer-events: none;
-	opacity: 0.6;
+	opacity: 0.35;
 }
 
-.essence-herb img {
+.herb-backdrop img {
 	display: block;
 	width: 100%;
 	height: 100%;
 	object-fit: contain;
 }
 
-.essence-herb__shimmer {
+.js-site.site {
+	position: relative;
+	z-index: 1;
+}
+
+.herb-backdrop__shimmer {
 	position: absolute;
 	inset: 0;
 	background: linear-gradient(
@@ -134,7 +139,7 @@ img[src*='Ginnie_'] {
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.essence-herb__shimmer {
+	.herb-backdrop__shimmer {
 		animation: none;
 	}
 }

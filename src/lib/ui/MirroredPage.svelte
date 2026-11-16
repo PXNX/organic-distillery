@@ -2,6 +2,7 @@
 	import ContactForm from './ContactForm.svelte';
 	import EssenceRecipe from './EssenceRecipe.svelte';
 	import FlavorWheel from './FlavorWheel.svelte';
+	import HerbBackdrop from './HerbBackdrop.svelte';
 	import GinAroma from './GinAroma.svelte';
 	import GinProcess from './GinProcess.svelte';
 	import Newsletter from './Newsletter.svelte';
@@ -9,11 +10,13 @@
 	import { botanicalPlates } from '#lib/content/plates.js';
 	import { recipeCards } from '#lib/content/recipes.js';
 	import { site } from '#lib/content/index.js';
-	import { essenceName } from '#lib/mirror/embellish.js';
+	import { botanicalPlate, essenceName } from '#lib/mirror/embellish.js';
+	import { familyForPath } from '#lib/features/flavor-wheel.js';
 	import { findPage } from '#lib/mirror/site.js';
 
 	let { path }: { path: string } = $props();
 	let page = $derived(findPage(site, path));
+	let plate = $derived(path.startsWith('/essenzen/') ? botanicalPlate(page) : null);
 </script>
 
 <svelte:head>
@@ -21,10 +24,18 @@
 	<meta name="description" content={page.description} />
 </svelte:head>
 
+{#if plate}
+	<HerbBackdrop src={plate.src} outline={plate.src.replace(/\.webp$/i, '-outline.webp')} />
+{/if}
+
 {@html page.html}
 
 {#if page.recipe}
-	<EssenceRecipe recipe={page.recipe} title={essenceName(page.title)} />
+	<EssenceRecipe
+		recipe={page.recipe}
+		title={essenceName(page.title)}
+		accent={familyForPath(path)?.color}
+	/>
 {/if}
 
 {#if path === '/kontakt'}

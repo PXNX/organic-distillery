@@ -2,34 +2,40 @@
 	import { trackEvent } from '#lib/features/telemetry.js';
 	import type { RecipeLink } from '#lib/mirror/embellish.js';
 
-	let { recipe, title }: { recipe: RecipeLink; title: string } = $props();
-
-	let open = $state(false);
-
-	function toggle() {
-		open = !open;
-		if (open) trackEvent('recipe_open', { essence: title });
-	}
+	let {
+		recipe,
+		title,
+		accent = '#b08d57'
+	}: { recipe: RecipeLink; title: string; accent?: string | undefined } = $props();
 </script>
 
-<section class="essence-recipe" aria-labelledby="essence-recipe-title">
-	<button type="button" class="essence-recipe__toggle" onclick={toggle} aria-expanded={open}>
-		<span class="essence-recipe__icon" aria-hidden="true">◇</span>
-		<span id="essence-recipe-title">Rezept &amp; Inspiration: {title}</span>
-		<span class="essence-recipe__arrow" aria-hidden="true">{open ? '−' : '+'}</span>
-	</button>
+<section class="recipe-section" style={`--accent: ${accent}`} aria-labelledby="recipe-title">
+	<header class="recipe-section__header">
+		<span aria-hidden="true">◇</span>
+		<div>
+			<p class="recipe-section__eyebrow">Rezept &amp; Inspiration</p>
+			<h2 id="recipe-title">{title}</h2>
+		</div>
+	</header>
 
-	<div class="essence-recipe__body" hidden={!open}>
-		{#if recipe.text}
-			<p>{recipe.text}</p>
-		{/if}
-		<a
-			class="o-button essence-recipe__download"
-			href={recipe.href}
-			download
-			onclick={() => trackEvent('recipe_download', { essence: title, file: recipe.href })}
-		>
-			PDF herunterladen ↓
-		</a>
-	</div>
+	{#if recipe.text}
+		<p class="recipe-section__text">{recipe.text}</p>
+	{/if}
+
+	{#if recipe.images && recipe.images.length > 0}
+		<div class="recipe-section__gallery">
+			{#each recipe.images as image (image)}
+				<img src={image} alt={`${title} – Rezeptmotiv`} loading="lazy" decoding="async" />
+			{/each}
+		</div>
+	{/if}
+
+	<a
+		class="o-button recipe-section__download"
+		href={recipe.href}
+		download
+		onclick={() => trackEvent('recipe_download', { essence: title, file: recipe.href })}
+	>
+		PDF herunterladen ↓
+	</a>
 </section>

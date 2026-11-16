@@ -6,7 +6,6 @@ import {
 	botanicalPlate,
 	essenceName,
 	extractRecipeLink,
-	insertHerbBackdrop,
 	latinNameFromSrc,
 	wrapBotanicalPlates
 } from '../src/lib/mirror/embellish.js';
@@ -69,24 +68,6 @@ describe('clarifyOrderLinks', () => {
 		expect(html).toContain('Zum Online-Shop');
 		expect(html).toContain('Jetzt bestellen');
 		expect(html.match(/o-button--shop/g)).toHaveLength(2);
-	});
-});
-
-describe('insertHerbBackdrop', () => {
-	const page =
-		'<div class="o-product__img-wrapper"><img class="single-column__img" src="/media/herb.webp"><img src="/media/bottle.webp" class="wp-post-image"></div>';
-
-	it('places the herb behind the bottle with a shimmer layer', () => {
-		const html = insertHerbBackdrop(page);
-		expect(html).toContain('essence-herb__shimmer');
-		expect(html).toContain("--herb: url('/media/herb.webp')");
-		expect(html).toContain("--outline: url('/media/herb-outline.webp')");
-		expect(html.indexOf('essence-herb')).toBeLessThan(html.indexOf('wp-post-image'));
-	});
-
-	it('is idempotent', () => {
-		const once = insertHerbBackdrop(page);
-		expect(insertHerbBackdrop(once)).toBe(once);
 	});
 });
 

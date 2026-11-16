@@ -115,6 +115,11 @@ const polar = (cx: number, cy: number, radius: number, angle: number) => {
 	return { x: cx + radius * Math.cos(rad), y: cy + radius * Math.sin(rad) };
 };
 
+/** Finds the colour family for an essence detail path. */
+export function familyForPath(path: string): WheelFamily | undefined {
+	return flavorFamilies.find((family) => family.essences.some((essence) => essence.path === path));
+}
+
 /** SVG path for an annular sector, used by both rings of the wheel. */
 export function sectorPath(
 	cx: number,
