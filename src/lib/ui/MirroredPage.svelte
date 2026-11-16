@@ -1,4 +1,5 @@
 <script lang="ts">
+	import AddToBasket from './AddToBasket.svelte';
 	import ContactForm from './ContactForm.svelte';
 	import EssenceRecipe from './EssenceRecipe.svelte';
 	import FlavorWheel from './FlavorWheel.svelte';
@@ -11,12 +12,14 @@
 	import { recipeCards } from '#lib/content/recipes.js';
 	import { site } from '#lib/content/index.js';
 	import { botanicalPlate, essenceName } from '#lib/mirror/embellish.js';
+	import { productForPath } from '#lib/features/basket.js';
 	import { familyForPath } from '#lib/features/flavor-wheel.js';
 	import { findPage } from '#lib/mirror/site.js';
 
 	let { path }: { path: string } = $props();
 	let page = $derived(findPage(site, path));
 	let plate = $derived(path.startsWith('/essenzen/') ? botanicalPlate(page) : null);
+	let product = $derived(productForPath(path, page.title));
 </script>
 
 <svelte:head>
@@ -29,6 +32,10 @@
 {/if}
 
 {@html page.html}
+
+{#if product}
+	<AddToBasket {product} />
+{/if}
 
 {#if page.recipe}
 	<EssenceRecipe

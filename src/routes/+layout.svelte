@@ -6,8 +6,10 @@
 	import { site } from '#lib/content/index.js';
 	import { shopMockMode } from '#lib/features/shop/config.js';
 	import { attachAgeGate } from '#lib/features/age-gate.js';
+	import { basket } from '#lib/features/basket.svelte.js';
 	import InstallHint from '#lib/ui/InstallHint.svelte';
-	import ShopButton from '#lib/ui/ShopButton.svelte';
+	import Basket from '#lib/ui/Basket.svelte';
+	import BasketButton from '#lib/ui/BasketButton.svelte';
 	import SiteFooter from '#lib/ui/SiteFooter.svelte';
 	import { attachMockOrder } from '#lib/features/shop/mock-client.js';
 	import { initTelemetry } from '#lib/features/telemetry.js';
@@ -18,6 +20,7 @@
 	let isError = $derived(page.status >= 400);
 
 	onMount(() => {
+		basket.restore();
 		initTelemetry();
 		const cleanupAgeGate = attachAgeGate();
 		const cleanupShop = shopMockMode ? attachMockOrder() : undefined;
@@ -66,7 +69,8 @@
 
 	<div class="js-order-popup o-order">{@html site.order}</div>
 
-	<ShopButton />
+	<BasketButton />
+	<Basket />
 	<InstallHint raised />
 
 	{#if shopMockMode}

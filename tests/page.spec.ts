@@ -4,7 +4,7 @@ import ContactForm from '../src/lib/ui/ContactForm.svelte';
 import EssenceRecipe from '../src/lib/ui/EssenceRecipe.svelte';
 import FlavorWheel from '../src/lib/ui/FlavorWheel.svelte';
 import HerbBackdrop from '../src/lib/ui/HerbBackdrop.svelte';
-import ShopButton from '../src/lib/ui/ShopButton.svelte';
+import BasketButton from '../src/lib/ui/BasketButton.svelte';
 import GinAroma from '../src/lib/ui/GinAroma.svelte';
 import GinProcess from '../src/lib/ui/GinProcess.svelte';
 import MirroredPage from '../src/lib/ui/MirroredPage.svelte';
@@ -52,10 +52,10 @@ describe('MirroredPage', () => {
 		expect(body.match(/gin-process__step/g)).toHaveLength(5);
 	});
 
-	it('renders a clearly labelled shop button', () => {
-		const { body } = render(ShopButton);
+	it('renders a basket button with a shop label', () => {
+		const { body } = render(BasketButton);
 		expect(body).toContain('Shop');
-		expect(body).toContain('Online-Shop öffnen');
+		expect(body).toContain('Warenkorb öffnen');
 	});
 
 	it('renders an always-visible coloured recipe section with images', () => {
