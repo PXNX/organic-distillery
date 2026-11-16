@@ -5,7 +5,7 @@
 		buildNewsletterMailto,
 		rememberNewsletterEmail,
 		validateNewsletterEmail
-	} from '#lib/newsletter.js';
+	} from '#lib/features/newsletter.js';
 
 	let email = $state('');
 	let error = $state<string | null>(null);

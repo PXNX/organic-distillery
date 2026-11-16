@@ -1,5 +1,5 @@
 <script lang="ts">
-	import MirroredPage from '#lib/components/MirroredPage.svelte';
+	import MirroredPage from '#lib/ui/MirroredPage.svelte';
 </script>
 
 <MirroredPage path="/datenschutz" />

@@ -5,7 +5,7 @@
 		validateContact,
 		type ContactErrors,
 		type ContactValues
-	} from '#lib/contact.js';
+	} from '#lib/features/contact.js';
 
 	let values = $state<ContactValues>({ name: '', place: '', email: '', message: '' });
 	let errors = $state<ContactErrors>({});

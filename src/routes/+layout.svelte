@@ -4,11 +4,11 @@
 	import { onNavigate } from '$app/navigation';
 	import { page } from '$app/state';
 	import { site } from '#lib/content/index.js';
-	import { shopMockMode } from '#lib/shop/config.js';
-	import { attachAgeGate } from '#lib/age-gate.js';
-	import InstallHint from '#lib/components/InstallHint.svelte';
-	import SiteFooter from '#lib/components/SiteFooter.svelte';
-	import { attachMockOrder } from '#lib/shop/mock-client.js';
+	import { shopMockMode } from '#lib/features/shop/config.js';
+	import { attachAgeGate } from '#lib/features/age-gate.js';
+	import InstallHint from '#lib/ui/InstallHint.svelte';
+	import SiteFooter from '#lib/ui/SiteFooter.svelte';
+	import { attachMockOrder } from '#lib/features/shop/mock-client.js';
 	import '../styles/app.css';
 
 	let { children } = $props();

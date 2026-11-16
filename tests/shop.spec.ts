@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatMockOrder } from '../src/lib/shop/mock.js';
+import { formatMockOrder } from '../src/lib/features/shop/mock.js';
 
 describe('formatMockOrder', () => {
 	it('lists quantities, descriptions and contact details', () => {

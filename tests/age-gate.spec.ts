@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { AGE_STORAGE_KEY, isAgeConfirmed } from '../src/lib/age-gate.js';
+import { AGE_STORAGE_KEY, isAgeConfirmed } from '../src/lib/features/age-gate.js';
 
 describe('isAgeConfirmed', () => {
 	it('only accepts the explicit true value', () => {

@@ -1,11 +1,11 @@
 import { render } from 'svelte/server';
 import { describe, expect, it } from 'vitest';
-import ContactForm from '../src/lib/components/ContactForm.svelte';
-import GinProcess from '../src/lib/components/GinProcess.svelte';
-import MirroredPage from '../src/lib/components/MirroredPage.svelte';
-import Newsletter from '../src/lib/components/Newsletter.svelte';
-import SiteFooter from '../src/lib/components/SiteFooter.svelte';
-import RecipeCard from '../src/lib/components/RecipeCard.svelte';
+import ContactForm from '../src/lib/ui/ContactForm.svelte';
+import GinProcess from '../src/lib/ui/GinProcess.svelte';
+import MirroredPage from '../src/lib/ui/MirroredPage.svelte';
+import Newsletter from '../src/lib/ui/Newsletter.svelte';
+import SiteFooter from '../src/lib/ui/SiteFooter.svelte';
+import RecipeCard from '../src/lib/ui/RecipeCard.svelte';
 
 describe('MirroredPage', () => {
 	it('renders a recipe card as a real PDF download', () => {

@@ -4,7 +4,7 @@ import {
 	formatContactMessage,
 	validateContact,
 	type ContactValues
-} from '../src/lib/contact.js';
+} from '../src/lib/features/contact.js';
 
 const valid: ContactValues = {
 	name: 'Ada Lovelace',

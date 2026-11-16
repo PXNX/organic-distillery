@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { INSTALL_DISMISSAL_KEY, shouldShowInstallHint } from '../src/lib/pwa.js';
+import { INSTALL_DISMISSAL_KEY, shouldShowInstallHint } from '../src/lib/features/pwa.js';
 
 describe('shouldShowInstallHint', () => {
 	it('shows the hint by default and after a fresh install', () => {

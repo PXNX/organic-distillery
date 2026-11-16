@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { applyTheme, nextTheme, storedTheme, type Theme } from '#lib/theme.js';
+	import { applyTheme, nextTheme, storedTheme, type Theme } from '#lib/features/theme.js';
 
 	const year = new Date().getFullYear();
 

@@ -52,7 +52,7 @@ describe('route generation', () => {
 
 	it('generates a route that renders MirroredPage with the right path', () => {
 		const source = routeSource('/kontakt');
-		expect(source).toContain("from '#lib/components/MirroredPage.svelte'");
+		expect(source).toContain("from '#lib/ui/MirroredPage.svelte'");
 		expect(source).toContain('path="/kontakt"');
 	});
 });

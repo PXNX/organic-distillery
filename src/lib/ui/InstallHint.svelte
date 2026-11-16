@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { INSTALL_DISMISSAL_KEY, shouldShowInstallHint } from '#lib/pwa.js';
+	import { INSTALL_DISMISSAL_KEY, shouldShowInstallHint } from '#lib/features/pwa.js';
 
 	interface BeforeInstallPromptEvent extends Event {
 		prompt(): Promise<void>;

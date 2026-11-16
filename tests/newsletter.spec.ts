@@ -3,7 +3,7 @@ import {
 	buildNewsletterMailto,
 	NEWSLETTER_STORAGE_KEY,
 	validateNewsletterEmail
-} from '../src/lib/newsletter.js';
+} from '../src/lib/features/newsletter.js';
 
 describe('validateNewsletterEmail', () => {
 	it('accepts a valid address', () => {

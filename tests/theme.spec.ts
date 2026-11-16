@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { nextTheme, resolveTheme, THEME_STORAGE_KEY } from '../src/lib/theme.js';
+import { nextTheme, resolveTheme, THEME_STORAGE_KEY } from '../src/lib/features/theme.js';
 
 describe('resolveTheme', () => {
 	it('follows the OS preference when no choice is saved', () => {

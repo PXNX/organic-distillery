@@ -43,5 +43,5 @@ export function routeDir(path: string): string {
 
 /** Generated route component source for a mirrored path. */
 export function routeSource(path: string): string {
-	return `<script lang="ts">\n\timport MirroredPage from '#lib/components/MirroredPage.svelte';\n</script>\n\n<MirroredPage path="${path}" />\n`;
+	return `<script lang="ts">\n\timport MirroredPage from '#lib/ui/MirroredPage.svelte';\n</script>\n\n<MirroredPage path="${path}" />\n`;
 }
