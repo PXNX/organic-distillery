@@ -22,6 +22,27 @@
 	}
 }
 
+@keyframes ornament-shimmer {
+	0%,
+	100% {
+		opacity: 0.75;
+		transform: scale(1) rotate(0deg);
+	}
+	50% {
+		opacity: 1;
+		transform: scale(1.08) rotate(8deg);
+	}
+}
+
+@keyframes link-sweep {
+	from {
+		transform: scaleX(0);
+	}
+	to {
+		transform: scaleX(1);
+	}
+}
+
 .o-teaser > h1,
 .o-teaser > h2,
 .o-teaser > p {
@@ -40,13 +61,23 @@
 	animation: hint-pop 0.45s cubic-bezier(0.2, 0.9, 0.25, 1.2) both;
 }
 
-.contact-form__success {
+.contact-form__success,
+.newsletter__confirmation {
 	animation: rise-in 0.35s ease-out both;
+}
+
+/* Ornaments breathe slowly in the background. */
+.gin-process__ornament,
+.newsletter__ornament,
+.visit-note__ornament {
+	display: inline-block;
+	animation: ornament-shimmer 5s ease-in-out infinite;
 }
 
 .recipe-card__icon,
 .botanical-gallery__item img,
-.botanical-plate img {
+.botanical-plate img,
+.gin-process__image img {
 	transition: transform 0.25s ease;
 }
 
@@ -54,12 +85,25 @@
 	transform: translateY(-2px) rotate(-8deg);
 }
 
-.botanical-gallery__item:hover img {
+.botanical-gallery__item:hover img,
+.gin-process__step:hover .gin-process__image img {
 	transform: scale(1.04);
 }
 
 .botanical-plate:hover img {
 	transform: scale(1.02);
+}
+
+/* Nav links draw a fine gold line on hover. */
+.site-head .menu-item a span::after {
+	transition: transform 0.25s ease;
+	transform: scaleX(0);
+	transform-origin: left;
+}
+
+.site-head .menu-item a:hover span::after {
+	transform: scaleX(1);
+	animation: link-sweep 0.25s ease-out;
 }
 
 @media (min-width: 768px) {
