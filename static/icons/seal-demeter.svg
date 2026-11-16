@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+	<circle cx="60" cy="60" r="56" fill="none" stroke="#b08d57" stroke-width="1.5" />
+	<circle cx="60" cy="60" r="49" fill="none" stroke="#b08d57" stroke-width="0.8" opacity="0.6" />
+	<path d="M60 16 64 24 60 32 56 24Z M60 88 64 96 60 104 56 96Z M16 60 24 56 32 60 24 64Z M88 60 96 56 104 60 96 64Z" fill="#b08d57" opacity="0.8" />
+	<text x="60" y="56" text-anchor="middle" font-family="Georgia, serif" font-size="15" letter-spacing="0.5" fill="#f4f0e6">DEMETER</text>
+	<text x="60" y="72" text-anchor="middle" font-family="Georgia, serif" font-size="7.5" letter-spacing="1.6" fill="#b08d57">BIODYNAMISCH</text>
+	<path d="M42 80h36" stroke="#b08d57" stroke-width="0.8" opacity="0.5" />
+</svg>

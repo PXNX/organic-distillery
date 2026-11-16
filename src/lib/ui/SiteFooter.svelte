@@ -104,6 +104,23 @@
 		</div>
 	</div>
 
+	<div class="footer__seals" aria-label="Zertifizierungen">
+		<img
+			src="/icons/seal-bio.svg"
+			alt="Biologisch zertifiziert"
+			width="72"
+			height="72"
+			loading="lazy"
+		/>
+		<img
+			src="/icons/seal-demeter.svg"
+			alt="Demeter biodynamisch"
+			width="72"
+			height="72"
+			loading="lazy"
+		/>
+	</div>
+
 	<div class="o-wrapper footer__bottom">
 		<span>© {year} Organic Distillery GmbH</span>
 		<span>Bodensee · Germany</span>

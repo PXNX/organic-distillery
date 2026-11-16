@@ -39,6 +39,8 @@ describe('MirroredPage', () => {
 		expect(body).toContain('Farbschema wechseln');
 		expect(body).toContain('/datenschutz');
 		expect(body).toContain('Kein Hofladen');
+		expect(body).toContain('/icons/seal-bio.svg');
+		expect(body).toContain('/icons/seal-demeter.svg');
 	});
 
 	it('explains the gin-making process in four steps', () => {

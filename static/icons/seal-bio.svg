@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+	<circle cx="60" cy="60" r="56" fill="none" stroke="#b08d57" stroke-width="1.5" />
+	<circle cx="60" cy="60" r="49" fill="none" stroke="#b08d57" stroke-width="0.8" opacity="0.6" />
+	<path d="M60 12 66 18 60 24 54 18Z M60 96 66 102 60 108 54 102Z M12 60 18 54 24 60 18 66Z M96 60 102 54 108 60 102 66Z" fill="#b08d57" opacity="0.8" />
+	<text x="60" y="57" text-anchor="middle" font-family="Georgia, serif" font-size="24" fill="#f4f0e6">BIO</text>
+	<text x="60" y="74" text-anchor="middle" font-family="Georgia, serif" font-size="8" letter-spacing="2" fill="#b08d57">ORGANIC</text>
+	<path d="M40 82h40" stroke="#b08d57" stroke-width="0.8" opacity="0.5" />
+</svg>
