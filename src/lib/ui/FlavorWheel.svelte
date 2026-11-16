@@ -94,7 +94,7 @@
 					<h3><span style={`background:${family.color}`}></span>{family.name}</h3>
 					<ul>
 						{#each family.essences as essence (essence.path)}
-							<li>
+							<li class:flavor-wheel__legend-item--active={active === essence.path}>
 								<a href={essence.path}>{essence.name}</a>
 								<span>{essence.pairings.join(' · ')}</span>
 							</li>

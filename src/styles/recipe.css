@@ -1,0 +1,48 @@
+.essence-recipe {
+	max-width: 46rem;
+	margin: 2.5rem auto;
+	background: var(--panel-bg);
+	border: 1px solid var(--hairline);
+}
+
+.essence-recipe__toggle {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	width: 100%;
+	padding: 1.1rem 1.25rem;
+	text-align: left;
+	background: none;
+	border: 0;
+	color: var(--text);
+	font-family: 'Ductus W03 Medium', Georgia, serif;
+	font-size: 1.15rem;
+	cursor: pointer;
+}
+
+.essence-recipe__toggle:hover {
+	color: var(--mystic-gold);
+}
+
+.essence-recipe__icon {
+	color: var(--mystic-gold);
+}
+
+.essence-recipe__arrow {
+	margin-left: auto;
+	color: var(--mystic-gold);
+	font-size: 1.3rem;
+}
+
+.essence-recipe__body {
+	padding: 0 1.25rem 1.5rem;
+}
+
+.essence-recipe__body p {
+	line-height: 1.75;
+	color: var(--muted);
+}
+
+.essence-recipe__download {
+	margin-top: 0.5rem;
+}

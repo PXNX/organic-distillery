@@ -10,7 +10,17 @@ const CUTOUTS = [
 	'media/2017/11/Ginn_200ml.jpg',
 	'media/2017/11/Ginnie_200ml.jpg',
 	'media/2017/11/Ginn_500ml.jpg',
-	'media/2017/11/Ginnie_500ml.jpg'
+	'media/2017/11/Ginnie_500ml.jpg',
+	'media/2017/10/organicdistillery-minze_front_FIN_schatten.jpg',
+	'media/2017/10/organicdistillery-eucalyptus_front_FIN_schatten.jpg',
+	'media/2017/10/organicdistillery-rosen-monarde_front_FIN_schatten.jpg',
+	'media/2017/10/organicdistillery-koriander_front_FIN_schatten.jpg',
+	'media/2017/10/organicdistillery-silber-wermut_front_FIN_schatten.jpg',
+	'media/2017/10/organicdistillery-cistrose_front_FIN_schatten.jpg',
+	'media/2017/10/organicdistillery-mandarine_front_FIN_schatten.jpg',
+	'media/2017/11/organicdistillery-zitronen-verbena_front_FIN_schatten.jpg',
+	'media/2017/10/organicdistillery-brombeer_front_FIN_schatten.jpg',
+	'media/2017/10/organicdistillery-vogelbeere_front_FIN_schatten.jpg'
 ];
 
 const DRAWING_CUTOUTS = [
@@ -68,36 +78,23 @@ async function cutout(src: string, dest: string): Promise<void> {
 	).filter((y) => y >= 0);
 	const firstWide = wide[0] ?? 0;
 	const lastWide = wide[wide.length - 1] ?? h - 1;
-
-	const nearestWide = (y: number) => {
-		const below = wide.find((row) => row >= y);
-		let above = -1;
-		for (const row of wide) {
-			if (row > y) break;
-			above = row;
-		}
-		return { above, below: below ?? -1 };
+	const median = (values: number[]) => {
+		const sorted = [...values].sort((a, b) => a - b);
+		return sorted[Math.floor(sorted.length / 2)] ?? 0;
 	};
+	// Bottle glass is roughly straight; use its median edges through the white label.
+	const bodyLeft = median(wide.map((y) => leftAt(y)));
+	const bodyRight = median(wide.map((y) => rightAt(y)));
 
 	for (let y = 0; y < h; y++) {
 		let left = leftAt(y);
 		let right = rightAt(y);
-		if (right - left < maxWidth * 0.6 && y >= firstWide && y <= lastWide) {
-			const { above, below } = nearestWide(y);
-			if (above >= 0 && below >= 0 && above !== below) {
-				const t = (y - above) / (below - above);
-				left = Math.round(leftAt(above) + (leftAt(below) - leftAt(above)) * t);
-				right = Math.round(rightAt(above) + (rightAt(below) - rightAt(above)) * t);
-			} else if (y <= firstWide) {
-				left = leftAt(firstWide);
-				right = rightAt(firstWide);
-			} else if (y >= lastWide) {
-				left = leftAt(lastWide);
-				right = rightAt(lastWide);
-			}
+		if (y >= firstWide && y <= lastWide) {
+			left = bodyLeft;
+			right = bodyRight;
 		}
 		const hasDark = rightAt(y) > leftAt(y);
-		const inBottle = hasDark || y >= firstWide - 40;
+		const inBottle = hasDark || (y >= firstWide - 40 && y <= lastWide + 20);
 		for (let x = 0; x < w; x++) {
 			const i = y * w + x;
 			if (!inBottle || left >= right || x < left || x > right) {

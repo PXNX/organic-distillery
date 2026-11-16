@@ -22,6 +22,9 @@ export function parseSite(value: unknown): MirroredSite {
 			if (!isRecord(recipe) || !isString(recipe.href) || !isString(recipe.label)) {
 				throw new TypeError(`Page ${index} has an invalid recipe`);
 			}
+			if ('text' in recipe && !isString(recipe.text)) {
+				throw new TypeError(`Page ${index} has an invalid recipe text`);
+			}
 		}
 	}
 	return value as unknown as MirroredSite;

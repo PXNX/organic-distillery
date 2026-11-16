@@ -1,6 +1,7 @@
 import { render } from 'svelte/server';
 import { describe, expect, it } from 'vitest';
 import ContactForm from '../src/lib/ui/ContactForm.svelte';
+import EssenceRecipe from '../src/lib/ui/EssenceRecipe.svelte';
 import FlavorWheel from '../src/lib/ui/FlavorWheel.svelte';
 import GinAroma from '../src/lib/ui/GinAroma.svelte';
 import GinProcess from '../src/lib/ui/GinProcess.svelte';
@@ -44,6 +45,18 @@ describe('MirroredPage', () => {
 		expect(body).toContain('Aroma infundieren');
 		expect(body).toContain('Schonende Destillation');
 		expect(body.match(/gin-process__step/g)).toHaveLength(5);
+	});
+
+	it('renders inline recipe content with a PDF download', () => {
+		const { body } = render(EssenceRecipe, {
+			props: {
+				title: 'Eucalyptus Geist',
+				recipe: { href: '/media/recipe.pdf', label: 'Rezeptkarte', text: 'Lamm und Kräuter.' }
+			}
+		});
+		expect(body).toContain('Rezept');
+		expect(body).toContain('Eucalyptus Geist');
+		expect(body).toContain('/media/recipe.pdf');
 	});
 
 	it('renders the colour-coded flavour wheel', () => {

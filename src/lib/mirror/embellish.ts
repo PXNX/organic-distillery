@@ -36,6 +36,7 @@ export function insertHerbBackdrop(html: string): string {
 export interface RecipeLink {
 	href: string;
 	label: string;
+	text?: string;
 }
 
 const drawingBlock =

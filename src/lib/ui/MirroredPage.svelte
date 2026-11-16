@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ContactForm from './ContactForm.svelte';
+	import EssenceRecipe from './EssenceRecipe.svelte';
 	import FlavorWheel from './FlavorWheel.svelte';
 	import GinAroma from './GinAroma.svelte';
 	import GinProcess from './GinProcess.svelte';
@@ -23,7 +24,7 @@
 {@html page.html}
 
 {#if page.recipe}
-	<RecipeCard recipe={page.recipe} title={essenceName(page.title)} />
+	<EssenceRecipe recipe={page.recipe} title={essenceName(page.title)} />
 {/if}
 
 {#if path === '/kontakt'}

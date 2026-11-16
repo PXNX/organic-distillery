@@ -5,6 +5,7 @@
 @import './process.css';
 @import './aroma.css';
 @import './flavor-wheel.css';
+@import './recipe.css';
 
 html {
 	scrollbar-gutter: stable;
