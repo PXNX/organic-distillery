@@ -6,37 +6,20 @@
  * Run with `bun run mirror` (needs network access).
  */
 import * as cheerio from 'cheerio';
+import {
+	SITE_ORIGIN as ROOT,
+	addImageHints,
+	localPath,
+	rewriteHtml,
+	routeDir,
+	routeSource
+} from '#lib/mirror/normalize.js';
+import type { MirroredPage as Page, MirroredSite as Site } from '#lib/mirror/types.js';
 
-const ROOT = 'https://www.organic-distillery.com';
 const OUT = 'src/lib/content/site.json';
-const ROUTES = 'src/routes';
-
-type Page = { path: string; title: string; description: string; html: string };
-type Site = {
-	pages: Page[];
-	header: string;
-	footer: string;
-	ageCheck: string;
-	order: string;
-};
-
-function localPath(href: string): string | null {
-	try {
-		const url = new URL(href, ROOT);
-		if (!/(^|\.)organic-distillery\.com$/.test(url.hostname)) return null;
-		let path = decodeURIComponent(url.pathname);
-		if (path.length > 1 && path.endsWith('/')) path = path.slice(0, -1);
-		return path || '/';
-	} catch {
-		return null;
-	}
-}
 
 function rewrite(html: string): string {
-	return html
-		.replace(/https?:\/\/(?:www\.)?organic-distillery\.com\/media\//g, '/media/')
-		.replace(/https?:\/\/(?:www\.)?organic-distillery\.com/g, '')
-		.replace(/(href|src|action|content)="([^"]*?)\s+"/g, '$1="$2"');
+	return addImageHints(rewriteHtml(html));
 }
 
 const downloadFile = async (url: string, file: string) => {
@@ -135,11 +118,7 @@ await Bun.write(
 );
 
 for (const page of pages) {
-	const dir = `${ROUTES}${page.path === '/' ? '' : page.path}`;
-	await Bun.write(
-		`${dir}/+page.svelte`,
-		`<script lang="ts">\n\timport MirroredPage from '#lib/components/MirroredPage.svelte';\n</script>\n\n<MirroredPage path="${page.path}" />\n`
-	);
+	await Bun.write(`${routeDir(page.path)}/+page.svelte`, routeSource(page.path));
 }
 
 console.log(`\nMirrored ${pages.length} pages and ${assetPaths.size} media files.`);
