@@ -4,6 +4,7 @@
 @import './motion.css';
 @import './process.css';
 @import './aroma.css';
+@import './flavor-wheel.css';
 
 html {
 	scrollbar-gutter: stable;

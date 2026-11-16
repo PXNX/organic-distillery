@@ -1,0 +1,182 @@
+.flavor-wheel {
+	max-width: 72rem;
+	margin: 4rem auto;
+	padding: 3rem 1.5rem;
+	text-align: center;
+}
+
+.flavor-wheel__ornament {
+	color: var(--mystic-gold);
+	font-size: 1.5rem;
+}
+
+.flavor-wheel__intro {
+	max-width: 40rem;
+	margin: 0.75rem auto 2.5rem;
+	line-height: 1.6;
+	color: var(--muted);
+}
+
+.flavor-wheel__layout {
+	display: grid;
+	grid-template-columns: minmax(20rem, 1fr) minmax(18rem, 1fr);
+	gap: 3rem;
+	align-items: center;
+}
+
+@keyframes wheel-arrive {
+	from {
+		opacity: 0;
+		transform: rotate(-10deg) scale(0.94);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@keyframes wheel-ring-glow {
+	0%,
+	100% {
+		stroke-width: 1;
+		opacity: 0.6;
+	}
+	50% {
+		stroke-width: 2.5;
+		opacity: 1;
+	}
+}
+
+.flavor-wheel__svg {
+	width: 100%;
+	max-width: 30rem;
+	height: auto;
+	margin: 0 auto;
+	filter: drop-shadow(0 14px 26px var(--shadow));
+	transform-origin: center;
+	animation: wheel-arrive 0.9s cubic-bezier(0.2, 0.9, 0.25, 1.2) both;
+}
+
+.flavor-wheel__svg > circle {
+	animation: wheel-ring-glow 5s ease-in-out infinite;
+}
+
+.flavor-wheel__family {
+	font-family: 'Ductus W03 Medium', Georgia, serif;
+	font-size: 11px;
+	letter-spacing: 0.08em;
+}
+
+.flavor-wheel__essence {
+	font-family: Georgia, serif;
+	font-size: 8.5px;
+	fill: #2a2420;
+	pointer-events: none;
+}
+
+.flavor-wheel__slice {
+	cursor: pointer;
+	transform-origin: 200px 200px;
+	transition:
+		opacity 0.25s ease,
+		transform 0.3s cubic-bezier(0.2, 0.9, 0.25, 1.2);
+}
+
+.flavor-wheel__slice:hover {
+	transform: scale(1.018);
+}
+
+.flavor-wheel__slice--dim,
+.flavor-wheel__essence--dim {
+	opacity: 0.35;
+}
+
+.flavor-wheel__slice--active {
+	stroke: var(--mystic-gold);
+	stroke-width: 3;
+}
+
+.flavor-wheel__center {
+	font-family: 'Ductus W03 Medium', Georgia, serif;
+	font-size: 19px;
+	fill: var(--text);
+}
+
+.flavor-wheel__center-small {
+	font-family: Georgia, serif;
+	font-size: 10px;
+	fill: var(--muted);
+}
+
+.flavor-wheel__legend {
+	display: grid;
+	gap: 1.25rem;
+	text-align: left;
+	animation: rise-in 0.5s ease-out 0.15s both;
+}
+
+.flavor-wheel__legend li {
+	animation: rise-in 0.4s ease-out both;
+}
+
+.flavor-wheel__legend li:nth-child(1) {
+	animation-delay: 0.2s;
+}
+.flavor-wheel__legend li:nth-child(2) {
+	animation-delay: 0.26s;
+}
+
+.flavor-wheel__legend-group h3 {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	margin-bottom: 0.5rem;
+	font-size: 0.8rem;
+	letter-spacing: 0.14em;
+}
+
+.flavor-wheel__legend-group h3::before,
+.flavor-wheel__legend-group h3::after {
+	display: none;
+}
+
+.flavor-wheel__legend-group h3 span {
+	width: 0.9rem;
+	height: 0.9rem;
+	border: 1px solid var(--hairline);
+}
+
+.flavor-wheel__legend ul {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.flavor-wheel__legend li {
+	padding: 0.35rem 0;
+	border-bottom: 1px solid var(--hairline);
+}
+
+.flavor-wheel__legend li a {
+	font-family: 'Ductus W03 Medium', Georgia, serif;
+	font-size: 1rem;
+	color: var(--text);
+	text-decoration: none;
+}
+
+.flavor-wheel__legend li a:hover {
+	color: var(--mystic-gold);
+}
+
+.flavor-wheel__legend li span {
+	display: block;
+	font-size: 0.72rem;
+	color: var(--muted);
+}
+
+@media (max-width: 860px) {
+	.flavor-wheel__layout {
+		grid-template-columns: 1fr;
+		gap: 2rem;
+	}
+}

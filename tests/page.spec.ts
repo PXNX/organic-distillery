@@ -1,6 +1,7 @@
 import { render } from 'svelte/server';
 import { describe, expect, it } from 'vitest';
 import ContactForm from '../src/lib/ui/ContactForm.svelte';
+import FlavorWheel from '../src/lib/ui/FlavorWheel.svelte';
 import GinAroma from '../src/lib/ui/GinAroma.svelte';
 import GinProcess from '../src/lib/ui/GinProcess.svelte';
 import MirroredPage from '../src/lib/ui/MirroredPage.svelte';
@@ -43,6 +44,14 @@ describe('MirroredPage', () => {
 		expect(body).toContain('Aroma infundieren');
 		expect(body).toContain('Schonende Destillation');
 		expect(body.match(/gin-process__step/g)).toHaveLength(5);
+	});
+
+	it('renders the colour-coded flavour wheel', () => {
+		const { body } = render(FlavorWheel);
+		expect(body).toContain('Aromarad');
+		expect(body).toContain('ZITRUS');
+		expect(body).toContain('Mandarine');
+		expect(body.match(/class="flavor-wheel__slice"/g)).toHaveLength(10);
 	});
 
 	it('renders distinct aroma profiles for Ginn and Ginnie', () => {
