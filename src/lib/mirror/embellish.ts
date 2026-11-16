@@ -20,6 +20,19 @@ export function addDocumentaryPress(html: string): string {
 	return html.replace(pressList, `$1${item}`);
 }
 
+/** Places the page's botanical drawing behind the essence bottle. */
+export function insertHerbBackdrop(html: string): string {
+	if (html.includes('essence-herb')) return html;
+	const drawing =
+		html.match(/<img[^>]*class="single-column__img"[^>]*src="([^"]+)"[^>]*>/)?.[1] ??
+		html.match(/<img[^>]*src="([^"]+)"[^>]*class="single-column__img"[^>]*>/)?.[1];
+	if (!drawing) return html;
+	return html.replace(
+		'<div class="o-product__img-wrapper">',
+		`<div class="o-product__img-wrapper"><div class="essence-herb" style="--herb: url('${drawing}')"><img src="${drawing}" alt="" aria-hidden="true" loading="lazy" decoding="async"><span class="essence-herb__shimmer"></span></div>`
+	);
+}
+
 export interface RecipeLink {
 	href: string;
 	label: string;
