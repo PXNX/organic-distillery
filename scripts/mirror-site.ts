@@ -88,7 +88,10 @@ while (queue.length) {
 		const asset = localPath(url);
 		if (asset && asset.startsWith('/media/')) assetPaths.add(asset);
 	}
-	for (const m of html.matchAll(/url\((['"]?)(\/media\/[^'")]+)\1\)/g)) assetPaths.add(m[2]);
+	for (const m of html.matchAll(/url\((['"]?)(\/media\/[^'")]+)\1\)/g)) {
+		const asset = m[2];
+		if (asset) assetPaths.add(asset);
+	}
 
 	console.log(`crawled ${path} (${title})`);
 }

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import site from '#lib/content/site.json';
+	import { site } from '#lib/content/index.js';
 	import '../styles/app.css';
 
 	let { children } = $props();

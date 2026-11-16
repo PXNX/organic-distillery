@@ -3,6 +3,10 @@
 	"compilerOptions": {
 		"sourceMap": true,
 		"strict": true,
+		"noUncheckedIndexedAccess": true,
+		"exactOptionalPropertyTypes": true,
+		"noImplicitOverride": true,
+		"types": ["$app/types", "bun", "node"],
 		"moduleResolution": "bundler",
 		"rewriteRelativeImportExtensions": true,
 		"allowJs": true,
@@ -12,5 +16,5 @@
 		"resolveJsonModule": true,
 		"skipLibCheck": true
 	},
-	"include": ["src", "tests", "vite.config.ts", "eslint.config.js", "*"]
+	"include": ["src", "tests", "scripts", "vite.config.ts", "eslint.config.js", "*"]
 }

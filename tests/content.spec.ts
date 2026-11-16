@@ -1,6 +1,6 @@
 import { access } from 'node:fs/promises';
 import { describe, expect, it } from 'vitest';
-import site from '../src/lib/content/site.json';
+import { site } from '../src/lib/content/index.js';
 
 const exists = async (path: string) => {
 	try {
@@ -42,7 +42,8 @@ describe('mirrored site content', () => {
 		const refs = new Set<string>();
 		for (const html of [site.header, site.footer, ...site.pages.map((page) => page.html)]) {
 			for (const match of html.matchAll(/(?:href|src)="(\/media\/[^"]+)"/g)) {
-				refs.add(decodeURIComponent(match[1]));
+				const ref = match[1];
+				if (ref) refs.add(decodeURIComponent(ref));
 			}
 		}
 		expect(refs.size).toBeGreaterThan(0);
