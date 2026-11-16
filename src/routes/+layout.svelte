@@ -5,5 +5,11 @@
 	let { children } = $props();
 </script>
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<svelte:head>
+	<link rel="icon" href={favicon} />
+	<link rel="stylesheet" href="/vendor/block-library.min.css" />
+	<link rel="stylesheet" href="/vendor/styles.min.css" />
+	<link rel="stylesheet" href="/vendor/cf7.min.css" />
+</svelte:head>
+
 {@render children()}

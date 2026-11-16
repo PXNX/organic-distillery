@@ -9,6 +9,7 @@ import ts from 'typescript-eslint';
 const gitignorePath = path.resolve(import.meta.dirname, '.gitignore');
 
 export default defineConfig(
+	{ ignores: ['static/vendor/**', 'src/lib/paraglide/**', 'build/**'] },
 	includeIgnoreFile(gitignorePath),
 	js.configs.recommended,
 	ts.configs.recommended,
@@ -34,8 +35,8 @@ export default defineConfig(
 		}
 	},
 	{
-		// Override or add rule settings here, such as:
-		// 'svelte/button-has-type': 'error'
-		rules: {}
+		// The mirrored site content is trusted and stored in our own repo.
+		files: ['src/lib/components/SitePage.svelte'],
+		rules: { 'svelte/no-at-html-tags': 'off' }
 	}
 );

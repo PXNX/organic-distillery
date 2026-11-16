@@ -95,8 +95,12 @@ while (queue.length) {
 	});
 
 	for (const url of [
-		...$('img').map((_, el) => $(el).attr('src') || $(el).attr('data-src') || '').get(),
-		...$('img').map((_, el) => $(el).attr('srcset')?.split(',')[0]?.trim().split(' ')[0] || '').get()
+		...$('img')
+			.map((_, el) => $(el).attr('src') || $(el).attr('data-src') || '')
+			.get(),
+		...$('img')
+			.map((_, el) => $(el).attr('srcset')?.split(',')[0]?.trim().split(' ')[0] || '')
+			.get()
 	]) {
 		const asset = localPath(url);
 		if (asset && asset.startsWith('/media/')) assetPaths.add(asset);
@@ -117,10 +121,7 @@ for (const [url, file] of vendor) await downloadFile(url, file);
 
 const fontCss = await Bun.file('static/vendor/styles.min.css').text();
 for (const m of fontCss.matchAll(/url\(\.\.\/fonts\/([^?'")]+)[^)]*\)/g)) {
-	await downloadFile(
-		`/content/themes/ginnie/static/fonts/${m[1]}`,
-		`fonts/${m[1]}`
-	);
+	await downloadFile(`/content/themes/ginnie/static/fonts/${m[1]}`, `fonts/${m[1]}`);
 }
 
 for (const path of assetPaths) {
@@ -128,7 +129,10 @@ for (const path of assetPaths) {
 }
 
 pages.sort((a, b) => a.path.localeCompare(b.path));
-await Bun.write(OUT, JSON.stringify({ pages, header, footer, ageCheck, order } satisfies Site, null, 2));
+await Bun.write(
+	OUT,
+	JSON.stringify({ pages, header, footer, ageCheck, order } satisfies Site, null, 2)
+);
 
 for (const page of pages) {
 	const dir = `${ROUTES}${page.path === '/' ? '' : page.path}`;
