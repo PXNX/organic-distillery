@@ -80,6 +80,7 @@ describe('insertHerbBackdrop', () => {
 		const html = insertHerbBackdrop(page);
 		expect(html).toContain('essence-herb__shimmer');
 		expect(html).toContain("--herb: url('/media/herb.webp')");
+		expect(html).toContain("--outline: url('/media/herb-outline.webp')");
 		expect(html.indexOf('essence-herb')).toBeLessThan(html.indexOf('wp-post-image'));
 	});
 

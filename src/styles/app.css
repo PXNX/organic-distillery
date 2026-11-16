@@ -6,6 +6,7 @@
 @import './aroma.css';
 @import './flavor-wheel.css';
 @import './recipe.css';
+@import './essence-page.css';
 @import './error.css';
 
 html {
@@ -111,8 +112,8 @@ img[src*='Ginnie_'] {
 	);
 	background-size: 100% 35%;
 	background-repeat: no-repeat;
-	-webkit-mask-image: var(--herb);
-	mask-image: var(--herb);
+	-webkit-mask-image: var(--outline, var(--herb));
+	mask-image: var(--outline, var(--herb));
 	-webkit-mask-size: contain;
 	mask-size: contain;
 	-webkit-mask-repeat: no-repeat;

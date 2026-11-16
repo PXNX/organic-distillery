@@ -171,6 +171,34 @@ async function cutoutDrawing(src: string, dest: string): Promise<void> {
 
 	const alpha = Buffer.alloc(pixels);
 	for (let i = 0; i < pixels; i++) alpha[i] = background[i] ? 0 : 255;
+
+	// A thin outline mask lets the shimmer glow along the pencil strokes only.
+	const outline = Buffer.alloc(pixels);
+	for (let y = 0; y < h; y++) {
+		for (let x = 0; x < w; x++) {
+			const i = y * w + x;
+			const solid = (alpha[i] ?? 0) > 128;
+			const neighbours = [
+				x > 1 ? alpha[i - 2] : 0,
+				x < w - 2 ? alpha[i + 2] : 0,
+				y > 1 ? alpha[i - 2 * w] : 0,
+				y < h - 2 ? alpha[i + 2 * w] : 0
+			];
+			if (neighbours.some((n) => (n ?? 0) > 128) !== solid) outline[i] = 255;
+		}
+	}
+	const outlineRgba = Buffer.alloc(pixels * 4);
+	for (let i = 0; i < pixels; i++) {
+		outlineRgba[i * 4] = 255;
+		outlineRgba[i * 4 + 1] = 255;
+		outlineRgba[i * 4 + 2] = 255;
+		outlineRgba[i * 4 + 3] = outline[i] ?? 0;
+	}
+	await sharp(outlineRgba, { raw: { width: w, height: h, channels: 4 } })
+		.resize(Math.round(w * 1.3), Math.round(h * 1.3), { kernel: 'mks2021' })
+		.webp({ quality: 90, effort: 5, alphaQuality: 100 })
+		.toFile(dest.replace(/\.webp$/i, '-outline.webp'));
+
 	const soft = await sharp(alpha, { raw: { width: w, height: h, channels: 1 } })
 		.blur(0.4)
 		.raw()

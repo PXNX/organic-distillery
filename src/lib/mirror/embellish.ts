@@ -27,9 +27,10 @@ export function insertHerbBackdrop(html: string): string {
 		html.match(/<img[^>]*class="single-column__img"[^>]*src="([^"]+)"[^>]*>/)?.[1] ??
 		html.match(/<img[^>]*src="([^"]+)"[^>]*class="single-column__img"[^>]*>/)?.[1];
 	if (!drawing) return html;
+	const outline = drawing.replace(/\.webp$/i, '-outline.webp');
 	return html.replace(
 		'<div class="o-product__img-wrapper">',
-		`<div class="o-product__img-wrapper"><div class="essence-herb" style="--herb: url('${drawing}')"><img src="${drawing}" alt="" aria-hidden="true" loading="lazy" decoding="async"><span class="essence-herb__shimmer"></span></div>`
+		`<div class="o-product__img-wrapper"><div class="essence-herb" style="--herb: url('${drawing}'); --outline: url('${outline}')"><img src="${drawing}" alt="" aria-hidden="true" loading="lazy" decoding="async"><span class="essence-herb__shimmer"></span></div>`
 	);
 }
 
