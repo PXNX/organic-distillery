@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import ContactForm from '../src/lib/components/ContactForm.svelte';
 import MirroredPage from '../src/lib/components/MirroredPage.svelte';
 import Newsletter from '../src/lib/components/Newsletter.svelte';
+import SiteFooter from '../src/lib/components/SiteFooter.svelte';
 import RecipeCard from '../src/lib/components/RecipeCard.svelte';
 
 describe('MirroredPage', () => {
@@ -24,6 +25,14 @@ describe('MirroredPage', () => {
 		expect(body).toContain('EMAIL');
 		expect(body).toContain('NACHRICHT');
 		expect(body).toContain('Abschicken');
+	});
+
+	it('renders the redesigned footer with navigation and theme toggle', () => {
+		const { body } = render(SiteFooter);
+		expect(body).toContain('Organic Distillery GmbH');
+		expect(body).toContain('Farbschema wechseln');
+		expect(body).toContain('/datenschutz');
+		expect(body).toContain('Kein Hofladen');
 	});
 
 	it('renders a newsletter signup form', () => {

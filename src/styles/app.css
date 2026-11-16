@@ -3,13 +3,6 @@
 @import './mystic.css';
 @import './motion.css';
 
-:root {
-	color-scheme: light;
-	--mystic-gold: #b08d57;
-	--mystic-ink: #111110;
-	--mystic-parchment: #f4f0e6;
-}
-
 html {
 	scrollbar-gutter: stable;
 }

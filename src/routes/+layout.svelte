@@ -7,6 +7,7 @@
 	import { shopMockMode } from '#lib/shop/config.js';
 	import { attachAgeGate } from '#lib/age-gate.js';
 	import InstallHint from '#lib/components/InstallHint.svelte';
+	import SiteFooter from '#lib/components/SiteFooter.svelte';
 	import { attachMockOrder } from '#lib/shop/mock-client.js';
 	import '../styles/app.css';
 
@@ -53,7 +54,7 @@
 <div class="js-site site" class:site--no-padding={isFrontPage} class:is-front-page={isFrontPage}>
 	<header class="site-head">{@html site.header}</header>
 	{@render children()}
-	<footer class="site-footer">{@html site.footer}</footer>
+	<SiteFooter />
 </div>
 
 <div class="js-order-popup o-order">{@html site.order}</div>

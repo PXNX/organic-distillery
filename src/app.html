@@ -12,6 +12,15 @@
 				if (localStorage.getItem('organic-distillery:age-confirmed') === 'true') {
 					document.documentElement.dataset.ageConfirmed = 'true';
 				}
+				const savedTheme = localStorage.getItem('organic-distillery:theme');
+				const theme =
+					savedTheme === 'light' || savedTheme === 'dark'
+						? savedTheme
+						: matchMedia('(prefers-color-scheme: dark)').matches
+							? 'dark'
+							: 'light';
+				document.documentElement.dataset.theme = theme;
+				document.documentElement.style.colorScheme = theme;
 			} catch {}
 		</script>
 		%sveltekit.head%
