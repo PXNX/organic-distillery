@@ -7,6 +7,7 @@ import {
 	essenceName,
 	extractRecipeLink,
 	latinNameFromSrc,
+	replaceContactLogo,
 	wrapBotanicalPlates
 } from '../src/lib/mirror/embellish.js';
 
@@ -57,6 +58,17 @@ describe('extractRecipeLink', () => {
 
 	it('leaves pages without a recipe untouched', () => {
 		expect(extractRecipeLink('<p>Hello</p>').recipe).toBeNull();
+	});
+});
+
+describe('replaceContactLogo', () => {
+	it('uses the vector brand mark instead of the raster logo', () => {
+		const html = replaceContactLogo(
+			'<img class="wp-image-84" src="/media/2017/10/organic-distillery-logo.png" width="49" height="49">'
+		);
+		expect(html).toContain('/icons/brand-mark.svg');
+		expect(html).toContain('class="contact-logo"');
+		expect(html).not.toContain('organic-distillery-logo');
 	});
 });
 

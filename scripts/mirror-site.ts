@@ -19,6 +19,7 @@ import {
 	clarifyOrderLinks,
 	extractContactForm,
 	extractRecipeLink,
+	replaceContactLogo,
 	wrapBotanicalPlates
 } from '#lib/mirror/embellish.js';
 import type { MirroredPage as Page, MirroredSite as Site } from '#lib/mirror/types.js';
@@ -79,7 +80,9 @@ while (queue.length) {
 	const plated = path.startsWith('/essenzen/') ? wrapBotanicalPlates(rewritten, title) : rewritten;
 	const { html: withoutRecipe, recipe } = extractRecipeLink(clarifyOrderLinks(plated));
 	const withoutContact =
-		path === '/kontakt' ? extractContactForm(withoutRecipe).html : withoutRecipe;
+		path === '/kontakt'
+			? replaceContactLogo(extractContactForm(withoutRecipe).html)
+			: withoutRecipe;
 	const html = path === '/ueber-uns' ? addDocumentaryPress(withoutContact) : withoutContact;
 
 	pages.push(

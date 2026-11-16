@@ -251,7 +251,7 @@
 			"path": "/kontakt",
 			"title": "Kontakt – Von der Natur begeistert",
 			"description": "",
-			"html": "\n\n    \n<div class=\"o-module o-contact \">\n    <div class=\"o-contact__text\">\n        <h1>Kontakt</h1>\n<p>&nbsp;</p>\n<p><img decoding=\"async\" fetchpriority=\"high\" class=\"alignnone size-full wp-image-84\" src=\"/media/2017/10/organic-distillery-logo.webp\" alt=\"\" width=\"49\" height=\"49\"></p>\n<h2>Organic Distillery GmbH</h2>\n<p>Dornierstrasse 139<br>\n88048 Friedrichshafen / Bodensee<br>\nGermany<br>\n+49 (0) 178 172 47 73</p>\n<p>Kein Hofladen – Besuche auf Voranmeldung</p>\n<h2>Mail</h2>\n    </div>\n    \n\n</div>\n\n\n\n    \n"
+			"html": "\n\n    \n<div class=\"o-module o-contact \">\n    <div class=\"o-contact__text\">\n        <h1>Kontakt</h1>\n<p>&nbsp;</p>\n<p><img class=\"contact-logo\" src=\"/icons/brand-mark.svg\" alt=\"Organic Distillery\" width=\"96\" height=\"96\"></p>\n<h2>Organic Distillery GmbH</h2>\n<p>Dornierstrasse 139<br>\n88048 Friedrichshafen / Bodensee<br>\nGermany<br>\n+49 (0) 178 172 47 73</p>\n<p>Kein Hofladen – Besuche auf Voranmeldung</p>\n<h2>Mail</h2>\n    </div>\n    \n\n</div>\n\n\n\n    \n"
 		},
 		{
 			"path": "/organic-distillery",

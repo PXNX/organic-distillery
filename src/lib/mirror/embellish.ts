@@ -20,6 +20,14 @@ export function addDocumentaryPress(html: string): string {
 	return html.replace(pressList, `$1${item}`);
 }
 
+/** Replaces the low-resolution contact logo with the vector brand mark. */
+export function replaceContactLogo(html: string): string {
+	return html.replace(
+		/<img[^>]*src="\/media\/2017\/10\/organic-distillery-logo\.(?:png|webp)"[^>]*>/g,
+		'<img class="contact-logo" src="/icons/brand-mark.svg" alt="Organic Distillery" width="96" height="96">'
+	);
+}
+
 /** Turns vague WordPress order links into clearly labelled shop buttons. */
 export function clarifyOrderLinks(html: string): string {
 	return html
