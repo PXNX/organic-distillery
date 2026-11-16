@@ -41,7 +41,7 @@ export default defineConfig(
 	},
 	{
 		// Links here are mirrored data or mailto/download URLs, not typed app routes.
-		files: ['src/lib/ui/*.svelte'],
+		files: ['src/lib/ui/*.svelte', 'src/routes/+error.svelte'],
 		rules: { 'svelte/no-navigation-without-resolve': 'off' }
 	}
 );

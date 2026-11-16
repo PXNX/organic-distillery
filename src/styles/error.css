@@ -1,0 +1,52 @@
+.error-page {
+	display: grid;
+	place-items: center;
+	min-height: 70vh;
+	padding: 4rem 1.5rem;
+	text-align: center;
+}
+
+.error-page__card {
+	max-width: 36rem;
+	padding: 3rem 2rem;
+	background: var(--panel-bg);
+	border: 1px solid var(--mystic-gold);
+	outline: 1px solid rgb(201 168 106 / 30%);
+	outline-offset: -6px;
+	box-shadow: 0 18px 40px var(--shadow);
+}
+
+.error-page__ornament {
+	color: var(--mystic-gold);
+	font-size: 1.75rem;
+}
+
+.error-page__status {
+	margin: 0.5rem 0;
+	font-family: 'Ductus W03 Medium', Georgia, serif;
+	font-size: 4rem;
+	line-height: 1;
+	color: var(--mystic-gold);
+}
+
+.error-page h1 {
+	margin-bottom: 1rem;
+}
+
+.error-page__description {
+	line-height: 1.7;
+	color: var(--muted);
+}
+
+.error-page__links {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.6rem;
+	margin: 2rem 0 1.25rem;
+}
+
+.error-page__mail {
+	font-size: 0.85rem;
+	color: var(--mystic-gold);
+}

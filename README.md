@@ -62,6 +62,7 @@ tests/                   unit and content-integrity tests
 - **PWA**: manifest, icons, minimal service worker and an install hint using `beforeinstallprompt`.
 - **Theme**: follows `prefers-color-scheme` with a footer toggle; ornate light/dark palettes, subtle animations and full `prefers-reduced-motion` support.
 - **Telemetry**: cookieless Vercel Analytics page views plus typed custom events (recipe downloads, form submissions, theme changes, PWA install outcomes). Disabled in development; a disclosure is shown on the Datenschutz page.
+- **Error pages**: a themed `+error.svelte` renders 404s and 500s without the site shell; `adapter-static` emits a `404.html` fallback so it also appears on static hosting.
 
 ## Refreshing the mirror
 

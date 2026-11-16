@@ -14,6 +14,7 @@
 
 	let { children } = $props();
 	let isFrontPage = $derived(page.url.pathname === '/');
+	let isError = $derived(page.status >= 400);
 
 	onMount(() => {
 		initTelemetry();
@@ -51,20 +52,24 @@
 	<link rel="stylesheet" href="/vendor/cf7.min.css" />
 </svelte:head>
 
-<div class="o-age-check">{@html site.ageCheck}</div>
-
-<div class="js-site site" class:site--no-padding={isFrontPage} class:is-front-page={isFrontPage}>
-	<header class="site-head">{@html site.header}</header>
+{#if isError}
 	{@render children()}
-	<SiteFooter />
-</div>
+{:else}
+	<div class="o-age-check">{@html site.ageCheck}</div>
 
-<div class="js-order-popup o-order">{@html site.order}</div>
-
-<InstallHint raised={shopMockMode} />
-
-{#if shopMockMode}
-	<div class="shop-mock-banner" role="status">
-		Shop-Mock-Modus aktiv – Bestellungen werden nicht versendet.
+	<div class="js-site site" class:site--no-padding={isFrontPage} class:is-front-page={isFrontPage}>
+		<header class="site-head">{@html site.header}</header>
+		{@render children()}
+		<SiteFooter />
 	</div>
+
+	<div class="js-order-popup o-order">{@html site.order}</div>
+
+	<InstallHint raised={shopMockMode} />
+
+	{#if shopMockMode}
+		<div class="shop-mock-banner" role="status">
+			Shop-Mock-Modus aktiv – Bestellungen werden nicht versendet.
+		</div>
+	{/if}
 {/if}

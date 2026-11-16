@@ -6,6 +6,7 @@
 @import './aroma.css';
 @import './flavor-wheel.css';
 @import './recipe.css';
+@import './error.css';
 
 html {
 	scrollbar-gutter: stable;
