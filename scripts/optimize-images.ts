@@ -52,9 +52,16 @@ async function cutout(src: string, dest: string): Promise<void> {
 		const o = (y * w + x) * channels;
 		return [data[o] ?? 0, data[o + 1] ?? 0, data[o + 2] ?? 0] as const;
 	};
-	const dark = (x: number, y: number) => {
+	// Dark glass, saturated cork/amber, and label ink all count as the object.
+	const isObject = (x: number, y: number) => {
 		const [r, g, b] = pixel(x, y);
-		return luminance(r, g, b) < 110 && saturation(r, g, b) < 60;
+		const lum = luminance(r, g, b);
+		const sat = saturation(r, g, b);
+		return (lum < 150 && sat < 95) || (sat >= 22 && lum < 235);
+	};
+	const isPaper = (x: number, y: number) => {
+		const [r, g, b] = pixel(x, y);
+		return luminance(r, g, b) > 205 && saturation(r, g, b) < 20;
 	};
 
 	const rowLeft = new Int32Array(h).fill(w);
@@ -63,7 +70,7 @@ async function cutout(src: string, dest: string): Promise<void> {
 	const rightAt = (y: number) => rowRight[y] ?? -1;
 	for (let y = 0; y < h; y++) {
 		for (let x = 0; x < w; x++) {
-			if (!dark(x, y)) continue;
+			if (!isObject(x, y)) continue;
 			if (x < leftAt(y)) rowLeft[y] = x;
 			if (x > rightAt(y)) rowRight[y] = x;
 		}
@@ -93,15 +100,17 @@ async function cutout(src: string, dest: string): Promise<void> {
 			left = bodyLeft;
 			right = bodyRight;
 		}
-		const hasDark = rightAt(y) > leftAt(y);
-		const inBottle = hasDark || (y >= firstWide - 40 && y <= lastWide + 20);
+		const hasObject = rightAt(y) > leftAt(y);
+		const inBottle = (hasObject || (y >= firstWide && y <= lastWide)) && y <= lastWide + 4;
 		for (let x = 0; x < w; x++) {
 			const i = y * w + x;
 			if (!inBottle || left >= right || x < left || x > right) {
 				alpha[i] = 0;
 				continue;
 			}
-			alpha[i] = 255;
+			// Drop pale halo pixels hugging the silhouette edge.
+			const nearEdge = x - left <= 2 || right - x <= 2;
+			alpha[i] = nearEdge && isPaper(x, y) ? 0 : 255;
 		}
 	}
 
@@ -123,9 +132,9 @@ async function cutout(src: string, dest: string): Promise<void> {
 	}
 
 	await sharp(rgba, { raw: { width: w, height: h, channels: 4 } })
-		.resize(w * 2.5, h * 2.5, { kernel: 'mks2021' })
-		.sharpen({ sigma: 0.4 })
-		.webp({ quality: 84, effort: 5, alphaQuality: 90 })
+		.resize(w * 4, h * 4, { kernel: 'mks2021' })
+		.sharpen({ sigma: 0.6, flat: 0.6, jagged: 1.4 })
+		.webp({ quality: 88, effort: 5, alphaQuality: 92 })
 		.toFile(dest);
 	console.log(`cutout ${src} -> ${dest}`);
 }
