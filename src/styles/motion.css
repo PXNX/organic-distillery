@@ -1,0 +1,84 @@
+/* Small, quiet moments of delight — nothing that fights the content. */
+
+@keyframes rise-in {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@keyframes hint-pop {
+	0% {
+		opacity: 0;
+		transform: translateY(10px) scale(0.96);
+	}
+	100% {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+.o-teaser > h1,
+.o-teaser > h2,
+.o-teaser > p {
+	animation: rise-in 0.5s ease-out both;
+}
+
+.o-teaser > :nth-child(2) {
+	animation-delay: 0.07s;
+}
+
+.o-teaser > :nth-child(3) {
+	animation-delay: 0.14s;
+}
+
+.install-hint {
+	animation: hint-pop 0.45s cubic-bezier(0.2, 0.9, 0.25, 1.2) both;
+}
+
+.contact-form__success {
+	animation: rise-in 0.35s ease-out both;
+}
+
+.recipe-card__icon,
+.botanical-gallery__item img,
+.botanical-plate img {
+	transition: transform 0.25s ease;
+}
+
+.recipe-card:hover .recipe-card__icon {
+	transform: translateY(-2px) rotate(-8deg);
+}
+
+.botanical-gallery__item:hover img {
+	transform: scale(1.04);
+}
+
+.botanical-plate:hover img {
+	transform: scale(1.02);
+}
+
+@media (min-width: 768px) {
+	.site h1:hover::before,
+	.site h1:hover::after,
+	.site h2:hover::before,
+	.site h2:hover::after {
+		display: inline-block;
+		transform: rotate(18deg) scale(1.1);
+		transition: transform 0.25s ease;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}
