@@ -66,6 +66,14 @@ img {
 	overflow: visible;
 }
 
+.site-head {
+	view-transition-name: site-header;
+}
+
+.site-footer {
+	view-transition-name: site-footer;
+}
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
 	animation-duration: 180ms;
