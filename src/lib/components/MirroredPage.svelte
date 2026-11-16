@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ContactForm from './ContactForm.svelte';
+	import Newsletter from './Newsletter.svelte';
 	import RecipeCard from './RecipeCard.svelte';
 	import { botanicalPlates } from '#lib/content/plates.js';
 	import { recipeCards } from '#lib/content/recipes.js';
@@ -24,6 +25,10 @@
 
 {#if path === '/kontakt'}
 	<ContactForm />
+{/if}
+
+{#if path === '/' || path === '/kontakt' || path === '/ueber-uns'}
+	<Newsletter />
 {/if}
 
 {#if path === '/'}

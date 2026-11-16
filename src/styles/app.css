@@ -47,6 +47,58 @@ input[type='checkbox'] {
 	background: #f6f6f6;
 }
 
+.newsletter {
+	max-width: 46rem;
+	margin: 3rem auto;
+	padding: 2.5rem 1.5rem;
+	text-align: center;
+	background: var(--mystic-ink);
+	color: var(--mystic-parchment);
+	border: 1px solid var(--mystic-gold);
+}
+
+.newsletter__ornament {
+	color: var(--mystic-gold);
+}
+
+.newsletter h2 {
+	margin-top: 0.5rem;
+}
+
+.newsletter p {
+	max-width: 30rem;
+	margin: 0.75rem auto 1.5rem;
+}
+
+.newsletter__form {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	justify-content: center;
+}
+
+.newsletter__form input {
+	flex: 1 1 16rem;
+	max-width: 24rem;
+	padding: 0.85rem;
+	color: var(--mystic-ink);
+	background: var(--mystic-parchment);
+	border: 1px solid var(--mystic-gold);
+	text-align: center;
+	letter-spacing: 0.1em;
+}
+
+.newsletter__error {
+	display: block;
+	margin-top: 0.75rem;
+	font-size: 0.85rem;
+	color: #f0b4a8;
+}
+
+.newsletter__confirmation .o-button {
+	margin-left: 0.5rem;
+}
+
 .contact-form {
 	max-width: 34rem;
 	margin: 2rem auto;
