@@ -1,3 +1,27 @@
+# organic-distillery
+
+A local replica of [organic-distillery.com](https://www.organic-distillery.com/), built with SvelteKit 3, Svelte 5, TypeScript 6, Tailwind 4 and Bun.
+
+## Running the replica
+
+```sh
+bun install
+bun run dev      # http://localhost:5173
+bun run ci       # format check, lint, type check, tests and static build
+```
+
+The replica includes every HTML page crawlable from the homepage (25 pages), the original German content, header/footer, age gate and order popup. Images, PDFs, fonts, CSS and JS are mirrored into `static/`, so the site works offline. Root-relative links mean it works on the apex and any subdomain, e.g. `http://www.localhost:5173`.
+
+## Refreshing the mirror
+
+```sh
+bun run mirror
+```
+
+This re-crawls the live site, rewrites internal URLs to local paths, refreshes `src/lib/content/site.json`, re-downloads assets and regenerates one route component per page. It needs network access.
+
+---
+
 # sv
 
 Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
