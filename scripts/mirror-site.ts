@@ -14,6 +14,7 @@ import {
 	routeDir,
 	routeSource
 } from '#lib/mirror/normalize.js';
+import { wrapBotanicalPlates } from '#lib/mirror/embellish.js';
 import type { MirroredPage as Page, MirroredSite as Site } from '#lib/mirror/types.js';
 
 const OUT = 'src/lib/content/site.json';
@@ -68,7 +69,8 @@ while (queue.length) {
 
 	const content = $('.js-site').first().clone();
 	content.find('.site-head, .site-footer').remove();
-	const html = rewrite(content.html() || '');
+	const rewritten = rewrite(content.html() || '');
+	const html = path.startsWith('/essenzen/') ? wrapBotanicalPlates(rewritten, title) : rewritten;
 
 	pages.push({ path, title, description, html });
 

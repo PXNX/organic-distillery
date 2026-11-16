@@ -3,6 +3,9 @@
 
 :root {
 	color-scheme: light;
+	--mystic-gold: #b08d57;
+	--mystic-ink: #111110;
+	--mystic-parchment: #f4f0e6;
 }
 
 html {
@@ -40,6 +43,59 @@ input[type='checkbox'] {
 
 .o-order__item:has(input:focus) {
 	background: #f6f6f6;
+}
+
+/* Botanical plates: pencil drawings framed like antique specimen sheets. */
+.botanical-plate {
+	position: relative;
+	margin: 0 0 2rem;
+	padding: clamp(1rem, 3vw, 2rem);
+	background: var(--mystic-parchment);
+	border: 1px solid var(--mystic-gold);
+	outline: 1px solid rgb(176 141 87 / 35%);
+	outline-offset: -6px;
+	box-shadow: 0 12px 30px rgb(17 17 16 / 8%);
+	overflow: hidden;
+}
+
+.botanical-plate::before {
+	content: '';
+	position: absolute;
+	inset: 8px;
+	border: 1px solid rgb(176 141 87 / 25%);
+	pointer-events: none;
+}
+
+.botanical-plate img {
+	display: block;
+	width: 100%;
+	max-width: 30rem;
+	margin: 0 auto;
+	filter: sepia(0.18) contrast(1.06);
+	mix-blend-mode: multiply;
+}
+
+.botanical-plate__caption {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	margin-top: 1.25rem;
+	text-align: center;
+}
+
+.botanical-plate__latin {
+	font-family: 'Ductus W03 Medium', Georgia, serif;
+	font-style: italic;
+	letter-spacing: 0.08em;
+	color: #6b5636;
+}
+
+.botanical-plate__name {
+	font-size: 0.72rem;
+	text-transform: uppercase;
+	letter-spacing: 0.18em;
+	color: #8a7551;
 }
 
 /* Mirrored assets should never force horizontal scrolling on small screens. */
@@ -137,6 +193,10 @@ img {
 
 	.o-text__content {
 		max-width: 100%;
+	}
+
+	.botanical-plate {
+		width: 100% !important;
 	}
 
 	.o-section {
