@@ -137,4 +137,6 @@ for (const page of pages) {
 	await Bun.write(`${routeDir(page.path)}/+page.svelte`, routeSource(page.path));
 }
 
+await import('./optimize-images.js');
+
 console.log(`\nMirrored ${pages.length} pages and ${assetPaths.size} media files.`);
