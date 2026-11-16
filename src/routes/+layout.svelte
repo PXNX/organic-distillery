@@ -9,12 +9,14 @@
 	import InstallHint from '#lib/ui/InstallHint.svelte';
 	import SiteFooter from '#lib/ui/SiteFooter.svelte';
 	import { attachMockOrder } from '#lib/features/shop/mock-client.js';
+	import { initTelemetry } from '#lib/features/telemetry.js';
 	import '../styles/app.css';
 
 	let { children } = $props();
 	let isFrontPage = $derived(page.url.pathname === '/');
 
 	onMount(() => {
+		initTelemetry();
 		const cleanupAgeGate = attachAgeGate();
 		const cleanupShop = shopMockMode ? attachMockOrder() : undefined;
 		if (!dev && 'serviceWorker' in navigator) {

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { RecipeLink } from '#lib/mirror/embellish.js';
+	import { trackEvent } from '#lib/features/telemetry.js';
 
 	interface Props {
 		recipe: RecipeLink;
@@ -16,6 +17,7 @@
 	href={recipe.href}
 	download
 	aria-label={`${title} – ${recipe.label}`}
+	onclick={() => trackEvent('recipe_download', { essence: title, file: recipe.href })}
 >
 	<span class="recipe-card__icon" aria-hidden="true">
 		<svg

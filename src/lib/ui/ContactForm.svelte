@@ -6,6 +6,7 @@
 		type ContactErrors,
 		type ContactValues
 	} from '#lib/features/contact.js';
+	import { trackEvent } from '#lib/features/telemetry.js';
 
 	let values = $state<ContactValues>({ name: '', place: '', email: '', message: '' });
 	let errors = $state<ContactErrors>({});
@@ -18,6 +19,7 @@
 		event.preventDefault();
 		errors = validateContact(values);
 		submitted = Object.keys(errors).length === 0;
+		if (submitted) trackEvent('contact_submit');
 		copied = false;
 	}
 

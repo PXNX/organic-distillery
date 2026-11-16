@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { trackEvent } from '#lib/features/telemetry.js';
 	import { applyTheme, nextTheme, storedTheme, type Theme } from '#lib/features/theme.js';
 
 	const year = new Date().getFullYear();
@@ -38,6 +39,7 @@
 	function toggleTheme() {
 		theme = nextTheme(theme);
 		applyTheme(theme);
+		trackEvent('theme_change', { theme });
 	}
 </script>
 

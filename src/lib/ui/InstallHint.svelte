@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { INSTALL_DISMISSAL_KEY, shouldShowInstallHint } from '#lib/features/pwa.js';
+	import { trackEvent } from '#lib/features/telemetry.js';
 
 	interface BeforeInstallPromptEvent extends Event {
 		prompt(): Promise<void>;
@@ -34,6 +35,7 @@
 	});
 
 	function dismiss() {
+		trackEvent('pwa_install_dismissed');
 		visible = false;
 		dismissed = true;
 		try {
@@ -47,6 +49,7 @@
 		if (!deferred) return;
 		await deferred.prompt();
 		const choice = await deferred.userChoice;
+		trackEvent('pwa_install_result', { outcome: choice.outcome });
 		visible = false;
 		deferred = null;
 		if (choice.outcome === 'dismissed') dismiss();

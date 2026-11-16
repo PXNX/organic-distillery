@@ -60,6 +60,7 @@ tests/                   unit and content-integrity tests
 - **Forms**: validated contact form and newsletter registration that prepare prefilled emails (no backend required). The age gate persists confirmation in `localStorage`.
 - **PWA**: manifest, icons, minimal service worker and an install hint using `beforeinstallprompt`.
 - **Theme**: follows `prefers-color-scheme` with a footer toggle; ornate light/dark palettes, subtle animations and full `prefers-reduced-motion` support.
+- **Telemetry**: cookieless Vercel Analytics page views plus typed custom events (recipe downloads, form submissions, theme changes, PWA install outcomes). Disabled in development; a disclosure is shown on the Datenschutz page.
 
 ## Refreshing the mirror
 

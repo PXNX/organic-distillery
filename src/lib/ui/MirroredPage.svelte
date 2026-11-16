@@ -36,6 +36,17 @@
 	<Newsletter />
 {/if}
 
+{#if path === '/datenschutz'}
+	<aside class="privacy-note" aria-label="Hinweis zur Analyse">
+		<h2>Hinweis zur Reichweitenmessung</h2>
+		<p>
+			Diese Website verwendet Vercel Analytics zur cookiefreien Reichweitenmessung. Es werden keine
+			Werbe-Cookies gesetzt und keine personenbezogenen Profile gebildet. Die Messung ist in der
+			lokalen Entwicklung deaktiviert.
+		</p>
+	</aside>
+{/if}
+
 {#if path === '/'}
 	<aside class="visit-note" aria-label="Hinweis für Besucher">
 		<span class="visit-note__ornament" aria-hidden="true">◇</span>

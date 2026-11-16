@@ -6,6 +6,7 @@
 		rememberNewsletterEmail,
 		validateNewsletterEmail
 	} from '#lib/features/newsletter.js';
+	import { trackEvent } from '#lib/features/telemetry.js';
 
 	let email = $state('');
 	let error = $state<string | null>(null);
@@ -29,6 +30,7 @@
 		event.preventDefault();
 		error = validateNewsletterEmail(email);
 		if (!error) {
+			trackEvent('newsletter_signup');
 			registered = true;
 			rememberNewsletterEmail(email);
 		}

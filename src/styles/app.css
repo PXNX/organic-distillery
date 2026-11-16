@@ -41,6 +41,23 @@ input[type='checkbox'] {
 	background: #f6f6f6;
 }
 
+.privacy-note {
+	max-width: 46rem;
+	margin: 2rem auto;
+	padding: 1.5rem;
+	background: var(--panel-bg);
+	border: 1px solid var(--hairline);
+}
+
+.privacy-note h2 {
+	font-size: 1.2rem;
+}
+
+.privacy-note p {
+	line-height: 1.6;
+	color: var(--muted);
+}
+
 img[src*='Ginn_'],
 img[src*='Ginnie_'] {
 	filter: drop-shadow(0 12px 14px rgb(0 0 0 / 25%));
