@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+	DOCUMENTARY_URL,
+	addDocumentaryPress,
 	botanicalPlate,
 	essenceName,
 	extractRecipeLink,
@@ -54,6 +56,24 @@ describe('extractRecipeLink', () => {
 
 	it('leaves pages without a recipe untouched', () => {
 		expect(extractRecipeLink('<p>Hello</p>').recipe).toBeNull();
+	});
+});
+
+describe('addDocumentaryPress', () => {
+	const pressHtml =
+		'<div class="o-module o-press o-wrapper"><div class="o-press__title o-press__item"><span>Presse</span></div><ul><li>Alt</li></ul></div>';
+
+	it('adds the documentary as a press item', () => {
+		const html = addDocumentaryPress(pressHtml);
+		expect(html).toContain(DOCUMENTARY_URL);
+		expect(html).toContain('20.08.2021');
+		expect(html).toContain('SWR / ARD Mediathek');
+		expect(html.indexOf(DOCUMENTARY_URL)).toBeLessThan(html.indexOf('Alt'));
+	});
+
+	it('is idempotent', () => {
+		const once = addDocumentaryPress(pressHtml);
+		expect(addDocumentaryPress(once)).toBe(once);
 	});
 });
 

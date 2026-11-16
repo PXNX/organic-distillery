@@ -5,6 +5,21 @@ export interface BotanicalPlate {
 	name: string;
 }
 
+export const DOCUMENTARY_URL =
+	'https://www.ardmediathek.de/video/handwerkskunst/wie-man-einen-gin-herstellt/swr/Y3JpZDovL3N3ci5kZS9hZXgvbzE1MTYxNDY';
+
+const pressList = /(<div class="o-module o-press o-wrapper">[\s\S]*?<ul>)/;
+
+/** Adds the SWR documentary to the mirrored press list. */
+export function addDocumentaryPress(html: string): string {
+	if (html.includes(DOCUMENTARY_URL)) return html;
+	const item = `<li class="o-press__item press-item--film"><div class="l-col l-2/12@tablet"><span>20.08.2021</span></div><!--
+--><div class="l-col l-5/12@tablet"><span>Wie man einen Gin herstellt – Christine Brugger in „Handwerkskunst“</span></div><!--
+--><div class="l-col l-3/12@tablet"><span>SWR / ARD Mediathek</span></div><!--
+--><div class="l-col l-2/12@tablet"><a class="o-button o-button--small" href="${DOCUMENTARY_URL}" target="_blank" rel="noopener noreferrer">Film</a></div></li>`;
+	return html.replace(pressList, `$1${item}`);
+}
+
 export interface RecipeLink {
 	href: string;
 	label: string;

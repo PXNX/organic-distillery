@@ -15,6 +15,7 @@ import {
 	routeSource
 } from '#lib/mirror/normalize.js';
 import {
+	addDocumentaryPress,
 	extractContactForm,
 	extractRecipeLink,
 	wrapBotanicalPlates
@@ -76,8 +77,9 @@ while (queue.length) {
 	const rewritten = rewrite(content.html() || '');
 	const plated = path.startsWith('/essenzen/') ? wrapBotanicalPlates(rewritten, title) : rewritten;
 	const { html: withoutRecipe, recipe } = extractRecipeLink(plated);
-	const { html } =
-		path === '/kontakt' ? extractContactForm(withoutRecipe) : { html: withoutRecipe };
+	const withoutContact =
+		path === '/kontakt' ? extractContactForm(withoutRecipe).html : withoutRecipe;
+	const html = path === '/ueber-uns' ? addDocumentaryPress(withoutContact) : withoutContact;
 
 	pages.push(
 		recipe ? { path, title, description, html, recipe } : { path, title, description, html }
