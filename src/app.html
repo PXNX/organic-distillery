@@ -7,6 +7,13 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 		<meta name="text-scale" content="scale" />
+		<script>
+			try {
+				if (localStorage.getItem('organic-distillery:age-confirmed') === 'true') {
+					document.documentElement.dataset.ageConfirmed = 'true';
+				}
+			} catch {}
+		</script>
 		%sveltekit.head%
 	</head>
 

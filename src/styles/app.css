@@ -12,6 +12,19 @@ img {
 	height: 100%;
 }
 
+/* The age gate keeps the site position:fixed via `.o-age-check + .site`;
+   once confirmed, restore normal document flow without removing DOM nodes. */
+[data-age-confirmed='true'] .o-age-check {
+	display: none;
+}
+
+[data-age-confirmed='true'] .site {
+	position: static;
+	height: auto;
+	width: 100%;
+	overflow: visible;
+}
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
 	animation-duration: 180ms;

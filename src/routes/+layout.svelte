@@ -4,13 +4,21 @@
 	import { page } from '$app/state';
 	import { site } from '#lib/content/index.js';
 	import { shopMockMode } from '#lib/shop/config.js';
+	import { attachAgeGate } from '#lib/age-gate.js';
 	import { attachMockOrder } from '#lib/shop/mock-client.js';
 	import '../styles/app.css';
 
 	let { children } = $props();
 	let isFrontPage = $derived(page.url.pathname === '/');
 
-	onMount(() => (shopMockMode ? attachMockOrder() : undefined));
+	onMount(() => {
+		const cleanupAgeGate = attachAgeGate();
+		const cleanupShop = shopMockMode ? attachMockOrder() : undefined;
+		return () => {
+			cleanupAgeGate();
+			cleanupShop?.();
+		};
+	});
 
 	onNavigate((navigation) => {
 		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
