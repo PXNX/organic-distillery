@@ -1,0 +1,125 @@
+/* Ornate layer over the mirrored theme: ink, parchment and antique gold,
+   echoing the engraved gin label and the botanical pencil drawings. */
+
+body {
+	background: #faf8f2;
+}
+
+.mystic-lattice::before,
+.o-teaser::before,
+.site-footer::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	background-image:
+		repeating-linear-gradient(45deg, transparent 0 18px, rgb(176 141 87 / 12%) 18px 19px),
+		repeating-linear-gradient(-45deg, transparent 0 18px, rgb(176 141 87 / 12%) 18px 19px);
+}
+
+.o-teaser,
+.site-footer {
+	position: relative;
+	overflow: hidden;
+	color: var(--mystic-parchment);
+	background: var(--mystic-ink);
+}
+
+.o-teaser {
+	padding-top: 3rem;
+	padding-bottom: 3rem;
+	border-top: 1px solid var(--mystic-gold);
+	border-bottom: 1px solid var(--mystic-gold);
+}
+
+.o-teaser > *,
+.site-footer > *,
+.o-age-check > * {
+	position: relative;
+	z-index: 1;
+}
+
+.o-teaser h1,
+.o-teaser h2,
+.o-teaser h3,
+.o-teaser p {
+	color: var(--mystic-parchment);
+}
+
+.site-head {
+	background: var(--mystic-ink);
+	border-bottom: 1px solid var(--mystic-gold);
+}
+
+.site-head .menu-item a {
+	color: var(--mystic-parchment);
+	opacity: 0.75;
+}
+
+.site-head .site-logo svg path {
+	fill: var(--mystic-gold);
+}
+
+.site-head .hamburger--inner .lines,
+.site-head .hamburger--inner .lines--before,
+.site-head .hamburger--inner .lines--after {
+	background: var(--mystic-gold);
+}
+
+.site-footer {
+	margin-top: 3rem;
+	border-top: 1px solid var(--mystic-gold);
+}
+
+.site-footer a {
+	color: var(--mystic-gold);
+}
+
+body .o-button {
+	border-color: var(--mystic-gold);
+	color: var(--mystic-gold);
+}
+
+body .o-button:hover {
+	background: var(--mystic-gold);
+	color: var(--mystic-ink);
+}
+
+.o-age-check {
+	background: rgb(244 240 230 / 96%);
+	border-bottom: 1px solid var(--mystic-gold);
+}
+
+.o-section__text h2,
+.o-section__text p {
+	color: var(--mystic-parchment);
+	text-shadow: 0 2px 18px rgb(0 0 0 / 45%);
+}
+
+@media (min-width: 768px) {
+	.site h1::before,
+	.site h1::after,
+	.site h2::before,
+	.site h2::after,
+	.site h3::before,
+	.site h3::after,
+	.site h4::before,
+	.site h4::after {
+		content: '◇';
+		color: var(--mystic-gold);
+	}
+}
+
+@media (max-width: 1023px) {
+	.nav-wrapper {
+		background: var(--mystic-ink);
+	}
+}
+
+@media (max-width: 767px) {
+	.o-teaser,
+	.site-footer {
+		padding-top: 2rem;
+		padding-bottom: 2rem;
+	}
+}
