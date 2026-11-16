@@ -12,6 +12,25 @@ img {
 	height: 100%;
 }
 
+.shop-mock-banner {
+	position: fixed;
+	inset: auto 0 0;
+	z-index: 5000;
+	background: #111;
+	color: #fff;
+	padding: 0.6rem 1rem;
+	text-align: center;
+	font-size: 0.875rem;
+}
+
+.mock-order-confirmation {
+	white-space: pre-line;
+	margin-top: 1rem;
+	padding: 1rem;
+	border: 1px solid #000;
+	box-sizing: border-box;
+}
+
 @media (max-width: 767px) {
 	.site {
 		width: 100%;

@@ -5,6 +5,9 @@ import adapter from '@sveltejs/adapter-static';
 import { sveltekit } from '@sveltejs/kit/vite';
 
 export default defineConfig({
+	define: {
+		__SHOP_MOCK_MODE__: JSON.stringify(process.env.SHOP_MOCK_MODE === 'true')
+	},
 	plugins: [
 		tailwindcss(),
 		sveltekit({

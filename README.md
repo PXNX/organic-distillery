@@ -20,6 +20,10 @@ bun run mirror
 
 This re-crawls the live site, rewrites internal URLs to local paths, refreshes `src/lib/content/site.json`, re-downloads assets and regenerates one route component per page. It needs network access.
 
+## Shop mock mode
+
+Set `SHOP_MOCK_MODE=true` when running `bun run dev` or `bun run build` to keep the order form local: submissions are intercepted, no WordPress POST is made, and a mock receipt is shown. See `.env.example`.
+
 ## Project layout
 
 | Path                                            | Purpose                                           |
