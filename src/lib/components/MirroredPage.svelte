@@ -10,11 +10,4 @@
 	<meta name="description" content={page?.description} />
 </svelte:head>
 
-<div class="js-site site" class:site--no-padding={path === '/'} class:is-front-page={path === '/'}>
-	<header class="site-head">{@html site.header}</header>
-	{@html page?.html ?? ''}
-	<footer class="site-footer">{@html site.footer}</footer>
-</div>
-
-<div class="o-age-check">{@html site.ageCheck}</div>
-<div class="js-order-popup o-order">{@html site.order}</div>
+{@html page?.html ?? ''}

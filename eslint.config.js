@@ -36,7 +36,7 @@ export default defineConfig(
 	},
 	{
 		// The mirrored site content is trusted and stored in our own repo.
-		files: ['src/lib/components/MirroredPage.svelte'],
+		files: ['src/lib/components/MirroredPage.svelte', 'src/routes/+layout.svelte'],
 		rules: { 'svelte/no-at-html-tags': 'off' }
 	}
 );
