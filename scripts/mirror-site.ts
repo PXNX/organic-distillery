@@ -14,7 +14,11 @@ import {
 	routeDir,
 	routeSource
 } from '#lib/mirror/normalize.js';
-import { extractRecipeLink, wrapBotanicalPlates } from '#lib/mirror/embellish.js';
+import {
+	extractContactForm,
+	extractRecipeLink,
+	wrapBotanicalPlates
+} from '#lib/mirror/embellish.js';
 import type { MirroredPage as Page, MirroredSite as Site } from '#lib/mirror/types.js';
 
 const OUT = 'src/lib/content/site.json';
@@ -71,7 +75,9 @@ while (queue.length) {
 	content.find('.site-head, .site-footer').remove();
 	const rewritten = rewrite(content.html() || '');
 	const plated = path.startsWith('/essenzen/') ? wrapBotanicalPlates(rewritten, title) : rewritten;
-	const { html, recipe } = extractRecipeLink(plated);
+	const { html: withoutRecipe, recipe } = extractRecipeLink(plated);
+	const { html } =
+		path === '/kontakt' ? extractContactForm(withoutRecipe) : { html: withoutRecipe };
 
 	pages.push(
 		recipe ? { path, title, description, html, recipe } : { path, title, description, html }

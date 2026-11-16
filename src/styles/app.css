@@ -45,6 +45,76 @@ input[type='checkbox'] {
 	background: #f6f6f6;
 }
 
+.contact-form {
+	max-width: 34rem;
+	margin: 2rem auto;
+}
+
+.contact-form label {
+	display: block;
+	text-align: left;
+}
+
+.contact-form__label {
+	display: block;
+	margin-bottom: 0.35rem;
+	font-size: 0.7rem;
+	text-transform: uppercase;
+	letter-spacing: 0.16em;
+	color: #8a7551;
+}
+
+.contact-form .wpcf7-form-control {
+	background: #fffdf8;
+}
+
+.contact-form [aria-invalid='true'] {
+	border-color: #a11414;
+}
+
+.contact-form__error {
+	display: block;
+	margin: -0.75rem 0 1rem;
+	text-align: left;
+	font-size: 0.8rem;
+	color: #a11414;
+}
+
+.contact-form__success {
+	max-width: 34rem;
+	margin: 0 auto 2rem;
+	padding: 1.5rem;
+	text-align: center;
+	background: var(--mystic-parchment);
+	border: 1px solid var(--mystic-gold);
+}
+
+.contact-form__success .o-button {
+	margin: 0.5rem;
+}
+
+.visit-note {
+	position: relative;
+	max-width: 46rem;
+	margin: 2rem auto 3rem;
+	padding: 2rem;
+	text-align: center;
+	background: var(--mystic-parchment);
+	border: 1px solid var(--mystic-gold);
+	outline: 1px solid rgb(176 141 87 / 35%);
+	outline-offset: -6px;
+}
+
+.visit-note__ornament {
+	color: var(--mystic-gold);
+	font-size: 1.5rem;
+}
+
+.visit-note p {
+	margin: 0.75rem 0 1.25rem;
+	line-height: 1.5;
+}
+
 .recipe-card {
 	display: flex;
 	align-items: center;

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ContactForm from './ContactForm.svelte';
 	import RecipeCard from './RecipeCard.svelte';
 	import { botanicalPlates } from '#lib/content/plates.js';
 	import { recipeCards } from '#lib/content/recipes.js';
@@ -19,6 +20,21 @@
 
 {#if page.recipe}
 	<RecipeCard recipe={page.recipe} title={essenceName(page.title)} />
+{/if}
+
+{#if path === '/kontakt'}
+	<ContactForm />
+{/if}
+
+{#if path === '/'}
+	<aside class="visit-note" aria-label="Hinweis für Besucher">
+		<span class="visit-note__ornament" aria-hidden="true">◇</span>
+		<p>
+			<strong>Besuch geplant?</strong> Es gibt keinen Hofladen – wenn Sie persönlich vorbeikommen möchten,
+			kontaktieren Sie Christine bitte vorab.
+		</p>
+		<a class="o-button" href="/kontakt">Kontakt aufnehmen</a>
+	</aside>
 {/if}
 
 {#if path === '/essenzen'}

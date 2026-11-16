@@ -37,6 +37,14 @@ export function wrapBotanicalPlates(html: string, title: string): string {
 	});
 }
 
+const contactFormBlock = /<div class="wpcf7 no-js"[\s\S]*?<\/form>\s*<\/div>/;
+
+/** Removes the WordPress-only form so a working local form can replace it. */
+export function extractContactForm(html: string): { html: string; found: boolean } {
+	if (!contactFormBlock.test(html)) return { html, found: false };
+	return { html: html.replace(contactFormBlock, ''), found: true };
+}
+
 const recipeParagraph = /<p>\s*<a[^>]*href="([^"]+\.pdf)"[^>]*>([^<]*)<\/a>\s*<\/p>/i;
 
 /** Removes the bare WordPress PDF link so a real download card can replace it. */
