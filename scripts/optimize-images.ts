@@ -133,7 +133,7 @@ async function cutout(src: string, dest: string): Promise<void> {
 
 	await sharp(rgba, { raw: { width: w, height: h, channels: 4 } })
 		.resize(w * 4, h * 4, { kernel: 'mks2021' })
-		.sharpen({ sigma: 0.6, flat: 0.6, jagged: 1.4 })
+		.sharpen({ sigma: 0.6, m1: 0.6, m2: 1.4 })
 		.webp({ quality: 88, effort: 5, alphaQuality: 92 })
 		.toFile(dest);
 	console.log(`cutout ${src} -> ${dest}`);
