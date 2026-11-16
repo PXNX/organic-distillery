@@ -14,7 +14,7 @@ import {
 	routeDir,
 	routeSource
 } from '#lib/mirror/normalize.js';
-import { wrapBotanicalPlates } from '#lib/mirror/embellish.js';
+import { extractRecipeLink, wrapBotanicalPlates } from '#lib/mirror/embellish.js';
 import type { MirroredPage as Page, MirroredSite as Site } from '#lib/mirror/types.js';
 
 const OUT = 'src/lib/content/site.json';
@@ -70,9 +70,12 @@ while (queue.length) {
 	const content = $('.js-site').first().clone();
 	content.find('.site-head, .site-footer').remove();
 	const rewritten = rewrite(content.html() || '');
-	const html = path.startsWith('/essenzen/') ? wrapBotanicalPlates(rewritten, title) : rewritten;
+	const plated = path.startsWith('/essenzen/') ? wrapBotanicalPlates(rewritten, title) : rewritten;
+	const { html, recipe } = extractRecipeLink(plated);
 
-	pages.push({ path, title, description, html });
+	pages.push(
+		recipe ? { path, title, description, html, recipe } : { path, title, description, html }
+	);
 
 	$('a[href]').each((_, el) => {
 		const next = localPath($(el).attr('href')!);

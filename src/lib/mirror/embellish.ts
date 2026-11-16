@@ -5,6 +5,11 @@ export interface BotanicalPlate {
 	name: string;
 }
 
+export interface RecipeLink {
+	href: string;
+	label: string;
+}
+
 const drawingBlock =
 	/<div class="l-col l-6\/12@tablet single-column">\s*(<img[^>]*class="single-column__img"[^>]*>)\s*<\/div>/g;
 const drawingImg = /<img[^>]*class="single-column__img"[^>]*>/;
@@ -30,6 +35,20 @@ export function wrapBotanicalPlates(html: string, title: string): string {
 		const caption = `<figcaption class="botanical-plate__caption"><span class="botanical-plate__latin">${latinNameFromSrc(src)}</span><span class="botanical-plate__name">${essenceName(title)}</span></figcaption>`;
 		return `<figure class="l-col l-6/12@tablet single-column botanical-plate">${img}${caption}</figure>`;
 	});
+}
+
+const recipeParagraph = /<p>\s*<a[^>]*href="([^"]+\.pdf)"[^>]*>([^<]*)<\/a>\s*<\/p>/i;
+
+/** Removes the bare WordPress PDF link so a real download card can replace it. */
+export function extractRecipeLink(html: string): { html: string; recipe: RecipeLink | null } {
+	const match = html.match(recipeParagraph);
+	const href = match?.[1];
+	const label = match?.[2]?.trim();
+	if (!href || !label) return { html, recipe: null };
+	return {
+		html: html.replace(recipeParagraph, ''),
+		recipe: { href, label }
+	};
 }
 
 /** Finds the botanical plate on an essence detail page. */

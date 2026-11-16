@@ -17,6 +17,12 @@ export function parseSite(value: unknown): MirroredSite {
 		for (const key of ['path', 'title', 'description', 'html'] as const) {
 			if (!isString(page[key])) throw new TypeError(`Page ${index} needs a string ${key}`);
 		}
+		if ('recipe' in page) {
+			const recipe = page.recipe;
+			if (!isRecord(recipe) || !isString(recipe.href) || !isString(recipe.label)) {
+				throw new TypeError(`Page ${index} has an invalid recipe`);
+			}
+		}
 	}
 	return value as unknown as MirroredSite;
 }
