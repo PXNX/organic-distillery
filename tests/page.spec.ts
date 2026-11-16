@@ -1,6 +1,7 @@
 import { render } from 'svelte/server';
 import { describe, expect, it } from 'vitest';
 import ContactForm from '../src/lib/components/ContactForm.svelte';
+import GinProcess from '../src/lib/components/GinProcess.svelte';
 import MirroredPage from '../src/lib/components/MirroredPage.svelte';
 import Newsletter from '../src/lib/components/Newsletter.svelte';
 import SiteFooter from '../src/lib/components/SiteFooter.svelte';
@@ -33,6 +34,14 @@ describe('MirroredPage', () => {
 		expect(body).toContain('Farbschema wechseln');
 		expect(body).toContain('/datenschutz');
 		expect(body).toContain('Kein Hofladen');
+	});
+
+	it('explains the gin-making process in four steps', () => {
+		const { body } = render(GinProcess);
+		expect(body).toContain('Vom Kraut zum Flaschengeist');
+		expect(body).toContain('Aroma infundieren');
+		expect(body).toContain('Schonende Destillation');
+		expect(body.match(/gin-process__step/g)).toHaveLength(5);
 	});
 
 	it('renders a newsletter signup form', () => {
