@@ -8,6 +8,8 @@
 	} from '#lib/features/contact.js';
 	import { trackEvent } from '#lib/features/telemetry.js';
 
+	const MAX_MESSAGE_LENGTH = 2000;
+
 	let values = $state<ContactValues>({ name: '', place: '', email: '', message: '' });
 	let errors = $state<ContactErrors>({});
 	let submitted = $state(false);
@@ -33,15 +35,15 @@
 	}
 </script>
 
-<form class="wpcf7-form init contact-form" aria-label="Kontaktformular" onsubmit={onSubmit}>
-	<p>
-		<label>
+<form class="contact-form" aria-label="Kontaktformular" onsubmit={onSubmit} novalidate>
+	<div class="contact-form__row">
+		<label class="contact-form__field">
 			<span class="contact-form__label">Name *</span>
 			<input
-				class="wpcf7-form-control wpcf7-text"
 				type="text"
 				name="your-name"
-				placeholder="NAME"
+				autocomplete="name"
+				placeholder="Ihr Name"
 				maxlength="400"
 				bind:value={values.name}
 				aria-invalid={Boolean(errors.name)}
@@ -51,53 +53,56 @@
 		{#if errors.name}<span class="contact-form__error" id="contact-name-error">{errors.name}</span
 			>{/if}
 
-		<label>
+		<label class="contact-form__field">
 			<span class="contact-form__label">Ort</span>
 			<input
-				class="wpcf7-form-control wpcf7-text"
 				type="text"
 				name="place"
-				placeholder="ORT"
+				autocomplete="address-level2"
+				placeholder="Ihr Ort"
 				maxlength="400"
 				bind:value={values.place}
 			/>
 		</label>
+	</div>
 
-		<label>
-			<span class="contact-form__label">E-Mail *</span>
-			<input
-				class="wpcf7-form-control wpcf7-email"
-				type="email"
-				name="email"
-				placeholder="EMAIL"
-				maxlength="400"
-				bind:value={values.email}
-				aria-invalid={Boolean(errors.email)}
-				aria-describedby={errors.email ? 'contact-email-error' : undefined}
-			/>
-		</label>
-		{#if errors.email}<span class="contact-form__error" id="contact-email-error"
-				>{errors.email}</span
-			>{/if}
+	<label class="contact-form__field">
+		<span class="contact-form__label">E-Mail *</span>
+		<input
+			type="email"
+			name="email"
+			autocomplete="email"
+			inputmode="email"
+			placeholder="name@beispiel.de"
+			maxlength="400"
+			bind:value={values.email}
+			aria-invalid={Boolean(errors.email)}
+			aria-describedby={errors.email ? 'contact-email-error' : undefined}
+		/>
+	</label>
+	{#if errors.email}<span class="contact-form__error" id="contact-email-error">{errors.email}</span
+		>{/if}
 
-		<label>
-			<span class="contact-form__label">Nachricht *</span>
-			<textarea
-				class="wpcf7-form-control wpcf7-textarea"
-				name="message"
-				placeholder="NACHRICHT"
-				rows="8"
-				maxlength="2000"
-				bind:value={values.message}
-				aria-invalid={Boolean(errors.message)}
-				aria-describedby={errors.message ? 'contact-message-error' : undefined}></textarea>
-		</label>
-		{#if errors.message}<span class="contact-form__error" id="contact-message-error"
-				>{errors.message}</span
-			>{/if}
+	<label class="contact-form__field">
+		<span class="contact-form__label">Nachricht *</span>
+		<textarea
+			name="message"
+			rows="12"
+			maxlength={MAX_MESSAGE_LENGTH}
+			placeholder="Erzählen Sie uns, was Sie bewegt …"
+			bind:value={values.message}
+			aria-invalid={Boolean(errors.message)}
+			aria-describedby={errors.message ? 'contact-message-error' : 'contact-message-count'}
+		></textarea>
+		<span class="contact-form__count" id="contact-message-count">
+			{values.message.length} / {MAX_MESSAGE_LENGTH} Zeichen
+		</span>
+	</label>
+	{#if errors.message}<span class="contact-form__error" id="contact-message-error"
+			>{errors.message}</span
+		>{/if}
 
-		<input class="wpcf7-form-control wpcf7-submit o-button" type="submit" value="Abschicken" />
-	</p>
+	<button class="o-button contact-form__submit" type="submit">Nachricht vorbereiten</button>
 </form>
 
 {#if submitted}

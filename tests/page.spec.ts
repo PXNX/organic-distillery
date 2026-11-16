@@ -24,12 +24,13 @@ describe('MirroredPage', () => {
 		expect(body).toContain('Eucalyptus Geist');
 	});
 
-	it('renders a working contact form with labelled fields', () => {
+	it('renders a working contact form with a roomy message field', () => {
 		const { body } = render(ContactForm);
 		expect(body).toContain('your-name');
-		expect(body).toContain('EMAIL');
-		expect(body).toContain('NACHRICHT');
-		expect(body).toContain('Abschicken');
+		expect(body).toContain('name@beispiel.de');
+		expect(body).toContain('rows="12"');
+		expect(body).toContain('Zeichen');
+		expect(body).toContain('Nachricht vorbereiten');
 	});
 
 	it('renders the redesigned footer with navigation and theme toggle', () => {
