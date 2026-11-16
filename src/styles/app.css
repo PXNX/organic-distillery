@@ -1,2 +1,78 @@
 @import 'tailwindcss/theme.css';
 @import 'tailwindcss/utilities.css';
+
+/* Mirrored assets should never force horizontal scrolling on small screens. */
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+.o-section__image img {
+	max-width: none;
+	height: 100%;
+}
+
+@media (max-width: 767px) {
+	.site {
+		width: 100%;
+	}
+
+	.site-footer .o-wrapper,
+	.o-age-check .o-wrapper,
+	.o-order .o-wrapper {
+		box-sizing: border-box;
+		padding-left: 1rem;
+		padding-right: 1rem;
+	}
+
+	/* Mirrored desktop columns become full-width stacked blocks. */
+	.o-text__content > .l-col,
+	.o-order__item > .l-col,
+	.o-order__customer > .l-col {
+		width: 100% !important;
+	}
+
+	.o-text__content {
+		max-width: 100%;
+	}
+
+	.o-section {
+		height: 60vh;
+		min-height: 20rem;
+	}
+
+	.o-section__text h2,
+	.o-section__text p {
+		font-size: 1.25em;
+	}
+
+	/* Comfortable touch targets for the menu and the order popup. */
+	.hamburger {
+		min-width: 2.75rem;
+		min-height: 2.75rem;
+	}
+
+	.menu-item a {
+		display: block;
+		padding-top: 0.75em;
+		padding-bottom: 0.75em;
+	}
+
+	.o-order {
+		width: calc(100% - 2rem);
+		max-height: 90vh;
+		overflow-y: auto;
+		box-sizing: border-box;
+	}
+
+	.o-order__item {
+		padding-top: 0.5rem;
+		padding-bottom: 0.5rem;
+	}
+
+	.o-age-check form {
+		max-width: 100%;
+		padding: 0 1rem;
+		box-sizing: border-box;
+	}
+}

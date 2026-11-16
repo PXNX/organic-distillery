@@ -13,11 +13,12 @@
 	<link rel="stylesheet" href="/vendor/cf7.min.css" />
 </svelte:head>
 
+<div class="o-age-check">{@html site.ageCheck}</div>
+
 <div class="js-site site" class:site--no-padding={isFrontPage} class:is-front-page={isFrontPage}>
 	<header class="site-head">{@html site.header}</header>
 	{@render children()}
 	<footer class="site-footer">{@html site.footer}</footer>
 </div>
 
-<div class="o-age-check">{@html site.ageCheck}</div>
 <div class="js-order-popup o-order">{@html site.order}</div>
