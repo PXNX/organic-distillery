@@ -37,21 +37,23 @@
 
 <form class="contact-form" aria-label="Kontaktformular" onsubmit={onSubmit} novalidate>
 	<div class="contact-form__row">
-		<label class="contact-form__field">
-			<span class="contact-form__label">Name *</span>
-			<input
-				type="text"
-				name="your-name"
-				autocomplete="name"
-				placeholder="Ihr Name"
-				maxlength="400"
-				bind:value={values.name}
-				aria-invalid={Boolean(errors.name)}
-				aria-describedby={errors.name ? 'contact-name-error' : undefined}
-			/>
-		</label>
-		{#if errors.name}<span class="contact-form__error" id="contact-name-error">{errors.name}</span
-			>{/if}
+		<div class="contact-form__cell">
+			<label class="contact-form__field">
+				<span class="contact-form__label">Name *</span>
+				<input
+					type="text"
+					name="your-name"
+					autocomplete="name"
+					placeholder="Ihr Name"
+					maxlength="400"
+					bind:value={values.name}
+					aria-invalid={Boolean(errors.name)}
+					aria-describedby={errors.name ? 'contact-name-error' : undefined}
+				/>
+			</label>
+			{#if errors.name}<span class="contact-form__error" id="contact-name-error">{errors.name}</span
+				>{/if}
+		</div>
 
 		<label class="contact-form__field">
 			<span class="contact-form__label">Ort</span>

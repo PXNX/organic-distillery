@@ -32,7 +32,9 @@ export function productForPath(path: string, title: string): Product | null {
 		return { id: path, name, variants: essence };
 	}
 	if (path.startsWith('/gins/')) {
-		return { id: path.replace(/-2$/, ''), name, variants: gin };
+		// "/gins/ginn" shows the 500 ml bottle, "/gins/ginn-2" the 200 ml one.
+		const variants = path.endsWith('-2') ? gin : [...gin].reverse();
+		return { id: path.replace(/-2$/, ''), name, variants };
 	}
 	return null;
 }

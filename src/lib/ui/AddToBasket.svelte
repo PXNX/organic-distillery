@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { basket, basketUi } from '#lib/features/basket.svelte.js';
+	import { basket, openBasket } from '#lib/features/basket.svelte.js';
 	import { formatEuro, type Product } from '#lib/features/basket.js';
 	import { trackEvent } from '#lib/features/telemetry.js';
 
@@ -9,14 +9,17 @@
 	let variantId = $derived(selected ?? product.variants[0]?.id ?? '');
 	let quantity = $state(1);
 	let added = $state(false);
+	let timer: ReturnType<typeof setTimeout> | undefined;
 
 	let variant = $derived(product.variants.find((entry) => entry.id === variantId));
 
 	function add() {
+		quantity = Math.min(99, Math.max(1, Math.round(Number(quantity) || 1)));
 		basket.add(product, variantId, quantity);
 		added = true;
 		trackEvent('basket_add', { product: product.id, variant: variantId, quantity });
-		setTimeout(() => (added = false), 1800);
+		clearTimeout(timer);
+		timer = setTimeout(() => (added = false), 1800);
 	}
 </script>
 
@@ -38,10 +41,22 @@
 		</label>
 	</div>
 
-	<button type="button" class="o-button add-to-basket__button" onclick={add}>
-		{added ? '✓ Hinzugefügt' : `In den Warenkorb · ${variant ? formatEuro(variant.price) : ''}`}
+	<button
+		type="button"
+		class="o-button add-to-basket__button"
+		class:is-added={added}
+		onclick={add}
+		disabled={!variant || quantity < 1}
+	>
+		{#if added}
+			<span class="add-to-basket__tick" aria-hidden="true">✓</span> Hinzugefügt
+		{:else}
+			In den Warenkorb · {variant ? formatEuro(variant.price * Math.max(1, quantity || 1)) : ''}
+		{/if}
 	</button>
-	<button type="button" class="add-to-basket__view" onclick={() => (basketUi.open = true)}>
-		Warenkorb ansehen ({basket.count})
-	</button>
+	{#if basket.count > 0}
+		<button type="button" class="add-to-basket__view" onclick={() => openBasket('basket')}>
+			Warenkorb ansehen ({basket.count})
+		</button>
+	{/if}
 </section>

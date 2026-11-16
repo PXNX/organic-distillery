@@ -55,7 +55,7 @@ describe('MirroredPage', () => {
 	it('renders a basket button with a shop label', () => {
 		const { body } = render(BasketButton);
 		expect(body).toContain('Shop');
-		expect(body).toContain('Warenkorb öffnen');
+		expect(body).toContain('Shop öffnen');
 	});
 
 	it('renders an always-visible coloured recipe section with images', () => {

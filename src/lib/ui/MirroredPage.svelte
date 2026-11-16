@@ -11,7 +11,7 @@
 	import { botanicalPlates } from '#lib/content/plates.js';
 	import { recipeCards } from '#lib/content/recipes.js';
 	import { site } from '#lib/content/index.js';
-	import { botanicalPlate, essenceName } from '#lib/mirror/embellish.js';
+	import { botanicalPlate, essenceName, replaceContactLogo } from '#lib/mirror/embellish.js';
 	import { productForPath } from '#lib/features/basket.js';
 	import { familyForPath } from '#lib/features/flavor-wheel.js';
 	import { findPage } from '#lib/mirror/site.js';
@@ -20,6 +20,24 @@
 	let page = $derived(findPage(site, path));
 	let plate = $derived(path.startsWith('/essenzen/') ? botanicalPlate(page) : null);
 	let product = $derived(productForPath(path, page.title));
+	// Render-time clean-up of WordPress leftovers: empty spacer paragraphs and the
+	// dead contact form on the home page (the working form lives on /kontakt).
+	let html = $derived(
+		replaceContactLogo(page.html)
+			.replace(/<p>(?:&nbsp;|\s|\u00a0)*<\/p>/g, '')
+			.replace(
+				/<div class="wpcf7 no-js"[\s\S]*?<\/form>\s*<\/div>/,
+				'<p class="o-contact__cta"><a class="o-button" href="/kontakt">Nachricht schreiben</a></p>'
+			)
+	);
+	let orderPanel = $state<HTMLElement | null>(null);
+
+	// Put the basket panel inside the product card, where the old "Jetzt bestellen" link was.
+	$effect(() => {
+		if (!orderPanel) return;
+		const card = document.querySelector('.site--single .o-product');
+		if (card && orderPanel.parentElement !== card) card.append(orderPanel);
+	});
 </script>
 
 <svelte:head>
@@ -31,17 +49,22 @@
 	<HerbBackdrop src={plate.src} outline={plate.src.replace(/\.webp$/i, '-outline.webp')} />
 {/if}
 
-{@html page.html}
+{@html html}
 
 {#if product}
-	<AddToBasket {product} />
+	<div class="order-panel" bind:this={orderPanel}>
+		<AddToBasket {product} />
+	</div>
 {/if}
 
 {#if page.recipe}
+	{@const family = familyForPath(path)}
 	<EssenceRecipe
 		recipe={page.recipe}
 		title={essenceName(page.title)}
-		accent={familyForPath(path)?.color}
+		accent={family?.color}
+		essence={family?.essences.find((entry) => entry.path === path)?.name ?? essenceName(page.title)}
+		family={family?.name}
 	/>
 {/if}
 

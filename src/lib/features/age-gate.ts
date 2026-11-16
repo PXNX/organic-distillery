@@ -22,7 +22,15 @@ export function attachAgeGate(): () => void {
 
 	const onSubmit = (event: Event) => {
 		event.preventDefault();
-		confirmAge();
+		const gate = form.closest<HTMLElement>('.o-age-check');
+		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		if (!gate || reduceMotion) {
+			confirmAge();
+			return;
+		}
+		// Let the card bow out before the page is released.
+		gate.classList.add('is-leaving');
+		setTimeout(confirmAge, 340);
 	};
 	form.addEventListener('submit', onSubmit);
 	return () => form.removeEventListener('submit', onSubmit);

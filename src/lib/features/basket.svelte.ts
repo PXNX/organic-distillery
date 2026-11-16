@@ -15,8 +15,13 @@ class BasketState {
 	}
 
 	add(product: Product, variantId: string, quantity = 1) {
+		const before = this.count;
 		this.items = addItem(this.items, product, variantId, quantity);
 		this.save();
+		if (this.count > before) {
+			basketUi.pulse += 1;
+			basketUi.lastAdded = product.name;
+		}
 	}
 
 	setQuantity(index: number, quantity: number) {
@@ -59,4 +64,18 @@ class BasketState {
 
 export const basket = new BasketState();
 
-export const basketUi = $state({ open: false });
+export type BasketView = 'shop' | 'basket';
+
+export const basketUi = $state({
+	open: false,
+	view: 'basket' as BasketView,
+	/** Increments on every successful add so the shop button can celebrate. */
+	pulse: 0,
+	lastAdded: ''
+});
+
+/** Opens the drawer on the given tab; defaults to the basket once it has items. */
+export function openBasket(view?: BasketView) {
+	basketUi.view = view ?? (basket.count > 0 ? 'basket' : 'shop');
+	basketUi.open = true;
+}

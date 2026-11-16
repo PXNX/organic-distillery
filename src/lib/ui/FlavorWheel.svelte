@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { buildWheel, flavorFamilies, type WheelEssence } from '#lib/features/flavor-wheel.js';
 
 	let { highlight }: { highlight?: string | undefined } = $props();
@@ -6,6 +7,16 @@
 	const wheel = buildWheel();
 	let hovered = $state<string | null>(null);
 	const active = $derived(hovered ?? highlight ?? null);
+
+	function open(essence: WheelEssence | undefined) {
+		if (essence) goto(essence.path);
+	}
+
+	function onKey(event: KeyboardEvent, essence: WheelEssence | undefined) {
+		if (event.key !== 'Enter' && event.key !== ' ') return;
+		event.preventDefault();
+		open(essence);
+	}
 
 	const isDimmed = (essence: WheelEssence | undefined) =>
 		Boolean(active && essence && essence.path !== active);
@@ -55,13 +66,15 @@
 					class="flavor-wheel__slice"
 					class:flavor-wheel__slice--dim={isDimmed(segment.essence)}
 					class:flavor-wheel__slice--active={active === segment.essence?.path}
-					role="button"
+					role="link"
 					tabindex="0"
 					aria-label={segment.essence?.name ?? ''}
 					onmouseenter={() => segment.essence && (hovered = segment.essence.path)}
 					onmouseleave={() => (hovered = null)}
 					onfocus={() => segment.essence && (hovered = segment.essence.path)}
 					onblur={() => (hovered = null)}
+					onclick={() => open(segment.essence)}
+					onkeydown={(event) => onKey(event, segment.essence)}
 				/>
 				{#if segment.essence}
 					<text

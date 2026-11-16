@@ -128,10 +128,14 @@
 			type="button"
 			class="footer__theme"
 			onclick={toggleTheme}
-			aria-label="Farbschema wechseln"
+			aria-label={theme === 'dark'
+				? 'Zum hellen Farbschema wechseln'
+				: 'Zum dunklen Farbschema wechseln'}
 		>
-			<span aria-hidden="true">{theme === 'dark' ? '☾' : '☀'}</span>
-			{theme === 'dark' ? 'Dunkel' : 'Hell'}
+			{#key theme}
+				<span class="footer__theme-icon" aria-hidden="true">{theme === 'dark' ? '☀' : '☾'}</span>
+			{/key}
+			{theme === 'dark' ? 'Hell' : 'Dunkel'}
 		</button>
 	</div>
 </footer>

@@ -9,10 +9,7 @@
 @import './essence-page.css';
 @import './basket.css';
 @import './error.css';
-
-html {
-	scrollbar-gutter: stable;
-}
+@import './polish.css';
 
 h1,
 h2,
@@ -90,7 +87,6 @@ img[src*='Ginnie_'] {
 	inset: 0;
 	z-index: 0;
 	pointer-events: none;
-	opacity: 0.35;
 }
 
 .herb-backdrop img {
@@ -630,6 +626,7 @@ img {
 }
 
 .shop-button__icon {
+	display: inline-block;
 	color: var(--mystic-gold);
 	font-size: 1.1rem;
 }
@@ -726,7 +723,6 @@ img {
 	}
 
 	.site-footer .o-wrapper,
-	.o-age-check .o-wrapper,
 	.o-order .o-wrapper {
 		box-sizing: border-box;
 		padding-left: 1rem;
@@ -787,8 +783,97 @@ img {
 	}
 
 	.o-age-check form {
-		max-width: 100%;
-		padding: 0 1rem;
-		box-sizing: border-box;
+		padding: 2.5rem 1.25rem 2rem;
 	}
+}
+
+/* Desktop header: logo, centred menu and social icons share one flex row
+   instead of absolutely positioned pieces that overlapped each other. */
+@media (min-width: 1024px) {
+	.site-head .o-wrapper {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+		max-width: 80rem;
+		padding-left: 1.5rem;
+		padding-right: 1.5rem;
+	}
+
+	.site-head .site-logo {
+		position: static;
+		flex: none;
+		padding: 0;
+		line-height: 0;
+	}
+
+	.site-head .site-logo svg {
+		transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.25, 1.2);
+	}
+
+	.site-head .site-logo a:hover svg {
+		transform: rotate(-12deg) scale(1.08);
+	}
+
+	.site-head .nav-wrapper {
+		display: flex;
+		flex: 1;
+		align-items: center;
+		min-width: 0;
+	}
+
+	.site-head .nav {
+		flex: 1;
+	}
+
+	.site-head .menu-item a {
+		font-size: 0.85em;
+		padding-left: 0.8em;
+		padding-right: 0.8em;
+		letter-spacing: 0.12em;
+	}
+
+	.site-head .o-social-icons {
+		position: static;
+		display: flex;
+		gap: 0.75rem;
+		transform: none;
+	}
+}
+
+.site-head .menu-item a {
+	transition: opacity 0.2s ease;
+}
+
+.site-head .menu-item a:hover,
+.site-head .menu-item a[aria-current='page'] {
+	opacity: 1;
+}
+
+.site-head .menu-item a span::after {
+	display: block;
+	background-color: var(--mystic-gold);
+	opacity: 1;
+}
+
+.site-head .menu-item a[aria-current='page'] span::after {
+	transform: scaleX(1);
+}
+
+.site-head .o-social-icons a {
+	display: inline-flex;
+	transition: transform 0.25s ease;
+}
+
+.site-head .o-social-icons a:hover {
+	transform: translateY(-2px);
+}
+
+.site-head .o-social-icons svg g {
+	fill: var(--mystic-gold);
+}
+
+/* Buttons wrapped in headings already carry their own ◇; skip the heading ornaments. */
+.site h2:has(> .o-button)::before,
+.site h2:has(> .o-button)::after {
+	content: none;
 }

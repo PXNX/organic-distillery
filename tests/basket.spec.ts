@@ -43,3 +43,10 @@ describe('basket math', () => {
 		expect(url.searchParams.get('body')).toContain('67,50 €');
 	});
 });
+
+describe('gin variants', () => {
+	it('defaults to the bottle size shown on the page', () => {
+		expect(productForPath('/gins/ginn', 'Ginn')?.variants[0]?.id).toBe('500ml');
+		expect(productForPath('/gins/ginn-2', 'Ginn')?.variants[0]?.id).toBe('200ml');
+	});
+});

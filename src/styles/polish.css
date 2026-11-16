@@ -1,0 +1,273 @@
+/* Fixes for contrast, spacing and leftovers from the mirrored WordPress theme. */
+
+/* Content starts right under the fixed header instead of a 10em gap. */
+.site:not(.site--no-padding) {
+	padding-top: 6.5rem;
+}
+
+@media (max-width: 1023px) {
+	.site:not(.site--no-padding) {
+		padding-top: 5rem;
+	}
+}
+
+/* "Paper" surfaces stay light in dark mode, so their text must stay dark too.
+   Redefining the tokens locally also wins over the global dark-mode text rule. */
+[data-theme='dark']
+	:is(.botanical-gallery, .botanical-plate, .recipe-card, .o-product__img-wrapper) {
+	--text: #1d1d1b;
+	--muted: #6b5636;
+	color: var(--text);
+}
+
+.botanical-gallery {
+	background: var(--mystic-parchment);
+	color: var(--text);
+}
+
+.botanical-gallery__item {
+	background: color-mix(in srgb, #fffdf8 85%, var(--mystic-parchment));
+	animation: rise-in 0.5s ease-out both;
+}
+
+.botanical-gallery__item:nth-child(2n) {
+	animation-delay: 60ms;
+}
+
+.botanical-gallery__item:nth-child(3n) {
+	animation-delay: 120ms;
+}
+
+.botanical-gallery__item:hover {
+	border-color: var(--mystic-gold);
+}
+
+.botanical-gallery__latin,
+.botanical-plate__latin {
+	color: #6b5636;
+}
+
+.botanical-gallery__name,
+.botanical-plate__name,
+.recipe-card__meta {
+	color: #7a6646;
+}
+
+.recipe-card {
+	color: #1d1d1b;
+}
+
+/* Plate caption sat on the inner frame line. */
+.botanical-plate {
+	padding-bottom: 1.75rem;
+}
+
+.botanical-plate__caption {
+	margin-top: 1rem;
+	padding: 0 1rem;
+}
+
+/* Family labels: the raw family colours (yellow, light green …) were used as
+   text on parchment. Engrave them onto an ink tag instead. */
+.o-essence__label {
+	display: inline-block;
+	padding: 0.25rem 0.6rem;
+	background: var(--mystic-ink);
+	border: 1px solid color-mix(in srgb, var(--mystic-gold) 60%, transparent);
+	filter: brightness(1.25) saturate(1.1);
+	font-size: 0.7rem;
+}
+
+/* Product grid cards on /essenzen and /ginn-ginnie: no wrapping ornaments. */
+.o-products .o-product h2::before,
+.o-products .o-product h2::after,
+.o-essence h2::before,
+.o-essence h2::after {
+	content: none;
+}
+
+.o-products .o-product {
+	transition: transform 0.3s ease;
+}
+
+.o-products .o-product:hover {
+	transform: translateY(-4px);
+}
+
+.o-products .o-product img {
+	transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.25, 1.2);
+}
+
+.o-products .o-product:hover img {
+	transform: translateY(-4px) rotate(-2deg);
+}
+
+/* Light-theme cut-outs still carry white pixels around the shoulders. */
+:root:not([data-theme='dark'])
+	:is(.o-products, .o-product__img-wrapper, .aroma-profile__bottle)
+	img:is([src*='Ginn_'], [src*='Ginnie_']) {
+	mix-blend-mode: multiply;
+	filter: none;
+}
+
+/* Text laid over photos gets a scrim and the site's serif. */
+.o-text.has-background-image {
+	position: relative;
+}
+
+@media (min-width: 768px) {
+	.o-text.has-background-image .o-text__content {
+		bottom: 0;
+		padding: 4rem 1.5rem 1.75rem;
+		box-sizing: border-box;
+		background: linear-gradient(to top, rgb(12 12 12 / 78%), rgb(12 12 12 / 45%) 60%, transparent);
+	}
+}
+
+.o-text.has-background-image .o-text__content p {
+	font-family: 'Ductus W03 Light', Georgia, serif;
+	font-size: 1.15rem;
+	line-height: 1.6;
+	text-shadow: 0 1px 12px rgb(0 0 0 / 50%);
+}
+
+/* Home contact block: the dead WordPress form became a link to /kontakt. */
+.o-contact__cta {
+	margin-top: 1rem;
+	text-align: center;
+}
+
+/* Mobile menu: sits above the floating shop button, which hides meanwhile. */
+@media (max-width: 1023px) {
+	.site-head {
+		z-index: 4600;
+	}
+
+	.nav-wrapper {
+		z-index: 4600;
+	}
+
+	.is-menu-open .shop-button,
+	.is-menu-open .shop-toast,
+	.is-menu-open .install-hint {
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.is-menu-open .menu-item {
+		animation: rise-in 0.35s ease-out both;
+	}
+
+	.is-menu-open .menu-item:nth-child(2) {
+		animation-delay: 40ms;
+	}
+	.is-menu-open .menu-item:nth-child(3) {
+		animation-delay: 80ms;
+	}
+	.is-menu-open .menu-item:nth-child(4) {
+		animation-delay: 120ms;
+	}
+	.is-menu-open .menu-item:nth-child(5) {
+		animation-delay: 160ms;
+	}
+	.is-menu-open .menu-item:nth-child(6) {
+		animation-delay: 200ms;
+	}
+	.is-menu-open .menu-item:nth-child(7) {
+		animation-delay: 240ms;
+	}
+}
+
+.shop-button {
+	transition:
+		transform 0.2s ease,
+		background 0.2s ease,
+		color 0.2s ease,
+		opacity 0.2s ease;
+}
+
+/* Essence detail pages: the herb drawing backdrop is a soft watermark, not a second image. */
+.herb-backdrop {
+	opacity: 0.16;
+	-webkit-mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%);
+	mask-image: radial-gradient(ellipse at center, #000 35%, transparent 75%);
+}
+
+[data-theme='dark'] .herb-backdrop {
+	opacity: 0.08;
+	filter: invert(1);
+}
+
+/* Footer theme switch: the icon turns over on change. */
+.footer__theme-icon {
+	display: inline-block;
+	animation: theme-flip 0.5s cubic-bezier(0.2, 0.9, 0.25, 1.3);
+}
+
+@keyframes theme-flip {
+	from {
+		opacity: 0;
+		transform: rotate(-180deg) scale(0.4);
+	}
+}
+
+/* Buttons: a gentle lift and a gold sheen on hover. */
+body .o-button {
+	position: relative;
+	overflow: hidden;
+	transition:
+		background 0.25s ease,
+		color 0.25s ease,
+		transform 0.2s ease,
+		box-shadow 0.25s ease;
+}
+
+body .o-button::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 35%) 50%, transparent 70%);
+	transform: translateX(-120%);
+	pointer-events: none;
+}
+
+body .o-button:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 20px rgb(0 0 0 / 18%);
+}
+
+body .o-button:hover::after {
+	transform: translateX(120%);
+	transition: transform 0.7s ease;
+}
+
+body .o-button:active {
+	transform: translateY(0) scale(0.98);
+}
+
+/* Reveal-on-scroll for sections (class set by the layout's observer). */
+.reveal {
+	opacity: 0;
+	transform: translateY(18px);
+	transition:
+		opacity 0.7s ease,
+		transform 0.7s cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+
+.reveal.is-visible {
+	opacity: 1;
+	transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.reveal {
+		opacity: 1;
+		transform: none;
+	}
+
+	.site--single .o-product__img-wrapper > img,
+	.basket__ornament,
+	.recipe-section__ornament {
+		animation: none;
+	}
+}

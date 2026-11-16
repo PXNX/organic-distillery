@@ -2,10 +2,13 @@
 	max-width: 52rem;
 	margin: 3rem auto;
 	padding: 2rem;
-	background: color-mix(in srgb, var(--accent) 8%, var(--panel-bg));
-	border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--hairline));
-	border-left: 4px solid var(--accent);
+	position: relative;
+	background: var(--panel-bg);
+	border: 1px solid var(--hairline);
+	outline: 1px solid color-mix(in srgb, var(--mystic-gold) 25%, transparent);
+	outline-offset: -6px;
 	box-shadow: 0 14px 32px var(--shadow);
+	overflow: hidden;
 }
 
 .recipe-section__header {
@@ -15,21 +18,92 @@
 	margin-bottom: 1.25rem;
 }
 
-.recipe-section__header > span {
-	font-size: 1.5rem;
-	color: var(--accent);
+.recipe-section::before {
+	content: '';
+	position: absolute;
+	inset: 0 0 auto;
+	height: 4px;
+	background: linear-gradient(90deg, var(--accent), var(--mystic-gold));
+}
+
+.recipe-section__ornament {
+	display: inline-block;
+	font-size: 1.6rem;
+	color: var(--mystic-gold);
+	animation: ornament-shimmer 5s ease-in-out infinite;
 }
 
 .recipe-section__eyebrow {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
 	margin: 0;
 	font-size: 0.7rem;
 	text-transform: uppercase;
 	letter-spacing: 0.2em;
+	color: var(--muted);
+}
+
+.recipe-section__family {
+	padding: 0.15rem 0.5rem;
+	background: var(--mystic-ink);
 	color: var(--accent);
+	letter-spacing: 0.16em;
 }
 
 .recipe-section h2 {
 	margin: 0.2rem 0 0;
+}
+
+.recipe-section h2::before,
+.recipe-section h2::after,
+.recipe-step h3::before,
+.recipe-step h3::after {
+	content: none !important;
+}
+
+.recipe-section__steps {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+	gap: 1rem;
+	margin: 1.5rem 0;
+}
+
+.recipe-step {
+	padding: 1.1rem 1.2rem;
+	background: color-mix(in srgb, var(--mystic-parchment) 55%, var(--panel-bg));
+	border-top: 2px solid color-mix(in srgb, var(--accent) 70%, var(--mystic-gold));
+	animation: rise-in 0.5s ease-out both;
+	animation-delay: var(--stagger, 0ms);
+	transition:
+		transform 0.25s ease,
+		box-shadow 0.25s ease;
+}
+
+.recipe-step:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 10px 22px var(--shadow);
+}
+
+.recipe-step h3 {
+	margin: 0 0 0.4rem;
+	font-size: 1.15rem;
+}
+
+.recipe-step__dish {
+	margin: 0 0 0.5rem;
+	font-style: italic;
+	color: var(--mystic-gold);
+}
+
+.recipe-step p {
+	margin: 0;
+	font-size: 0.92rem;
+	line-height: 1.65;
+}
+
+[data-theme='dark'] .recipe-step {
+	background: color-mix(in srgb, var(--mystic-gold) 8%, var(--panel-bg));
 }
 
 .recipe-section__text {
