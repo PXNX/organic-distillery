@@ -138,7 +138,7 @@ for (const page of pages) {
 	const dir = `${ROUTES}${page.path === '/' ? '' : page.path}`;
 	await Bun.write(
 		`${dir}/+page.svelte`,
-		`<script lang="ts">\n\timport SitePage from '#lib/components/SitePage.svelte';\n</script>\n\n<SitePage path="${page.path}" />\n`
+		`<script lang="ts">\n\timport MirroredPage from '#lib/components/MirroredPage.svelte';\n</script>\n\n<MirroredPage path="${page.path}" />\n`
 	);
 }
 

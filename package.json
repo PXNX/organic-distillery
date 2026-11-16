@@ -16,7 +16,7 @@
 		"preview": "vite preview --host",
 		"prepare": "svelte-kit sync || echo ''",
 		"i18n:compile": "paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide --emit-ts-declarations",
-		"mirror": "bun scripts/mirror.ts",
+		"mirror": "bun scripts/mirror-site.ts",
 		"check": "svelte-kit sync && bun run i18n:compile && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && bun run i18n:compile && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "bun fmt",

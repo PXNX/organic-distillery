@@ -20,6 +20,18 @@ bun run mirror
 
 This re-crawls the live site, rewrites internal URLs to local paths, refreshes `src/lib/content/site.json`, re-downloads assets and regenerates one route component per page. It needs network access.
 
+## Project layout
+
+| Path                                            | Purpose                                           |
+| ----------------------------------------------- | ------------------------------------------------- |
+| `scripts/mirror-site.ts`                        | Crawler, asset downloader and route generator     |
+| `src/lib/content/site.json`                     | Mirrored page content and site shell              |
+| `src/lib/components/MirroredPage.svelte`        | Renders a mirrored page inside the original shell |
+| `src/routes/`                                   | One generated route per mirrored page             |
+| `src/styles/app.css`                            | Global Tailwind styles                            |
+| `static/media`, `static/fonts`, `static/vendor` | Mirrored assets                                   |
+| `tests/`                                        | Content and asset integrity checks                |
+
 ---
 
 # sv

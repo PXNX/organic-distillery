@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SitePage from '#lib/components/SitePage.svelte';
+	import MirroredPage from '#lib/components/MirroredPage.svelte';
 </script>
 
-<SitePage path="/essenzen/silber-wermut-geist" />
+<MirroredPage path="/essenzen/silber-wermut-geist" />
