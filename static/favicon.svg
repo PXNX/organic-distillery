@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#2563eb"/>
-  <text x="32" y="32" dy="0.35em" text-anchor="middle" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="26" font-weight="600" fill="#ffffff">OD</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+	<rect width="512" height="512" rx="96" fill="#111110" />
+	<path d="M256 56 456 256 256 456 56 256Z" fill="none" stroke="#b08d57" stroke-width="14" />
+	<path d="M256 128 384 256 256 384 128 256Z" fill="none" stroke="#b08d57" stroke-width="6" opacity="0.6" />
+	<text x="256" y="290" text-anchor="middle" font-family="Georgia, serif" font-size="132" fill="#f4f0e6">OD</text>
 </svg>

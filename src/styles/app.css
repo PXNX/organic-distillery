@@ -359,6 +359,60 @@ img {
 	}
 }
 
+.install-hint {
+	position: fixed;
+	right: 1rem;
+	bottom: 1rem;
+	z-index: 4500;
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	max-width: calc(100% - 2rem);
+	padding: 0.75rem 1rem;
+	background: var(--mystic-ink);
+	color: var(--mystic-parchment);
+	border: 1px solid var(--mystic-gold);
+	box-shadow: 0 12px 30px rgb(0 0 0 / 25%);
+}
+
+.install-hint--raised {
+	bottom: 4rem;
+}
+
+.install-hint__ornament {
+	color: var(--mystic-gold);
+}
+
+.install-hint__text {
+	font-size: 0.85rem;
+}
+
+.install-hint__button {
+	background: none;
+	border: 1px solid var(--mystic-gold);
+	color: var(--mystic-gold);
+	padding: 0.35rem 0.7rem;
+	font: inherit;
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	letter-spacing: 0.12em;
+	cursor: pointer;
+}
+
+.install-hint__button:hover {
+	background: var(--mystic-gold);
+	color: var(--mystic-ink);
+}
+
+.install-hint__close {
+	background: none;
+	border: 0;
+	color: var(--mystic-gold);
+	font-size: 1.25rem;
+	line-height: 1;
+	cursor: pointer;
+}
+
 .shop-mock-banner {
 	position: fixed;
 	inset: auto 0 0;
