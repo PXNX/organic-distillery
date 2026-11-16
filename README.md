@@ -24,6 +24,10 @@ This re-crawls the live site, rewrites internal URLs to local paths, refreshes `
 
 Set `SHOP_MOCK_MODE=true` when running `bun run dev` or `bun run build` to keep the order form local: submissions are intercepted, no WordPress POST is made, and a mock receipt is shown. See `.env.example`.
 
+## Deploying to Vercel
+
+Import the repository into Vercel. [vercel.json](vercel.json) tells Vercel to install with `bun install --frozen-lockfile`, build with `bun run build` (bun fmt/bun lint are part of `bun run ci`), and serve the static `build/` output produced by `adapter-static`. Set `SHOP_MOCK_MODE=true` as a build environment variable if the deployed copy should use the local mock shop instead of the original order endpoint.
+
 ## Project layout
 
 | Path                                            | Purpose                                           |
