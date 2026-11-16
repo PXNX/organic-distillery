@@ -1,6 +1,7 @@
 import { render } from 'svelte/server';
 import { describe, expect, it } from 'vitest';
 import ContactForm from '../src/lib/ui/ContactForm.svelte';
+import GinAroma from '../src/lib/ui/GinAroma.svelte';
 import GinProcess from '../src/lib/ui/GinProcess.svelte';
 import MirroredPage from '../src/lib/ui/MirroredPage.svelte';
 import Newsletter from '../src/lib/ui/Newsletter.svelte';
@@ -42,6 +43,15 @@ describe('MirroredPage', () => {
 		expect(body).toContain('Aroma infundieren');
 		expect(body).toContain('Schonende Destillation');
 		expect(body.match(/gin-process__step/g)).toHaveLength(5);
+	});
+
+	it('renders distinct aroma profiles for Ginn and Ginnie', () => {
+		const ginn = render(GinAroma, { props: { variant: 'ginn' } }).body;
+		const ginnie = render(GinAroma, { props: { variant: 'ginnie' } }).body;
+		expect(ginn).toContain('Wacholder');
+		expect(ginn).toContain('Gaumenmensch');
+		expect(ginnie).toContain('Kardamom');
+		expect(ginnie).toContain('Nasenmensch');
 	});
 
 	it('renders a newsletter signup form', () => {

@@ -3,6 +3,7 @@
 @import './mystic.css';
 @import './motion.css';
 @import './process.css';
+@import './aroma.css';
 
 html {
 	scrollbar-gutter: stable;
@@ -61,6 +62,17 @@ input[type='checkbox'] {
 img[src*='Ginn_'],
 img[src*='Ginnie_'] {
 	filter: drop-shadow(0 12px 14px rgb(0 0 0 / 25%));
+}
+
+/* Essence bottles keep their white labels; blending removes the studio backdrop. */
+.o-product__img-wrapper {
+	background: var(--mystic-parchment);
+	padding: 1rem;
+	box-sizing: border-box;
+}
+
+.o-product__img-wrapper img {
+	mix-blend-mode: multiply;
 }
 
 .newsletter {

@@ -26,8 +26,8 @@
 			number: 'III',
 			title: 'Schonende Destillation',
 			text: 'In sehr kleiner Auflage wird der Destillat schonend gebrannt – für Intensität und Komplexität.',
-			image: '/media/2017/10/organic-distillery-schonendes-destillieren.webp',
-			alt: 'Destillation in der Brennerei'
+			image: '/media/2017/11/140801_GIN_556_HRk_Klein-470x310.webp',
+			alt: 'Christine Brugger an der Kupferdestille'
 		},
 		{
 			number: 'IV',

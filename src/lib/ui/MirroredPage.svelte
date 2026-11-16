@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ContactForm from './ContactForm.svelte';
+	import GinAroma from './GinAroma.svelte';
 	import GinProcess from './GinProcess.svelte';
 	import Newsletter from './Newsletter.svelte';
 	import RecipeCard from './RecipeCard.svelte';
@@ -30,6 +31,10 @@
 
 {#if path === '/ginn-ginnie'}
 	<GinProcess />
+{/if}
+
+{#if path.startsWith('/gins/')}
+	<GinAroma variant={path.includes('ginnie') ? 'ginnie' : 'ginn'} />
 {/if}
 
 {#if path === '/' || path === '/kontakt' || path === '/ueber-uns'}
