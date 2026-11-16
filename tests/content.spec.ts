@@ -1,6 +1,6 @@
 import { access } from 'node:fs/promises';
 import { describe, expect, it } from 'vitest';
-import site from './site.json';
+import site from '../src/lib/content/site.json';
 
 const exists = async (path: string) => {
 	try {
