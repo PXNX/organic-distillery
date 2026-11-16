@@ -21,5 +21,11 @@ describe('formatMockOrder', () => {
 		const receipt = formatMockOrder({ lines: [], name: '', email: '' });
 		expect(receipt).toContain('keine Artikel ausgewählt');
 		expect(receipt).toContain('– / –');
+		expect(receipt).not.toContain('Referenz');
+	});
+
+	it('includes a mock reference when provided', () => {
+		const receipt = formatMockOrder({ lines: [], name: '', email: '', reference: 'AB12CD34' });
+		expect(receipt).toContain('Referenz: AB12CD34');
 	});
 });

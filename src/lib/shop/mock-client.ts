@@ -27,17 +27,28 @@ export function attachMockOrder(): () => void {
 
 		const value = (name: string) =>
 			form.querySelector<HTMLInputElement>(`input[name="${name}"]`)?.value.trim() ?? '';
-		const order: MockOrder = { lines, name: value('order-name'), email: value('order-email') };
+		const order: MockOrder = {
+			lines,
+			name: value('order-name'),
+			email: value('order-email'),
+			reference: crypto.randomUUID().slice(0, 8).toUpperCase()
+		};
 
-		let panel = document.querySelector<HTMLElement>('.mock-order-confirmation');
-		if (!panel) {
-			panel = document.createElement('div');
-			panel.className = 'mock-order-confirmation';
-			form.parentElement?.appendChild(panel);
+		let dialog = document.querySelector<HTMLDialogElement>('.mock-order-confirmation');
+		if (!dialog) {
+			dialog = document.createElement('dialog');
+			dialog.className = 'mock-order-confirmation';
+			const content = document.createElement('pre');
+			const close = document.createElement('button');
+			close.type = 'button';
+			close.textContent = 'Schließen';
+			close.addEventListener('click', () => dialog?.close());
+			dialog.append(content, close);
+			form.parentElement?.appendChild(dialog);
 		}
-		panel.textContent = formatMockOrder(order);
-		panel.hidden = false;
-		panel.scrollIntoView({ block: 'nearest' });
+		const content = dialog.querySelector('pre');
+		if (content) content.textContent = formatMockOrder(order);
+		if (!dialog.open) dialog.showModal();
 	};
 
 	form.addEventListener('submit', handleSubmit, true);
