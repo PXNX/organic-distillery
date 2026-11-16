@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { onNavigate } from '$app/navigation';
 	import { page } from '$app/state';
 	import { site } from '#lib/content/index.js';
 	import { shopMockMode } from '#lib/shop/config.js';
@@ -10,6 +11,18 @@
 	let isFrontPage = $derived(page.url.pathname === '/');
 
 	onMount(() => (shopMockMode ? attachMockOrder() : undefined));
+
+	onNavigate((navigation) => {
+		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		if (reduceMotion || !document.startViewTransition) return;
+
+		return new Promise<void>((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
+	});
 </script>
 
 <svelte:head>

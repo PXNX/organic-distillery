@@ -12,6 +12,19 @@ img {
 	height: 100%;
 }
 
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation-duration: 180ms;
+	animation-timing-function: ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	::view-transition-old(root),
+	::view-transition-new(root) {
+		animation: none;
+	}
+}
+
 .shop-mock-banner {
 	position: fixed;
 	inset: auto 0 0;
