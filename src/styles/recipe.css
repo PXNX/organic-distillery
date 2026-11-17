@@ -453,10 +453,3 @@
 		animation: none;
 	}
 }
-
-/* Press list: compact downloads sit right-aligned like the Film/Link buttons. */
-.o-press .download-button--compact {
-	display: flex;
-	width: fit-content;
-	margin-left: auto;
-}

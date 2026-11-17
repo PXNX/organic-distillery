@@ -424,17 +424,3 @@
 		grid-template-columns: 1fr;
 	}
 }
-
-/* Essenzen overview: the "Aromafamilien" introduction sits right above the wheel. */
-.essence-intro .o-text {
-	margin-bottom: 0;
-	padding-bottom: 0;
-}
-
-.essence-intro .o-text__content > div {
-	text-align: center;
-}
-
-.essence-intro img {
-	margin: 0 auto 1.5rem;
-}

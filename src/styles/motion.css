@@ -1,4 +1,4 @@
-/* Small, quiet moments of delight — nothing that fights the content. */
+/* Shared keyframes: small, quiet moments of delight. */
 
 @keyframes rise-in {
 	from {
@@ -67,78 +67,6 @@
 	}
 	to {
 		transform: scaleX(1);
-	}
-}
-
-.o-teaser > h1,
-.o-teaser > h2,
-.o-teaser > p {
-	animation: rise-in 0.5s ease-out both;
-}
-
-.o-teaser > :nth-child(2) {
-	animation-delay: 0.07s;
-}
-
-.o-teaser > :nth-child(3) {
-	animation-delay: 0.14s;
-}
-
-.install-hint {
-	animation: hint-pop 0.45s cubic-bezier(0.2, 0.9, 0.25, 1.2) both;
-}
-
-.contact-form__success,
-.newsletter__confirmation {
-	animation: rise-in 0.35s ease-out both;
-}
-
-/* Ornaments breathe slowly in the background. */
-.gin-process__ornament,
-.newsletter__ornament,
-.visit-note__ornament {
-	display: inline-block;
-	animation: ornament-shimmer 5s ease-in-out infinite;
-}
-
-.recipe-card__icon,
-.botanical-gallery__item img,
-.botanical-plate img,
-.gin-process__image img {
-	transition: transform 0.25s ease;
-}
-
-.recipe-card:hover .recipe-card__icon {
-	transform: translateY(-2px) rotate(-8deg);
-}
-
-.botanical-gallery__item:hover img,
-.gin-process__step:hover .gin-process__image img {
-	transform: scale(1.04);
-}
-
-.botanical-plate:hover img {
-	transform: scale(1.02);
-}
-
-/* Nav links draw a fine gold line on hover. */
-.site-head .menu-item a span::after {
-	transition: transform 0.25s ease;
-	transform: scaleX(0);
-	transform-origin: left;
-}
-
-.site-head .menu-item a:hover span::after {
-	transform: scaleX(1);
-	animation: link-sweep 0.25s ease-out;
-}
-
-@media (min-width: 768px) {
-	.site h1:hover::before,
-	.site h1:hover::after,
-	.site h2:hover::before,
-	.site h2:hover::after {
-		transform: rotate(18deg) scale(1.1);
 	}
 }
 

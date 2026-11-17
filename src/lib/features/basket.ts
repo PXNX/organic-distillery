@@ -19,25 +19,16 @@ export interface BasketItem {
 	quantity: number;
 }
 
-const essence: ProductVariant[] = [{ id: '50ml', label: '50 ml', price: 22.5 }];
-const gin: ProductVariant[] = [
-	{ id: '200ml', label: '200 ml', price: 55 },
-	{ id: '500ml', label: '500 ml', price: 115 }
+export const ESSENCE_VARIANTS: ProductVariant[] = [{ id: '50ml', label: '50 ml', price: 22.5 }];
+export const GIN_VARIANTS: ProductVariant[] = [
+	{ id: '500ml', label: '500 ml', price: 115 },
+	{ id: '200ml', label: '200 ml', price: 55 }
 ];
 
-/** Derives a product from a mirrored detail page. */
-export function productForPath(path: string, title: string): Product | null {
-	const name = title.replace(/\s*[–—-]\s*Von der Natur.*$/i, '').trim();
-	if (path.startsWith('/essenzen/')) {
-		return { id: path, name, variants: essence };
-	}
-	if (path.startsWith('/gins/')) {
-		// "/gins/ginn" shows the 500 ml bottle, "/gins/ginn-2" the 200 ml one.
-		const variants = path.endsWith('-2') ? gin : [...gin].reverse();
-		return { id: path.replace(/-2$/, ''), name, variants };
-	}
-	return null;
-}
+/** Product ids that changed with the move away from WordPress URLs. */
+export const RENAMED_PRODUCTS: Record<string, string> = {
+	'/essenzen/137-2': '/essenzen/koriander-geist'
+};
 
 export function basketCount(items: BasketItem[]): number {
 	return items.reduce((sum, item) => sum + item.quantity, 0);

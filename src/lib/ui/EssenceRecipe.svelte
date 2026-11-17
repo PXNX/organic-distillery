@@ -1,33 +1,22 @@
 <script lang="ts">
 	import DownloadButton from './DownloadButton.svelte';
-	import { structureRecipe } from '#lib/features/recipe-text.js';
-	import { recipeView } from '#lib/features/recipe-view.js';
-	import type { RecipeLink } from '#lib/mirror/embellish.js';
-	import recipeMedia from '#lib/content/recipe-media.json';
+	import { flavorFamilies } from '#lib/features/flavor-wheel.js';
+	import type { Essence } from '#lib/content/types.js';
 
-	let {
-		recipe,
-		title,
-		path = '',
-		accent = '#b08d57',
-		essence = title,
-		family = ''
-	}: {
-		recipe: RecipeLink;
-		title: string;
-		path?: string;
-		accent?: string | undefined;
-		essence?: string;
-		family?: string | undefined;
-	} = $props();
+	let { essence }: { essence: Essence } = $props();
 
-	type Media = { photo?: string; portrait?: boolean; signature?: string };
-	const media = $derived<Media>((recipeMedia as Record<string, Media>)[path] ?? {});
-	const view = $derived(
-		recipe.text ? recipeView(structureRecipe(recipe.text, essence, family ?? '')) : null
+	const view = $derived(essence.recipe);
+	const accent = $derived(
+		flavorFamilies.find((family) => family.name === essence.family)?.color ?? '#b08d57'
 	);
-	const familyLabel = $derived(family ? family.charAt(0) + family.slice(1).toLowerCase() : '');
-	const dish = $derived(view?.feature?.dish ?? view?.cocktail?.name);
+	const familyLabel = $derived(essence.family.charAt(0) + essence.family.slice(1).toLowerCase());
+	const dish = $derived(view.feature?.dish ?? view.cocktail?.name);
+	const media = $derived({
+		photo: view.photo,
+		portrait: view.portrait,
+		signature: view.signature
+	});
+	const title = $derived(essence.name);
 </script>
 
 <section class="recipe" style={`--accent: ${accent}`} aria-labelledby="recipe-title">
@@ -36,7 +25,7 @@
 			<span aria-hidden="true">◇</span> Rezept &amp; Inspiration
 			{#if familyLabel}<span class="recipe__family">{familyLabel}</span>{/if}
 		</p>
-		<h2 id="recipe-title">Genießen mit {essence}</h2>
+		<h2 id="recipe-title">Genießen mit {essence.short}</h2>
 	</header>
 
 	<div class="recipe__feature" class:recipe__feature--no-photo={!media.photo}>
@@ -53,7 +42,7 @@
 		{/if}
 
 		<div class="recipe__ideas">
-			{#if view?.feature}
+			{#if view.feature}
 				<div class="recipe__inspiration">
 					<span class="recipe__label">Inspiration</span>
 					{#if view.feature.dish && view.feature.dish !== view.cocktail?.name}<h3>
@@ -63,7 +52,7 @@
 				</div>
 			{/if}
 
-			{#if view?.cocktail}
+			{#if view.cocktail}
 				<div class="recipe__cocktail">
 					<div class="recipe__cocktail-head">
 						<span class="recipe__label">Drink</span>
@@ -81,7 +70,7 @@
 				</div>
 			{/if}
 
-			{#if view && view.uses.length > 0}
+			{#if view.uses.length > 0}
 				<ol class="recipe__uses">
 					{#each view.uses as use, index (index)}
 						<li>
@@ -104,7 +93,7 @@
 		</div>
 	</div>
 
-	{#if view?.letter}
+	{#if view.letter}
 		<blockquote class="recipe__letter">
 			<p>{view.letter}</p>
 			<footer>
@@ -119,8 +108,8 @@
 
 	<div class="recipe__download">
 		<DownloadButton
-			href={recipe.href}
-			title={`Rezeptkarte ${essence}`}
+			href={view.pdf}
+			title={`Rezeptkarte ${essence.short}`}
 			meta="PDF · Alle Rezepte zum Ausdrucken"
 			track={title}
 		/>

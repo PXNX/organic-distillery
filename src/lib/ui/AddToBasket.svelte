@@ -43,7 +43,7 @@
 
 	<button
 		type="button"
-		class="o-button add-to-basket__button"
+		class="btn add-to-basket__button"
 		class:is-added={added}
 		onclick={add}
 		disabled={!variant || quantity < 1}

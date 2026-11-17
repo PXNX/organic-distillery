@@ -33,7 +33,7 @@
 
 		<nav class="error-page__links" aria-label="Weiter zur">
 			{#each suggestions as link (link.href)}
-				<a class="o-button" href={link.href}>{link.label}</a>
+				<a class="btn" href={link.href}>{link.label}</a>
 			{/each}
 		</nav>
 

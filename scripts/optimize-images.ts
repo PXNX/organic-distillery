@@ -1,13 +1,12 @@
 /**
- * Converts mirrored imagery to WebP and cuts the bottles out of their white
- * studio backgrounds. Run after `bun run mirror` (or via `bun run images`).
+ * Converts the imagery to WebP and cuts the bottles out of their white
+ * studio backgrounds (`bun run images`).
  */
 import { readdir } from 'node:fs/promises';
 import { PDFParse } from 'pdf-parse';
 import sharp from 'sharp';
 import { cutoutBottle } from './bottle-cutout.js';
 
-const SITE_JSON = 'src/lib/content/site.json';
 const force = process.env.FORCE === '1';
 const CUTOUTS = [
 	'media/2017/11/Ginn_200ml.jpg',
@@ -188,39 +187,13 @@ async function convert(src: string, dest: string): Promise<void> {
 	console.log(`webp ${src} -> ${dest}`);
 }
 
-const site = await Bun.file(SITE_JSON).json();
-const htmlParts = [
-	site.header,
-	site.footer,
-	site.ageCheck,
-	site.order,
-	...site.pages.map((page: { html: string }) => page.html)
-];
-const refs = new Set<string>();
-for (const html of htmlParts) {
-	for (const match of html.matchAll(/\/media\/[^"')\s]+\.(?:jpg|jpeg|png|webp)/gi)) {
-		refs.add(match[0]);
-	}
-}
-
-const renamed = new Map<string, string>();
-for (const ref of refs) {
-	renamed.set(ref, ref.replace(/\.(jpg|jpeg|png)$/i, '.webp'));
-}
-
+// Every JPEG/PNG under static/media gets a WebP sibling; the site only references the WebPs.
 const sources = new Set<string>([...CUTOUTS, ...DRAWING_CUTOUTS]);
-for (const ref of refs) {
-	const relative = decodeURIComponent(ref).replace(/^\//, '');
-	if (relative.endsWith('.webp')) {
-		for (const ext of ['.jpg', '.png']) {
-			const candidate = relative.replace(/\.webp$/i, ext);
-			if (await Bun.file(`static/${candidate}`).exists()) sources.add(candidate);
-		}
-	} else {
-		sources.add(relative);
-	}
+for (const entry of await readdir('static/media', { recursive: true })) {
+	if (/\.(jpe?g|png)$/i.test(entry)) sources.add(`media/${entry}`);
 }
 
+let converted = 0;
 for (const relative of sources) {
 	const source = `static/${relative}`;
 	if (!(await Bun.file(source).exists())) continue;
@@ -228,21 +201,7 @@ for (const relative of sources) {
 	if (CUTOUTS.includes(relative)) await cutout(relative, dest);
 	else if (DRAWING_CUTOUTS.includes(relative)) await cutoutDrawing(source, dest);
 	else if (force || !(await Bun.file(dest).exists())) await convert(source, dest);
+	else continue;
+	converted++;
 }
-
-const rewriteRefs = (html: string) => {
-	let out = html;
-	for (const [from, to] of renamed) out = out.split(from).join(to);
-	return out;
-};
-
-site.header = rewriteRefs(site.header);
-site.footer = rewriteRefs(site.footer);
-site.ageCheck = rewriteRefs(site.ageCheck);
-site.order = rewriteRefs(site.order);
-site.pages = site.pages.map((page: { html: string }) => ({
-	...page,
-	html: rewriteRefs(page.html)
-}));
-await Bun.write(SITE_JSON, JSON.stringify(site, null, 2) + '\n');
-console.log(`\nOptimized ${renamed.size} images.`);
+console.log(`\nOptimized ${converted} images.`);

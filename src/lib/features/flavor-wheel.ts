@@ -69,7 +69,7 @@ export const flavorFamilies: WheelFamily[] = [
 			},
 			{
 				name: 'Koriander',
-				path: '/essenzen/137-2',
+				path: '/essenzen/koriander-geist',
 				pairings: ['Apfel & Birne', 'Hülsenfrüchte', 'Wurzelgemüse']
 			}
 		]

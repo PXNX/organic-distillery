@@ -3,6 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vitest/config';
 import adapter from '@sveltejs/adapter-static';
 import { sveltekit } from '@sveltejs/kit/vite';
+import Icons from 'unplugin-icons/vite';
 
 export default defineConfig({
 	define: {
@@ -18,6 +19,8 @@ export default defineConfig({
 			},
 			adapter: adapter({ fallback: '404.html' })
 		}),
+
+		Icons({ compiler: 'svelte' }),
 
 		paraglideVitePlugin({
 			project: './project.inlang',

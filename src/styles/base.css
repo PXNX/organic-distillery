@@ -1,0 +1,248 @@
+/* Foundations: brand fonts, colour tokens, typography and the shared button. */
+
+@font-face {
+	font-family: 'Ductus W03 Light';
+	src:
+		url('/fonts/71a62b99-b09e-4579-8b92-e6ddc81e9744.woff2') format('woff2'),
+		url('/fonts/52f80c57-bb7e-4244-99d1-a22f1d9d3d5d.woff') format('woff');
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Ductus W03 Medium';
+	src:
+		url('/fonts/3b40bed6-a9b7-4856-9088-eb8b6b2eb284.woff2') format('woff2'),
+		url('/fonts/51ec77a6-35f1-456c-9f78-ba76da672a04.woff') format('woff');
+	font-display: swap;
+}
+
+:root,
+:root[data-theme='light'] {
+	--mystic-gold: #9a7640;
+	--mystic-ink: #111110;
+	--mystic-parchment: #f4f0e6;
+	--page-bg: #faf8f2;
+	--panel-bg: #ffffff;
+	--text: #1d1d1b;
+	--muted: #6f6859;
+	--hairline: #cfc6b2;
+	--plate-bg: #f6f2e8;
+	--shadow: rgb(17 17 16 / 8%);
+	--font-display: 'Ductus W03 Medium', Georgia, 'Times New Roman', serif;
+	--font-light: 'Ductus W03 Light', Georgia, 'Times New Roman', serif;
+	--font-body: 'Rubik', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--content: 60rem;
+	--gutter: clamp(1rem, 4vw, 1.5rem);
+	--header-height: 4.625rem;
+	color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+	--mystic-gold: #c9a86a;
+	--mystic-ink: #0c0c0c;
+	--mystic-parchment: #e9e3d3;
+	--page-bg: #141412;
+	--panel-bg: #1e1d1a;
+	--text: #ece7da;
+	--muted: #a49a84;
+	--hairline: #3a352b;
+	--plate-bg: #24221d;
+	--shadow: rgb(0 0 0 / 35%);
+	color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	min-height: 100%;
+	overflow-y: scroll;
+	font-family: var(--font-body);
+	font-size: 16px;
+	line-height: 1.6;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-size-adjust: 100%;
+	scroll-padding-top: calc(var(--header-height) + 1rem);
+}
+
+body {
+	margin: 0;
+	background: var(--page-bg);
+	color: var(--text);
+}
+
+h1,
+h2,
+h3,
+h4 {
+	margin: 0 0 0.6em;
+	font-family: var(--font-display);
+	font-weight: 400;
+	line-height: 1.25;
+	text-wrap: balance;
+}
+
+h1 {
+	font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+h2 {
+	font-size: clamp(1.4rem, 3vw, 1.85rem);
+}
+
+h3 {
+	font-size: 1.2rem;
+}
+
+p {
+	margin: 0 0 1em;
+	text-wrap: pretty;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+img,
+svg {
+	max-width: 100%;
+}
+
+img {
+	height: auto;
+}
+
+button {
+	font: inherit;
+}
+
+:focus-visible {
+	outline: 2px solid var(--mystic-gold);
+	outline-offset: 3px;
+}
+
+.container {
+	width: min(100%, var(--content));
+	margin-inline: auto;
+	padding-inline: var(--gutter);
+}
+
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+/* Section heading flanked by gold diamonds. */
+.ornate::before,
+.ornate::after {
+	content: '◇';
+	display: inline-block;
+	margin-inline: 0.5em;
+	color: var(--mystic-gold);
+	font-size: 0.7em;
+	vertical-align: 0.15em;
+}
+
+.eyebrow {
+	margin: 0 0 0.5rem;
+	color: var(--muted);
+	font-size: 0.7rem;
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
+}
+
+/* Engraved lattice texture for dark panels. */
+.lattice {
+	position: relative;
+	isolation: isolate;
+}
+
+.lattice::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	background-image:
+		repeating-linear-gradient(45deg, transparent 0 18px, rgb(201 168 106 / 9%) 18px 19px),
+		repeating-linear-gradient(-45deg, transparent 0 18px, rgb(201 168 106 / 9%) 18px 19px);
+}
+
+/* The one button: gold outline, fills on hover. */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	min-height: 2.75rem;
+	padding: 0.65rem 1.4rem 0.55rem;
+	border: 1px solid var(--mystic-gold);
+	background: transparent;
+	color: var(--mystic-gold);
+	font-size: 0.85rem;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition:
+		background-color 0.25s ease,
+		color 0.25s ease;
+}
+
+.btn:hover {
+	background: var(--mystic-gold);
+	color: var(--mystic-ink);
+}
+
+.btn--solid {
+	background: var(--mystic-gold);
+	color: var(--mystic-ink);
+}
+
+.btn--solid:hover {
+	background: transparent;
+	color: var(--mystic-gold);
+}
+
+.btn--light {
+	border-color: var(--mystic-parchment);
+	color: var(--mystic-parchment);
+}
+
+.btn--light:hover {
+	background: var(--mystic-parchment);
+	color: var(--mystic-ink);
+}
+
+.btn--wide {
+	padding-inline: 3.5rem;
+}
+
+/* Sections drift in as they are scrolled into view (see +layout.svelte). */
+.reveal {
+	opacity: 0;
+	transform: translateY(18px);
+	transition:
+		opacity 0.7s ease,
+		transform 0.7s ease;
+}
+
+.reveal.is-visible {
+	opacity: 1;
+	transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.reveal {
+		opacity: 1;
+		transform: none;
+	}
+}

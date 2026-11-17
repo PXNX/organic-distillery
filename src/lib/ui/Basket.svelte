@@ -70,8 +70,8 @@
 				<span class="basket__empty-ornament" aria-hidden="true">◇</span>
 				<p>Noch nichts ausgewählt.<br />Stellen Sie sich ein Destillat zusammen.</p>
 				<div class="basket__empty-links">
-					<a class="o-button" href="/ginn-ginnie/" onclick={close}>Ginn &amp; Ginnie</a>
-					<a class="o-button" href="/essenzen/" onclick={close}>Essenzen</a>
+					<a class="btn" href="/ginn-ginnie/" onclick={close}>Ginn &amp; Ginnie</a>
+					<a class="btn" href="/essenzen/" onclick={close}>Essenzen</a>
 				</div>
 			</div>
 		{:else}
@@ -129,7 +129,7 @@
 					<p class="basket__mock">Mock-Modus – es wird keine echte Bestellung versendet.</p>
 				{/if}
 				<a
-					class="o-button basket__checkout"
+					class="btn basket__checkout"
 					href={mailto}
 					onclick={() => trackEvent('basket_checkout', { items: basket.count })}
 					>Bestellung per E-Mail senden</a

@@ -8,18 +8,25 @@ import AgeGate from '../src/lib/ui/AgeGate.svelte';
 import BasketButton from '../src/lib/ui/BasketButton.svelte';
 import GinBotanicals from '../src/lib/ui/GinBotanicals.svelte';
 import GinProcess from '../src/lib/ui/GinProcess.svelte';
-import MirroredPage from '../src/lib/ui/MirroredPage.svelte';
+import DownloadButton from '../src/lib/ui/DownloadButton.svelte';
+import BezugPage from '../src/routes/bezug/+page.svelte';
+import EssencePage from '../src/routes/essenzen/[slug]/+page.svelte';
+import GinPage from '../src/routes/gins/[slug]/+page.svelte';
+import GinnGinniePage from '../src/routes/ginn-ginnie/+page.svelte';
+import ImpressumPage from '../src/routes/impressum/+page.svelte';
+import UeberUnsPage from '../src/routes/ueber-uns/+page.svelte';
+import { findEssence, findGin } from '../src/lib/content/catalog.js';
 import Newsletter from '../src/lib/ui/Newsletter.svelte';
 import SiteFooter from '../src/lib/ui/SiteFooter.svelte';
-import RecipeCard from '../src/lib/ui/RecipeCard.svelte';
 
-describe('MirroredPage', () => {
-	it('renders a recipe card as a real PDF download', () => {
-		const { body } = render(RecipeCard, {
-			props: {
-				recipe: { href: '/media/card.pdf', label: 'Rezeptkarte herunterladen' },
-				title: 'Eucalyptus Geist'
-			}
+const mandarine = findEssence('mandarine-geist');
+const eucalyptus = findEssence('eucalyptus-geist');
+const ginn = findGin('ginn');
+
+describe('pages and components', () => {
+	it('renders the standard download button as a real PDF download', () => {
+		const { body } = render(DownloadButton, {
+			props: { href: '/media/card.pdf', title: 'Eucalyptus Geist' }
 		});
 		expect(body).toContain('/media/card.pdf');
 		expect(body).toContain('download');
@@ -60,44 +67,27 @@ describe('MirroredPage', () => {
 	});
 
 	it('renders the recipe with dish photo, signature and the standard download', () => {
-		const { body } = render(EssenceRecipe, {
-			props: {
-				title: 'Eucalyptus Geist',
-				path: '/essenzen/eucalyptus-geist',
-				essence: 'Eucalyptus',
-				recipe: {
-					href: '/media/recipe.pdf',
-					label: 'Rezeptkarte',
-					text: 'Lamm und Kräuter.'
-				}
-			}
-		});
+		const { body } = render(EssenceRecipe, { props: { essence: eucalyptus! } });
 		expect(body).toContain('class="recipe"');
-		expect(body).toContain('Lamm und Kräuter.');
+		expect(body).toContain('Genießen mit Eucalyptus');
 		expect(body).toContain('/media/recipes/eucalyptus-geist-3.webp');
 		expect(body).toContain('/media/recipes/eucalyptus-geist-4.webp');
 		expect(body).not.toContain('eucalyptus-geist-2.webp');
 		expect(body).toContain('download-button');
-		expect(body).toContain('/media/recipe.pdf');
+		expect(body).toContain(eucalyptus!.recipe.pdf);
 	});
 
-	it('shows the gin botanicals before the sibling gin, with a smaller stage bottle', () => {
-		const { body } = render(MirroredPage, { props: { path: '/gins/ginn' } });
+	it('shows the gin botanicals before the sibling gin', () => {
+		const { body, head } = render(GinPage, { props: { data: { gin: ginn! } } as never });
+		expect(body).toContain('stage__ornament');
+		expect(body).toContain('Ginn_500ml.webp');
 		expect(body.indexOf('gin-botanicals')).toBeGreaterThan(0);
 		expect(body.indexOf('gin-botanicals')).toBeLessThan(body.indexOf('Der zweite Gin'));
-		expect(body).not.toContain('detail-photo');
-	});
-
-	it('renders mirrored PDF links as standard download buttons', () => {
-		const bezug = render(MirroredPage, { props: { path: '/bezug' } }).body;
-		expect(bezug).toContain('download-button');
-		expect(bezug).toContain('Bezugsquellen DACH');
-		const press = render(MirroredPage, { props: { path: '/ueber-uns' } }).body;
-		expect(press.match(/download-button download-button--compact/g)?.length).toBe(4);
+		expect(head).toContain('<title>Ginn');
 	});
 
 	it('renders essence pages as a product stage with a shimmering drawing', () => {
-		const { body } = render(MirroredPage, { props: { path: '/essenzen/mandarine-geist' } });
+		const { body } = render(EssencePage, { props: { data: { essence: mandarine! } } as never });
 		expect(body).toContain('stage__shimmer');
 		expect(body).toContain(
 			"--outline: url('/media/2017/10/Citrus_Nobilis_Mandarine-outline.webp')"
@@ -105,14 +95,31 @@ describe('MirroredPage', () => {
 		expect(body).toContain('Citrus Nobilis');
 		expect(body).toContain('Passt zu');
 		expect(body).toContain('In den Warenkorb');
-		expect(body).not.toContain('js-show-order');
+		expect(body).toContain('/essenzen/koriander-geist');
 	});
 
-	it('renders gin pages with an ornament stage and the other gin', () => {
-		const { body } = render(MirroredPage, { props: { path: '/gins/ginnie' } });
-		expect(body).toContain('stage__ornament');
-		expect(body).toContain('Ginnie_500ml.webp');
-		expect(body).toContain('Der zweite Gin');
+	it('renders PDFs on Bezug and Über uns as standard download buttons', () => {
+		const bezug = render(BezugPage).body;
+		expect(bezug).toContain('Bezugsquellen DACH');
+		expect(bezug).toContain('Manufactum Warenhaus im Chilehaus');
+		const press = render(UeberUnsPage).body;
+		expect(press.match(/download-button download-button--compact/g)?.length).toBe(4);
+		expect(press).toContain('Studio Naroska');
+	});
+
+	it('renders the Ginn & Ginnie page with both gins and the process', () => {
+		const { body, head } = render(GinnGinniePage);
+		expect(body).toContain('Sensorische Wahrnehmung');
+		expect(body).toContain('Aus 1001 Nacht');
+		expect(body).toContain('/gins/ginnie');
+		expect(body).toContain('Vom Kraut zur Ginnie');
+		expect(head).toContain('description');
+	});
+
+	it('renders legal texts without raw HTML', () => {
+		const { body } = render(ImpressumPage);
+		expect(body).toContain('HRB 731086');
+		expect(body).toContain('Urheberrecht');
 	});
 
 	it('renders the aroma compass with every essence', () => {
@@ -145,13 +152,6 @@ describe('MirroredPage', () => {
 		expect(body).toContain('newsletter-email');
 		expect(body).toContain('Anmelden');
 		expect(body).toContain('Neuigkeiten aus der Brennerei');
-	});
-
-	it('renders the content and metadata of the requested page', () => {
-		const { body, head } = render(MirroredPage, { props: { path: '/ginn-ginnie' } });
-		expect(body).toContain('Sensorische Wahrnehmung');
-		expect(head).toContain('Ginn');
-		expect(head).toContain('description');
 	});
 
 	it('renders the age gate as a modal dialog with both answers', () => {

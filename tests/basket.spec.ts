@@ -4,22 +4,21 @@ import {
 	basketCount,
 	basketTotal,
 	buildOrderMailto,
-	formatEuro,
-	productForPath
+	formatEuro
 } from '../src/lib/features/basket.js';
+import { essenceProduct, findEssence, findGin, ginProduct } from '../src/lib/content/catalog.js';
 import type { BasketItem } from '../src/lib/features/basket.js';
 
-const essence = productForPath(
-	'/essenzen/eucalyptus-geist',
-	'Eucalyptus Geist – Von der Natur begeistert'
-);
-const gin = productForPath('/gins/ginn', 'Ginn – Von der Natur begeistert');
+const eucalyptus = findEssence('eucalyptus-geist');
+const ginn = findGin('ginn');
+const essence = eucalyptus ? essenceProduct(eucalyptus) : null;
+const gin = ginn ? ginProduct(ginn) : null;
 
-describe('productForPath', () => {
-	it('derives products with variants from detail pages', () => {
+describe('products', () => {
+	it('derives basket products with variants from the content', () => {
+		expect(essence?.id).toBe('/essenzen/eucalyptus-geist');
 		expect(essence?.variants).toHaveLength(1);
 		expect(gin?.variants).toHaveLength(2);
-		expect(productForPath('/kontakt', 'Kontakt')).toBeNull();
 	});
 });
 
@@ -45,8 +44,7 @@ describe('basket math', () => {
 });
 
 describe('gin variants', () => {
-	it('defaults to the bottle size shown on the page', () => {
-		expect(productForPath('/gins/ginn', 'Ginn')?.variants[0]?.id).toBe('500ml');
-		expect(productForPath('/gins/ginn-2', 'Ginn')?.variants[0]?.id).toBe('200ml');
+	it('offers the 500 ml bottle first', () => {
+		expect(gin?.variants.map((variant) => variant.id)).toEqual(['500ml', '200ml']);
 	});
 });

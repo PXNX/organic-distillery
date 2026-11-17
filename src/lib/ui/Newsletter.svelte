@@ -45,7 +45,7 @@
 	{#if registered}
 		<p class="newsletter__confirmation" role="status">
 			Vielen Dank! Ihre Anmeldung ist vorbereitet. Bitte senden Sie sie noch ab:
-			<a class="o-button" href={mailto}>Anmeldung per E-Mail senden</a>
+			<a class="btn" href={mailto}>Anmeldung per E-Mail senden</a>
 		</p>
 	{:else}
 		<form class="newsletter__form" onsubmit={onSubmit} novalidate>
@@ -60,7 +60,7 @@
 				aria-invalid={Boolean(error)}
 				aria-describedby={error ? 'newsletter-error' : undefined}
 			/>
-			<button class="o-button" type="submit">Anmelden</button>
+			<button class="btn" type="submit">Anmelden</button>
 		</form>
 		{#if error}<span class="newsletter__error" id="newsletter-error">{error}</span>{/if}
 	{/if}

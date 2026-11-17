@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { botanicalPlates } from '#lib/content/plates.js';
-	import { catalog } from '#lib/content/catalog.js';
+	import { essences } from '#lib/content/products.js';
+	import { catalog, essencePath } from '#lib/content/catalog.js';
 	import {
 		aromaCompass,
 		familyForPath,
@@ -12,7 +12,10 @@
 	let { highlight }: { highlight?: string | undefined } = $props();
 
 	const compass = aromaCompass(600);
-	const drawingFor = (path: string) => botanicalPlates.find((plate) => plate.path === path);
+	const drawingFor = (path: string) => {
+		const essence = essences.find((entry) => essencePath(entry) === path);
+		return essence ? { src: essence.drawing } : undefined;
+	};
 	const bottleFor = (path: string) => catalog.find((entry) => entry.path === path)?.image ?? null;
 
 	let hovered = $state<string | null>(null);

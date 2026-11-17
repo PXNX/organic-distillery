@@ -1,5 +1,8 @@
 <script lang="ts">
-	import MirroredPage from '#lib/ui/MirroredPage.svelte';
+	import LegalPage from '#lib/ui/LegalPage.svelte';
+	import PageHead from '#lib/ui/PageHead.svelte';
+	import { impressum } from '#lib/content/legal.js';
 </script>
 
-<MirroredPage path="/impressum" />
+<PageHead title="Impressum" />
+<LegalPage text={impressum} />

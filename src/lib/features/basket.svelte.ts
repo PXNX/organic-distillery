@@ -1,5 +1,5 @@
 import type { BasketItem, Product } from './basket.js';
-import { addItem } from './basket.js';
+import { addItem, RENAMED_PRODUCTS } from './basket.js';
 
 const STORAGE_KEY = 'organic-distillery:basket';
 
@@ -47,7 +47,11 @@ class BasketState {
 	restore() {
 		try {
 			const raw = localStorage.getItem(STORAGE_KEY);
-			if (raw) this.items = JSON.parse(raw) as BasketItem[];
+			if (!raw) return;
+			this.items = (JSON.parse(raw) as BasketItem[]).map((item) => ({
+				...item,
+				productId: RENAMED_PRODUCTS[item.productId] ?? item.productId
+			}));
 		} catch {
 			// Ignore unavailable or corrupt storage.
 		}

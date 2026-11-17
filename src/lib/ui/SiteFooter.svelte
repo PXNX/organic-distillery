@@ -44,7 +44,7 @@
 </script>
 
 <footer class="site-footer">
-	<div class="o-wrapper footer">
+	<div class="footer container">
 		<div class="footer__brand">
 			<span class="footer__mark" aria-hidden="true">◇</span>
 			<a class="footer__wordmark" href="/">Organic Distillery</a>
@@ -121,7 +121,7 @@
 		/>
 	</div>
 
-	<div class="o-wrapper footer__bottom">
+	<div class="footer__bottom container">
 		<span>© {year} Organic Distillery GmbH</span>
 		<span>Bodensee · Germany</span>
 		<button

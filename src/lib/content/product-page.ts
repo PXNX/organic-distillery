@@ -1,104 +1,57 @@
-import { botanicalPlate, essenceName } from '../mirror/embellish.js';
-import type { MirroredPage } from '../mirror/types.js';
-
-export interface ProductSection {
-	title: string;
-	lines: string[];
-}
+import { essencePath, ginPath } from './catalog.js';
+import { essences, gins } from './products.js';
+import { flavorFamilies } from '../features/flavor-wheel.js';
+import type { Essence, Gin } from './types.js';
 
 export interface ProductPage {
 	kind: 'essence' | 'gin';
 	name: string;
-	/** Aroma family for essences ("ZITRUS"), with the label colour from the original site. */
+	/** Aroma family for essences, with its colour. */
 	family?: { name: string; color: string };
 	/** "50 ml · 55 % Vol." */
 	meta: string[];
 	lead: string;
-	sections: ProductSection[];
-	bottle: string | null;
+	aroma?: string;
+	pairings: { group: string; items: string[] }[];
+	bottle: string;
 	drawing: { src: string; outline: string; latin: string } | null;
-	photo: string | null;
-	prev: string | null;
-	next: string | null;
+	prev: string;
+	next: string;
 }
 
-const text = (html: string) =>
-	html
-		.replace(/<[^>]+>/g, '')
-		.replace(/&nbsp;/g, ' ')
-		.replace(/&amp;/g, '&')
-		.replace(/\s+/g, ' ')
-		.trim();
-
-const localPath = (href: string | undefined) => (href ? href.replace(/\/$/, '') || '/' : null);
-
-/** Reads the structured content out of a mirrored essence or gin detail page. */
-export function productPage(page: MirroredPage): ProductPage | null {
-	const kind = page.path.startsWith('/essenzen/')
-		? 'essence'
-		: page.path.startsWith('/gins/')
-			? 'gin'
-			: null;
-	if (!kind) return null;
-	const html = page.html;
-
-	const card = html.slice(html.indexOf('<div class="o-product">'));
-	const label = card.match(
-		/<strong class="o-essence__label" style="color:(#[0-9a-f]{3,6});?">([^<]+)<\/strong>/i
-	);
-	const teaser = card.match(/<div class="single-teaser">([\s\S]*?)<\/div>/)?.[1] ?? '';
-	const meta = teaser
-		.replace(/<strong[\s\S]*?<\/strong>/, '')
-		.split(/<br>|<\/p>|<\/span>/)
-		.map(text)
-		.filter(Boolean)
-		.map((part) => part.replace(/(\d)\s*%\s*Vol\./, '$1 % Vol.').replace(/\s*\/\s*/g, ' · '));
-
-	const afterTeaser = card.slice(card.indexOf('</div>', card.indexOf('single-teaser')) + 6);
-	const paragraphs = [...afterTeaser.matchAll(/<p>([\s\S]*?)<\/p>/g)].map((m) =>
-		(m[1] ?? '')
-			.split(/<br\s*\/?>/)
-			.map(text)
-			.filter(Boolean)
-	);
-	let lead = '';
-	const sections: ProductSection[] = [];
-	for (const lines of paragraphs) {
-		const [first = '', ...rest] = lines;
-		const titled = rest.length > 0 && first.length < 40;
-		if (titled) sections.push({ title: first.replace(/:$/, ''), lines: rest });
-		else if (!lead) lead = lines.join(' ');
-		else sections.push({ title: '', lines });
-	}
-
-	const prev = localPath(card.match(/arrow--left[\s\S]*?href="([^"]+)"/)?.[1]);
-	const nextMatch =
-		card.match(/<a href="([^"]+)"><span class="arrow arrow--right"/)?.[1] ??
-		card.match(/arrow--right"><a href="([^"]+)"/)?.[1];
-	const plate = botanicalPlate(page);
-
+const neighbours = <T>(list: T[], item: T, path: (entry: T) => string) => {
+	const index = list.indexOf(item);
 	return {
-		kind,
-		name: essenceName(page.title),
-		...(label ? { family: { name: label[2]?.trim() ?? '', color: label[1] ?? '#b08d57' } } : {}),
-		meta,
-		lead,
-		sections,
-		bottle: card.match(/<img[^>]*src="([^"]+)"[^>]*wp-post-image/)?.[1] ?? null,
-		drawing: plate
-			? {
-					src: plate.src,
-					outline: plate.src.replace(/\.webp$/i, '-outline.webp'),
-					latin: plate.latin.replace(/\s+\S+$/, '')
-				}
-			: null,
-		photo:
-			kind === 'gin'
-				? (html.match(/class="single-column__img"[^>]*src="([^"]+)"/)?.[1] ??
-					html.match(/src="([^"]+)"[^>]*class="single-column__img"/)?.[1] ??
-					null)
-				: null,
-		prev,
-		next: localPath(nextMatch)
+		prev: path(list[(index - 1 + list.length) % list.length] as T),
+		next: path(list[(index + 1) % list.length] as T)
+	};
+};
+
+export function essencePage(essence: Essence): ProductPage {
+	const family = flavorFamilies.find((entry) => entry.name === essence.family);
+	return {
+		kind: 'essence',
+		name: essence.name,
+		...(family ? { family: { name: family.name, color: family.color } } : {}),
+		meta: [`50 ml · ${essence.abv} % Vol.`],
+		lead: essence.lead,
+		aroma: essence.aroma,
+		pairings: essence.pairings,
+		bottle: essence.bottle,
+		drawing: { src: essence.drawing, outline: essence.outline, latin: essence.latin },
+		...neighbours(essences, essence, essencePath)
+	};
+}
+
+export function ginPage(gin: Gin): ProductPage {
+	return {
+		kind: 'gin',
+		name: gin.name,
+		meta: [`Organic unfiltered Dry Gin · ${gin.abv} % Vol.`, '500 ml · 200 ml'],
+		lead: gin.lead,
+		pairings: [],
+		bottle: gin.bottles['500ml'],
+		drawing: null,
+		...neighbours(gins, gin, ginPath)
 	};
 }

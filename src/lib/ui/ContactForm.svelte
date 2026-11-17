@@ -104,14 +104,14 @@
 			>{errors.message}</span
 		>{/if}
 
-	<button class="o-button contact-form__submit" type="submit">Nachricht vorbereiten</button>
+	<button class="btn contact-form__submit" type="submit">Nachricht vorbereiten</button>
 </form>
 
 {#if submitted}
 	<div class="contact-form__success" role="status">
 		<p>Ihre Nachricht ist vorbereitet. Bitte senden Sie sie mit Ihrem E-Mail-Programm ab.</p>
-		<a class="o-button" href={mailto}>E-Mail öffnen</a>
-		<button type="button" class="o-button" onclick={copyMessage}>
+		<a class="btn" href={mailto}>E-Mail öffnen</a>
+		<button type="button" class="btn" onclick={copyMessage}>
 			{copied ? 'Kopiert' : 'Nachricht kopieren'}
 		</button>
 	</div>

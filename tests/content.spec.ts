@@ -1,6 +1,12 @@
-import { access } from 'node:fs/promises';
+import { access, readFile } from 'node:fs/promises';
 import { describe, expect, it } from 'vitest';
-import { site } from '../src/lib/content/index.js';
+import { catalog, essencePath } from '../src/lib/content/catalog.js';
+import { datenschutz, impressum } from '../src/lib/content/legal.js';
+import * as pages from '../src/lib/content/pages.js';
+import { press } from '../src/lib/content/press.js';
+import { essences, gins } from '../src/lib/content/products.js';
+import { retailerSections } from '../src/lib/content/retailers.js';
+import { flavorFamilies } from '../src/lib/features/flavor-wheel.js';
 
 const exists = async (path: string) => {
 	try {
@@ -11,48 +17,74 @@ const exists = async (path: string) => {
 	}
 };
 
-const paths = site.pages.map((page) => page.path);
+const contentFiles = ['pages', 'products', 'retailers', 'press', 'legal'].map(
+	(name) => `src/lib/content/${name}.ts`
+);
 
-describe('mirrored site content', () => {
-	it('contains every crawled page', () => {
-		expect(paths.length).toBeGreaterThanOrEqual(25);
-		expect(paths).toContain('/');
-		expect(paths).toContain('/ginn-ginnie');
-		expect(paths).toContain('/essenzen/zitronen-verbena-geist');
+describe('site content', () => {
+	it('has ten essences and two gins with unique slugs', () => {
+		expect(essences).toHaveLength(10);
+		expect(gins.map((gin) => gin.slug)).toEqual(['ginn', 'ginnie']);
+		expect(new Set(essences.map((essence) => essence.slug)).size).toBe(10);
+		expect(essences.some((essence) => /^\d/.test(essence.slug))).toBe(false);
 	});
 
-	it('has a unique path per page', () => {
-		expect(new Set(paths).size).toBe(paths.length);
+	it('keeps the aroma wheel in step with the essences', () => {
+		const wheelPaths = flavorFamilies.flatMap((family) => family.essences.map((e) => e.path));
+		expect(wheelPaths.sort()).toEqual(essences.map(essencePath).sort());
 	});
 
-	it('mirrors the site shell', () => {
-		expect(site.header).toContain('site-logo');
-		expect(site.footer).toContain('site-footer__company');
-		expect(site.ageCheck).toContain('Sind Sie über 18');
-		expect(site.order).toContain('o-order__item');
-	});
-
-	it('rewrites internal URLs to local paths', () => {
-		for (const page of site.pages) {
-			expect(page.html).not.toMatch(/https?:\/\/(?:www\.)?organic-distillery\.com/);
+	it('gives every essence a recipe card and a drawing', () => {
+		for (const essence of essences) {
+			expect(essence.recipe.pdf).toMatch(/\.pdf$/);
+			expect(essence.recipe.letter.length).toBeGreaterThan(100);
+			expect(essence.drawing).toMatch(/\.webp$/);
 		}
 	});
 
-	it('ships every referenced media file', async () => {
+	it('lists retailers, press and legal texts', () => {
+		const retailers = retailerSections.flatMap((s) => s.groups.flatMap((g) => g.retailers));
+		expect(retailers.length).toBeGreaterThan(50);
+		expect(press.length).toBeGreaterThanOrEqual(6);
+		expect(impressum.sections[0]?.paragraphs.length).toBeGreaterThan(2);
+		expect(datenschutz.sections.length).toBeGreaterThan(0);
+		expect(pages.home.blocks.length).toBeGreaterThan(3);
+	});
+
+	it('never says Flaschengeist and holds no WordPress markup', async () => {
+		for (const file of contentFiles) {
+			const text = await readFile(file, 'utf8');
+			expect(text).not.toMatch(/Flaschengeist/);
+			expect(text).not.toMatch(/<(?:div|span|p|br)\b/);
+			expect(text).not.toMatch(/https?:\/\/(?:www\.)?organic-distillery\.com/);
+		}
+	});
+
+	it('ships every referenced media file, all images as WebP', async () => {
 		const refs = new Set<string>();
-		for (const html of [site.header, site.footer, ...site.pages.map((page) => page.html)]) {
-			for (const match of html.matchAll(/(?:href|src)="(\/media\/[^"]+)"/g)) {
-				const ref = match[1];
-				if (ref) refs.add(decodeURIComponent(ref));
+		for (const file of contentFiles) {
+			for (const match of (await readFile(file, 'utf8')).matchAll(/\/media\/[^"'\s)]+/g)) {
+				refs.add(match[0]);
 			}
 		}
-		expect(refs.size).toBeGreaterThan(0);
-		for (const ref of refs) expect(await exists(`static${ref}`)).toBe(true);
+		for (const entry of catalog) refs.add(entry.image);
+		expect(refs.size).toBeGreaterThan(40);
+		for (const ref of refs) {
+			expect(ref).not.toMatch(/\.(jpe?g|png)$/i);
+			expect(await exists(`static${decodeURIComponent(ref)}`), ref).toBe(true);
+		}
 	});
 
-	it('has a route component for every page', async () => {
-		for (const path of paths) {
-			expect(await exists(`src/routes${path === '/' ? '' : path}/+page.svelte`)).toBe(true);
+	it('cuts the gin bottles out with transparency', async () => {
+		const sharp = (await import('sharp')).default;
+		for (const gin of gins) {
+			for (const src of Object.values(gin.bottles)) {
+				const { data, info } = await sharp(`static${src}`).ensureAlpha().raw().toBuffer({
+					resolveWithObject: true
+				});
+				expect(info.width).toBeGreaterThan(400);
+				expect(data[3]).toBe(0);
+			}
 		}
 	});
 });

@@ -10,7 +10,7 @@
 		product,
 		path,
 		children
-	}: { page: ProductPage; product: Product | null; path: string; children?: Snippet } = $props();
+	}: { page: ProductPage; product: Product; path: string; children?: Snippet } = $props();
 
 	let reduceMotion = $state(false);
 	onMount(() => {
@@ -18,20 +18,9 @@
 	});
 
 	const familyLabel = (name: string) => name.charAt(0) + name.slice(1).toLowerCase();
-	const pairings = $derived(
-		(page.sections.find((section) => /passend/i.test(section.title))?.lines ?? []).map((line) => {
-			const match = line.match(/^(.+?)\s*\((.+)\)\s*$/);
-			return match
-				? { group: match[1] ?? line, items: (match[2] ?? '').split(/,\s*/) }
-				: { group: line, items: [] };
-		})
-	);
-	const notes = $derived(page.sections.filter((section) => !/passend/i.test(section.title)));
 	const siblings = $derived(
 		catalog.filter(
-			(entry) =>
-				entry.group === (page.kind === 'gin' ? 'Gin' : 'Essenz') &&
-				entry.path !== (page.kind === 'gin' ? path.replace(/-2$/, '') : path)
+			(entry) => entry.group === (page.kind === 'gin' ? 'Gin' : 'Essenz') && entry.path !== path
 		)
 	);
 	const parent = $derived(
@@ -162,22 +151,20 @@
 		</div>
 	</section>
 
-	{#if notes.length > 0 || pairings.length > 0}
+	{#if page.aroma || page.pairings.length > 0}
 		<section class="product__details">
-			{#each notes as note (note.title)}
+			{#if page.aroma}
 				<div class="detail-card">
-					<h2>{note.title || 'Charakter'}</h2>
-					{#each note.lines as line (line)}
-						<p>{line}</p>
-					{/each}
+					<h2>Aromabeschreibung</h2>
+					<p>{page.aroma}</p>
 				</div>
-			{/each}
+			{/if}
 
-			{#if pairings.length > 0}
+			{#if page.pairings.length > 0}
 				<div class="detail-card detail-card--pairings">
 					<h2>Passt zu</h2>
 					<ul>
-						{#each pairings as pairing (pairing.group)}
+						{#each page.pairings as pairing (pairing.group)}
 							<li>
 								<span class="pairing__group">{pairing.group}</span>
 								<span class="pairing__items">

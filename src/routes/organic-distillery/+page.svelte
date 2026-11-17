@@ -1,5 +1,11 @@
 <script lang="ts">
-	import MirroredPage from '#lib/ui/MirroredPage.svelte';
+	import PageHead from '#lib/ui/PageHead.svelte';
+	import Blocks from '#lib/ui/blocks/Blocks.svelte';
+	import { organicDistillery } from '#lib/content/pages.js';
 </script>
 
-<MirroredPage path="/organic-distillery" />
+<PageHead
+	title="Organic Distillery"
+	description="Die richtungsweisende Brennerei mit rein biologischen Wurzeln am Bodensee."
+/>
+<Blocks blocks={organicDistillery.blocks} />
