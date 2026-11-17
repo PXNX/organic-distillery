@@ -55,7 +55,7 @@
 		{/if}
 	</button>
 	{#if basket.count > 0}
-		<button type="button" class="add-to-basket__view" onclick={() => openBasket('basket')}>
+		<button type="button" class="add-to-basket__view" onclick={() => openBasket()}>
 			Warenkorb ansehen ({basket.count})
 		</button>
 	{/if}

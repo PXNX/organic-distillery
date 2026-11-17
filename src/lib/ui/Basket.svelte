@@ -1,41 +1,17 @@
 <script lang="ts">
 	import { flip } from 'svelte/animate';
-	import { fade, fly, slide } from 'svelte/transition';
+	import { fade, fly } from 'svelte/transition';
 	import { basket, basketUi } from '#lib/features/basket.svelte.js';
-	import { buildOrderMailto, formatEuro, type Product } from '#lib/features/basket.js';
+	import { buildOrderMailto, formatEuro } from '#lib/features/basket.js';
 	import { shopMockMode } from '#lib/features/shop/config.js';
 	import { trackEvent } from '#lib/features/telemetry.js';
-	import { catalog } from '#lib/content/catalog.js';
 
 	const mailto = $derived(buildOrderMailto(basket.items));
 	const reduceMotion =
 		typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	const motion = (duration: number) => (reduceMotion ? 0 : duration);
 
-	/** Selected variant per product in the catalog (gins come in two sizes). */
-	let chosen = $state<Record<string, string>>({});
-	/** Product id that was just added, for a brief confirmation tick. */
-	let justAdded = $state<string | null>(null);
-	let addedTimer: ReturnType<typeof setTimeout> | undefined;
 	let closeButton = $state<HTMLButtonElement | null>(null);
-
-	function variantOf(product: Product) {
-		return chosen[product.id] ?? product.variants[0]?.id ?? '';
-	}
-
-	function quickAdd(product: Product) {
-		const variantId = variantOf(product);
-		basket.add(product, variantId, 1);
-		trackEvent('basket_add', {
-			product: product.id,
-			variant: variantId,
-			quantity: 1,
-			from: 'shop'
-		});
-		justAdded = product.id;
-		clearTimeout(addedTimer);
-		addedTimer = setTimeout(() => (justAdded = null), 1400);
-	}
 
 	function close() {
 		basketUi.open = false;
@@ -77,7 +53,7 @@
 	>
 		<header class="basket__header">
 			<span class="basket__ornament" aria-hidden="true">◇</span>
-			<h2 id="basket-title">{basketUi.view === 'shop' ? 'Sortiment' : 'Ihr Warenkorb'}</h2>
+			<h2 id="basket-title">Ihr Warenkorb</h2>
 			<button
 				type="button"
 				class="basket__close"
@@ -89,97 +65,14 @@
 			</button>
 		</header>
 
-		<div class="basket__tabs" role="tablist" aria-label="Ansicht">
-			<button
-				type="button"
-				role="tab"
-				aria-selected={basketUi.view === 'shop'}
-				class:is-active={basketUi.view === 'shop'}
-				onclick={() => (basketUi.view = 'shop')}>Sortiment</button
-			>
-			<button
-				type="button"
-				role="tab"
-				aria-selected={basketUi.view === 'basket'}
-				class:is-active={basketUi.view === 'basket'}
-				onclick={() => (basketUi.view = 'basket')}
-			>
-				Warenkorb
-				{#if basket.count > 0}
-					{#key basket.count}
-						<span class="basket__tab-count">{basket.count}</span>
-					{/key}
-				{/if}
-			</button>
-		</div>
-
-		{#if basketUi.view === 'shop'}
-			<ul class="basket__catalog" in:fade={{ duration: motion(180) }}>
-				{#each catalog as entry, index (entry.product.id)}
-					{@const product = entry.product}
-					{@const variant = product.variants.find((v) => v.id === variantOf(product))}
-					<li class="catalog-item" style:--stagger={`${Math.min(index, 12) * 30}ms`}>
-						<a class="catalog-item__image" href={entry.path} onclick={close} tabindex="-1">
-							{#if entry.image}
-								<img src={entry.image} alt="" loading="lazy" decoding="async" />
-							{/if}
-						</a>
-						<div class="catalog-item__info">
-							<span class="catalog-item__group">{entry.group}</span>
-							<a class="catalog-item__name" href={entry.path} onclick={close}>{product.name}</a>
-							{#if product.variants.length > 1}
-								<div class="catalog-item__sizes" role="radiogroup" aria-label="Größe">
-									{#each product.variants as option (option.id)}
-										<button
-											type="button"
-											role="radio"
-											aria-checked={variantOf(product) === option.id}
-											class:is-active={variantOf(product) === option.id}
-											onclick={() => (chosen[product.id] = option.id)}>{option.label}</button
-										>
-									{/each}
-								</div>
-							{:else}
-								<span class="catalog-item__size">{product.variants[0]?.label}</span>
-							{/if}
-						</div>
-						<div class="catalog-item__buy">
-							<span class="catalog-item__price">{variant ? formatEuro(variant.price) : ''}</span>
-							<button
-								type="button"
-								class="catalog-item__add"
-								class:is-added={justAdded === product.id}
-								onclick={() => quickAdd(product)}
-								aria-label={`${product.name} in den Warenkorb`}
-							>
-								{justAdded === product.id ? '✓' : '+'}
-							</button>
-						</div>
-					</li>
-				{/each}
-			</ul>
-
-			{#if basket.count > 0}
-				<div
-					class="basket__footer basket__footer--shop"
-					transition:slide={{ duration: motion(200) }}
-				>
-					<button
-						type="button"
-						class="o-button basket__checkout"
-						onclick={() => (basketUi.view = 'basket')}
-					>
-						Zum Warenkorb · {formatEuro(basket.total)}
-					</button>
-				</div>
-			{/if}
-		{:else if basket.items.length === 0}
+		{#if basket.items.length === 0}
 			<div class="basket__empty" in:fade={{ duration: motion(180) }}>
 				<span class="basket__empty-ornament" aria-hidden="true">◇</span>
 				<p>Noch nichts ausgewählt.<br />Stellen Sie sich ein Destillat zusammen.</p>
-				<button type="button" class="o-button" onclick={() => (basketUi.view = 'shop')}>
-					Zum Sortiment
-				</button>
+				<div class="basket__empty-links">
+					<a class="o-button" href="/ginn-ginnie/" onclick={close}>Ginn &amp; Ginnie</a>
+					<a class="o-button" href="/essenzen/" onclick={close}>Essenzen</a>
+				</div>
 			</div>
 		{:else}
 			<ul class="basket__items" in:fade={{ duration: motion(180) }}>

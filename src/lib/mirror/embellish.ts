@@ -122,3 +122,27 @@ export function botanicalPlate(page: {
 		name: essenceName(page.title)
 	};
 }
+
+const GENIE_COPY: [RegExp, string][] = [
+	[
+		/<h1 class="o-text__headline">Flaschengeist<\/h1>/g,
+		'<h1 class="o-text__headline">Aus 1001 Nacht</h1>'
+	],
+	[
+		/Der Tradition folgend erfüllen die ersten zwei eingefangenen Flaschengeiste (<strong>„Ginn &amp; Ginnie“<\/strong>) wieder befreit,/g,
+		'Der Tradition folgend erfüllen die ersten beiden Gins $1, einmal entkorkt,'
+	],
+	[
+		/Weitere Flaschengeister aus der Organic Distillery/g,
+		'Weitere Destillate aus der Organic Distillery'
+	],
+	[/Herstellung(\s)Flaschengeist(\s)Genuss/g, 'Herstellung$1Orient$2Genuss']
+];
+
+/** Retires the "Flaschengeist" wording of the original site. */
+export function retireBottleGenie(html: string): string {
+	return GENIE_COPY.reduce(
+		(text, [pattern, replacement]) => text.replace(pattern, replacement),
+		html
+	);
+}

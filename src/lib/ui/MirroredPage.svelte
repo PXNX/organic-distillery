@@ -24,9 +24,17 @@
 		if (path !== '/essenzen') return null;
 		const start = html.indexOf('<div class="o-essences');
 		const end = start >= 0 ? html.indexOf('<div class="o-teaser', start) : -1;
-		return start >= 0 && end > start
-			? { before: html.slice(0, start), after: html.slice(end) }
-			: null;
+		if (start < 0 || end <= start) return null;
+		// Lift the "Aromafamilien" introduction above the wheel it explains.
+		let after = html.slice(end);
+		let families = '';
+		const heading = after.indexOf('>Aromafamilien</h2>');
+		const block = heading >= 0 ? after.lastIndexOf('<div class="o-text o-module', heading) : -1;
+		if (block >= 0) {
+			families = after.slice(block);
+			after = after.slice(0, block);
+		}
+		return { before: html.slice(0, start), families, after };
 	});
 	let product = $derived(productForPath(path, page.title));
 	// Render-time clean-up of WordPress leftovers: empty spacer paragraphs and the
@@ -50,6 +58,7 @@
 	<ProductPage page={detail} {product} {path} />
 {:else if essenceSplit}
 	{@html essenceSplit.before}
+	<div class="essence-intro">{@html essenceSplit.families}</div>
 	<FlavorWheel />
 	<EssenceFamilies />
 	{@html essenceSplit.after}

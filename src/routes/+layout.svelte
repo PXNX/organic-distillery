@@ -5,8 +5,8 @@
 	import { page } from '$app/state';
 	import { site } from '#lib/content/index.js';
 	import { shopMockMode } from '#lib/features/shop/config.js';
-	import { attachAgeGate } from '#lib/features/age-gate.js';
 	import { basket, openBasket } from '#lib/features/basket.svelte.js';
+	import AgeGate from '#lib/ui/AgeGate.svelte';
 	import InstallHint from '#lib/ui/InstallHint.svelte';
 	import Basket from '#lib/ui/Basket.svelte';
 	import BasketButton from '#lib/ui/BasketButton.svelte';
@@ -22,7 +22,6 @@
 	onMount(() => {
 		basket.restore();
 		initTelemetry();
-		const cleanupAgeGate = attachAgeGate();
 		const cleanupShop = shopMockMode ? attachMockOrder() : undefined;
 		// The mirrored "order" links used to open a bare WordPress form; route them to the shop drawer.
 		const onOrderClick = (event: MouseEvent) => {
@@ -30,14 +29,13 @@
 			if (!link || link.getAttribute('href')?.startsWith('mailto:')) return;
 			event.preventDefault();
 			event.stopImmediatePropagation();
-			openBasket('shop');
+			openBasket();
 		};
 		document.addEventListener('click', onOrderClick, true);
 		if (!dev && 'serviceWorker' in navigator) {
 			navigator.serviceWorker.register('/sw.js').catch(() => {});
 		}
 		return () => {
-			cleanupAgeGate();
 			cleanupShop?.();
 			document.removeEventListener('click', onOrderClick, true);
 		};
@@ -126,7 +124,7 @@
 {#if isError}
 	{@render children()}
 {:else}
-	<div class="o-age-check">{@html site.ageCheck}</div>
+	<AgeGate />
 
 	<div class="js-site site" class:site--no-padding={isFrontPage} class:is-front-page={isFrontPage}>
 		<header class="site-head">{@html site.header}</header>

@@ -27,7 +27,10 @@
 	<p class="essence-families__intro">50 ml · biologisch · von Hand mazeriert und destilliert</p>
 
 	{#each flavorFamilies as family (family.name)}
-		<div class="essence-family" style={`--family: ${family.color}; --family-light: ${family.light}`}>
+		<div
+			class="essence-family"
+			style={`--family: ${family.color}; --family-light: ${family.light}`}
+		>
 			<h3 class="essence-family__name"><span aria-hidden="true"></span>{family.name}</h3>
 			<ul>
 				{#each family.essences as essence (essence.path)}

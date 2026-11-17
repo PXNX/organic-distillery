@@ -1,5 +1,5 @@
 /* The aroma compass: family ring, ten essence segments with their drawings,
-   a live centre card and a legend that doubles as the accessible list. */
+   and a live centre card. */
 
 .aroma-compass {
 	max-width: 76rem;
@@ -32,51 +32,9 @@
 	color: var(--muted);
 }
 
-.aroma-compass__filters {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	gap: 0.5rem;
-	margin-bottom: 2rem;
-}
-
-.aroma-compass__filters button {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.45rem;
-	padding: 0.45rem 0.9rem;
-	background: transparent;
-	border: 1px solid var(--hairline);
-	color: var(--muted);
-	font: inherit;
-	font-size: 0.72rem;
-	letter-spacing: 0.16em;
-	cursor: pointer;
-	transition:
-		border-color 0.2s ease,
-		color 0.2s ease,
-		background 0.2s ease;
-}
-
-.aroma-compass__filters button span {
-	width: 0.6rem;
-	height: 0.6rem;
-	border-radius: 50%;
-	background: var(--chip);
-}
-
-.aroma-compass__filters button:hover,
-.aroma-compass__filters button.is-active {
-	border-color: var(--mystic-gold);
-	color: var(--text);
-	background: color-mix(in srgb, var(--mystic-gold) 10%, transparent);
-}
-
 .aroma-compass__stage {
 	display: grid;
-	grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-	gap: clamp(2rem, 4vw, 3.5rem);
-	align-items: center;
+	justify-items: center;
 }
 
 .aroma-compass__wheel {
@@ -261,75 +219,6 @@
 	animation: ornament-shimmer 4s ease-in-out infinite;
 }
 
-/* Legend */
-.aroma-compass__legend {
-	display: grid;
-	gap: 1rem;
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-
-.aroma-compass__legend > li {
-	padding-left: 1rem;
-	border-left: 3px solid var(--family);
-	transition: opacity 0.3s ease;
-}
-
-.aroma-compass__legend > li.is-dim {
-	opacity: 0.35;
-}
-
-.aroma-compass__legend h3 {
-	margin: 0 0 0.35rem;
-	font-family: inherit;
-	font-size: 0.7rem;
-	letter-spacing: 0.2em;
-	color: var(--muted);
-}
-
-.aroma-compass__legend h3::before,
-.aroma-compass__legend h3::after {
-	content: none !important;
-}
-
-.aroma-compass__legend ul {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 0.5rem;
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-
-.aroma-compass__legend a {
-	display: grid;
-	gap: 0.1rem;
-	padding: 0.5rem 0.65rem;
-	border: 1px solid transparent;
-	color: var(--text);
-	text-decoration: none;
-	transition:
-		border-color 0.2s ease,
-		background 0.2s ease;
-}
-
-.aroma-compass__legend a:hover,
-.aroma-compass__legend a.is-active {
-	border-color: color-mix(in srgb, var(--mystic-gold) 50%, transparent);
-	background: color-mix(in srgb, var(--mystic-gold) 8%, transparent);
-}
-
-.aroma-compass__legend a span {
-	font-family: 'Ductus W03 Medium', Georgia, serif;
-	font-size: 1.05rem;
-}
-
-.aroma-compass__legend a small {
-	font-size: 0.72rem;
-	color: var(--muted);
-}
-
 @keyframes compass-sheen {
 	to {
 		transform: rotate(360deg);
@@ -340,12 +229,6 @@
 	from {
 		opacity: 0;
 		transform: scale(0.94);
-	}
-}
-
-@media (max-width: 960px) {
-	.aroma-compass__stage {
-		grid-template-columns: 1fr;
 	}
 }
 
@@ -374,10 +257,6 @@
 
 	.compass-card__pairs {
 		display: none;
-	}
-
-	.aroma-compass__legend ul {
-		grid-template-columns: 1fr;
 	}
 }
 
@@ -568,4 +447,18 @@
 	.essence-family ul {
 		grid-template-columns: 1fr;
 	}
+}
+
+/* Essenzen overview: the "Aromafamilien" introduction sits right above the wheel. */
+.essence-intro .o-text {
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.essence-intro .o-text__content > div {
+	text-align: center;
+}
+
+.essence-intro img {
+	margin: 0 auto 1.5rem;
 }

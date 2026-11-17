@@ -5,33 +5,53 @@ export function isAgeConfirmed(value: string | null): boolean {
 	return value === 'true';
 }
 
-/** Marks the document so CSS can dismiss the gate without a hydration mismatch. */
-export function confirmAge(): void {
-	try {
-		localStorage.setItem(AGE_STORAGE_KEY, 'true');
-	} catch {
-		// Storage can be unavailable (private mode); the session still works.
-	}
-	document.documentElement.dataset.ageConfirmed = 'true';
-}
+const isConfirmed = () => document.documentElement.dataset.ageConfirmed === 'true';
 
-/** Wires the mirrored age form to local storage instead of a WordPress POST. */
-export function attachAgeGate(): () => void {
-	const form = document.querySelector<HTMLFormElement>('.o-age-check form');
-	if (!form) return () => {};
+const visibleButtons = (gate: HTMLElement) =>
+	[...gate.querySelectorAll<HTMLButtonElement>('button')].filter(
+		(button) => button.offsetParent !== null
+	);
 
-	const onSubmit = (event: Event) => {
-		event.preventDefault();
-		const gate = form.closest<HTMLElement>('.o-age-check');
-		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		if (!gate || reduceMotion) {
-			confirmAge();
-			return;
+/**
+ * Keeps keyboard focus and assistive tech inside the age dialog while it is open.
+ * The answers themselves are handled by the inline script in app.html, which runs
+ * before hydration so the buttons never feel dead on a slow connection.
+ */
+export function attachAgeGate(gate: HTMLElement): () => void {
+	if (isConfirmed()) return () => {};
+	const site = document.querySelector<HTMLElement>('.site');
+	site?.setAttribute('inert', '');
+	visibleButtons(gate)[0]?.focus({ preventScroll: true });
+
+	const onKeydown = (event: KeyboardEvent) => {
+		if (event.key !== 'Tab') return;
+		const buttons = visibleButtons(gate);
+		const first = buttons[0];
+		const last = buttons.at(-1);
+		if (!first || !last) return;
+		if (event.shiftKey && document.activeElement === first) {
+			event.preventDefault();
+			last.focus();
+		} else if (!event.shiftKey && document.activeElement === last) {
+			event.preventDefault();
+			first.focus();
 		}
-		// Let the card bow out before the page is released.
-		gate.classList.add('is-leaving');
-		setTimeout(confirmAge, 340);
 	};
-	form.addEventListener('submit', onSubmit);
-	return () => form.removeEventListener('submit', onSubmit);
+	// The inline script flips this attribute once the visitor confirms.
+	const observer = new MutationObserver(() => {
+		if (!isConfirmed()) return;
+		site?.removeAttribute('inert');
+		cleanup();
+	});
+	observer.observe(document.documentElement, { attributeFilter: ['data-age-confirmed'] });
+	gate.addEventListener('keydown', onKeydown);
+
+	function cleanup() {
+		observer.disconnect();
+		gate.removeEventListener('keydown', onKeydown);
+	}
+	return () => {
+		cleanup();
+		site?.removeAttribute('inert');
+	};
 }

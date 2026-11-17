@@ -24,7 +24,11 @@
 	margin: 0 auto 2.5rem;
 	padding: clamp(0.75rem, 2vw, 1.5rem);
 	background:
-		radial-gradient(ellipse at 45% 60%, color-mix(in srgb, var(--mystic-gold) 14%, transparent), transparent 65%),
+		radial-gradient(
+			ellipse at 45% 60%,
+			color-mix(in srgb, var(--mystic-gold) 14%, transparent),
+			transparent 65%
+		),
 		var(--mystic-parchment);
 	border: 1px solid var(--mystic-gold);
 	outline: 1px solid color-mix(in srgb, var(--mystic-gold) 35%, transparent);

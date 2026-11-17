@@ -56,23 +56,6 @@
 		</p>
 	</header>
 
-	<div class="aroma-compass__filters" role="group" aria-label="Nach Aroma-Familie filtern">
-		<button type="button" class:is-active={family === null} onclick={() => (family = null)}
-			>Alle</button
-		>
-		{#each flavorFamilies as entry (entry.name)}
-			<button
-				type="button"
-				class:is-active={family === entry.name}
-				style={`--chip: ${entry.color}`}
-				aria-pressed={family === entry.name}
-				onclick={() => toggleFamily(entry.name)}
-			>
-				<span aria-hidden="true"></span>{entry.name}
-			</button>
-		{/each}
-	</div>
-
 	<div class="aroma-compass__stage">
 		<div class="aroma-compass__wheel">
 			<div class="aroma-compass__sheen" aria-hidden="true"></div>
@@ -174,33 +157,5 @@
 				{/if}
 			</div>
 		</div>
-
-		<ol class="aroma-compass__legend">
-			{#each flavorFamilies as entry (entry.name)}
-				<li
-					class:is-dim={family !== null && family !== entry.name}
-					style={`--family: ${entry.color}`}
-				>
-					<h3>{entry.name}</h3>
-					<ul>
-						{#each entry.essences as essence (essence.path)}
-							<li>
-								<a
-									href={essence.path}
-									class:is-active={active === essence.path}
-									onmouseenter={() => (hovered = essence.path)}
-									onmouseleave={() => (hovered = null)}
-									onfocus={() => (hovered = essence.path)}
-									onblur={() => (hovered = null)}
-								>
-									<span>{essence.name}</span>
-									<small>{essence.pairings.join(' · ')}</small>
-								</a>
-							</li>
-						{/each}
-					</ul>
-				</li>
-			{/each}
-		</ol>
 	</div>
 </section>

@@ -64,18 +64,14 @@ class BasketState {
 
 export const basket = new BasketState();
 
-export type BasketView = 'shop' | 'basket';
-
 export const basketUi = $state({
 	open: false,
-	view: 'basket' as BasketView,
 	/** Increments on every successful add so the shop button can celebrate. */
 	pulse: 0,
 	lastAdded: ''
 });
 
-/** Opens the drawer on the given tab; defaults to the basket once it has items. */
-export function openBasket(view?: BasketView) {
-	basketUi.view = view ?? (basket.count > 0 ? 'basket' : 'shop');
+/** Opens the basket drawer. */
+export function openBasket() {
 	basketUi.open = true;
 }

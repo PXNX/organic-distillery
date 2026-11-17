@@ -4,6 +4,7 @@ import ContactForm from '../src/lib/ui/ContactForm.svelte';
 import EssenceRecipe from '../src/lib/ui/EssenceRecipe.svelte';
 import EssenceFamilies from '../src/lib/ui/EssenceFamilies.svelte';
 import FlavorWheel from '../src/lib/ui/FlavorWheel.svelte';
+import AgeGate from '../src/lib/ui/AgeGate.svelte';
 import BasketButton from '../src/lib/ui/BasketButton.svelte';
 import GinAroma from '../src/lib/ui/GinAroma.svelte';
 import GinProcess from '../src/lib/ui/GinProcess.svelte';
@@ -131,5 +132,13 @@ describe('MirroredPage', () => {
 		expect(body).toContain('Sensorische Wahrnehmung');
 		expect(head).toContain('Ginn');
 		expect(head).toContain('description');
+	});
+
+	it('renders the age gate as a modal dialog with both answers', () => {
+		const { body } = render(AgeGate);
+		expect(body).toContain('role="dialog"');
+		expect(body).toContain('data-age-answer="yes"');
+		expect(body).toContain('data-age-answer="no"');
+		expect(body).toContain('18');
 	});
 });

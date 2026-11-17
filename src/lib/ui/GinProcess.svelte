@@ -77,11 +77,19 @@
 					<stop offset="0.5" stop-color="#f4e0b0" stop-opacity="0.9" />
 					<stop offset="1" stop-color="var(--mystic-gold)" stop-opacity="0" />
 				</linearGradient>
-				<pattern id="still-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+				<pattern
+					id="still-hatch"
+					width="6"
+					height="6"
+					patternUnits="userSpaceOnUse"
+					patternTransform="rotate(35)"
+				>
 					<line x1="0" y1="0" x2="0" y2="6" stroke="#5a3415" stroke-width="1" opacity="0.45" />
 				</pattern>
 				<clipPath id="still-bottle-inside">
-					<path d="M736 276 c0 10 28 14 28 34 v44 c0 5 -3 7 -8 7 h-56 c-5 0 -8 -2 -8 -7 v-44 c0 -20 28 -24 28 -34 z" />
+					<path
+						d="M736 276 c0 10 28 14 28 34 v44 c0 5 -3 7 -8 7 h-56 c-5 0 -8 -2 -8 -7 v-44 c0 -20 28 -24 28 -34 z"
+					/>
 				</clipPath>
 				<path id="still-vapour" d={vapourPath} />
 			</defs>
@@ -90,7 +98,11 @@
 			<path class="still__ground" d="M30 362 H870" />
 
 			<!-- I · Botanicals: mortar with sprigs and berries -->
-			<g class="still__part" class:is-dim={dim('botanicals')} class:is-active={active === 'botanicals'}>
+			<g
+				class="still__part"
+				class:is-dim={dim('botanicals')}
+				class:is-active={active === 'botanicals'}
+			>
 				<path class="still__line still__fill-paper" d="M60 300 Q120 372 180 300 Z" />
 				<path class="still__line" d="M56 300 H184" />
 				<path class="still__hatch" d="M70 304 Q120 360 170 304 Z" />
@@ -111,7 +123,11 @@
 			</g>
 
 			<!-- II · Copper pot on its firebox -->
-			<g class="still__part" class:is-dim={dim('maceration')} class:is-active={active === 'maceration'}>
+			<g
+				class="still__part"
+				class:is-dim={dim('maceration')}
+				class:is-active={active === 'maceration'}
+			>
 				<rect class="still__line still__fill-ink" x="262" y="300" width="160" height="50" rx="3" />
 				<path class="still__line" d="M262 318 H422 M262 334 H422" opacity="0.4" />
 				<g class="still__flames">
@@ -123,7 +139,10 @@
 					class="still__line still__copper"
 					d="M268 296 C 244 240, 266 180, 340 172 C 414 180, 436 240, 412 296 Z"
 				/>
-				<path class="still__hatch-copper" d="M380 186 C 420 206, 428 252, 410 292 L 392 292 C 404 252, 398 214, 372 190 Z" />
+				<path
+					class="still__hatch-copper"
+					d="M380 186 C 420 206, 428 252, 410 292 L 392 292 C 404 252, 398 214, 372 190 Z"
+				/>
 				<path class="still__sheen" d="M290 230 C 292 206, 306 192, 324 186" />
 				<!-- Liquid sloshing inside the pot -->
 				<path class="still__wash" d="M262 262 C 300 252, 380 272, 418 258" />
@@ -133,7 +152,11 @@
 			</g>
 
 			<!-- III · Column with portholes, swan neck and condenser -->
-			<g class="still__part" class:is-dim={dim('distillation')} class:is-active={active === 'distillation'}>
+			<g
+				class="still__part"
+				class:is-dim={dim('distillation')}
+				class:is-active={active === 'distillation'}
+			>
 				<path class="still__line still__pipe" d="M370 124 C 410 104, 440 98, 456 102" />
 				<rect class="still__line still__copper" x="452" y="96" width="40" height="200" rx="6" />
 				{#each [130, 180, 230] as y (y)}
@@ -143,20 +166,35 @@
 				<path class="still__line" d="M452 296 v 54 M492 296 v 54" />
 				<path class="still__line still__pipe" d="M492 110 C 530 116, 560 124, 586 146" />
 				<!-- Condenser tank with coil -->
-				<rect class="still__line still__fill-water" x="570" y="140" width="80" height="150" rx="4" />
+				<rect
+					class="still__line still__fill-water"
+					x="570"
+					y="140"
+					width="80"
+					height="150"
+					rx="4"
+				/>
 				<path
 					class="still__coil"
 					d="M586 150 C 640 158, 640 172, 586 180 C 640 188, 640 202, 586 210 C 640 218, 640 232, 586 240 C 640 248, 640 262, 610 270"
 				/>
 				<path class="still__line" d="M570 290 v 60 M650 290 v 60" />
-				<path class="still__line still__pipe" d="M610 270 V 300 C 610 312, 640 236, 690 236 H 736 V 256" />
+				<path
+					class="still__line still__pipe"
+					d="M610 270 V 300 C 610 312, 640 236, 690 236 H 736 V 256"
+				/>
 			</g>
 
 			<!-- Vapour travelling through the still -->
 			<g class="still__vapour" aria-hidden="true">
 				{#each [0, 1, 2, 3, 4] as index (index)}
 					<circle r="4">
-						<animateMotion dur="4.5s" repeatCount="indefinite" begin={`${index * 0.9}s`} rotate="auto">
+						<animateMotion
+							dur="4.5s"
+							repeatCount="indefinite"
+							begin={`${index * 0.9}s`}
+							rotate="auto"
+						>
 							<mpath href="#still-vapour" />
 						</animateMotion>
 						<animate

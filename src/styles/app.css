@@ -7,6 +7,7 @@
 @import './flavor-wheel.css';
 @import './recipe.css';
 @import './product.css';
+@import './age-gate.css';
 @import './basket.css';
 @import './error.css';
 @import './polish.css';
@@ -473,19 +474,6 @@ img {
 	height: 100%;
 }
 
-/* The age gate keeps the site position:fixed via `.o-age-check + .site`;
-   once confirmed, restore normal document flow without removing DOM nodes. */
-[data-age-confirmed='true'] .o-age-check {
-	display: none;
-}
-
-[data-age-confirmed='true'] .site {
-	position: static;
-	height: auto;
-	width: 100%;
-	overflow: visible;
-}
-
 .site-head {
 	view-transition-name: site-header;
 }
@@ -708,10 +696,6 @@ img {
 	.o-order__item {
 		padding-top: 0.5rem;
 		padding-bottom: 0.5rem;
-	}
-
-	.o-age-check form {
-		padding: 2.5rem 1.25rem 2rem;
 	}
 }
 

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+	retireBottleGenie,
 	DOCUMENTARY_URL,
 	addDocumentaryPress,
 	clarifyOrderLinks,
@@ -118,5 +119,16 @@ describe('botanicalPlate', () => {
 		expect(
 			botanicalPlate({ path: '/ginn-ginnie', title: 'Ginn & Ginnie', html: drawing })
 		).toBeNull();
+	});
+});
+
+describe('retireBottleGenie', () => {
+	it('replaces the Flaschengeist wording', () => {
+		const html =
+			'<h1 class="o-text__headline">Flaschengeist</h1><p>Der Tradition folgend erfüllen die ersten zwei eingefangenen Flaschengeiste <strong>„Ginn &amp; Ginnie“</strong> wieder befreit, dem Genießer … Weitere Flaschengeister aus der Organic Distillery am Bodensee</p><span>Herstellung Flaschengeist Genuss</span>';
+		const out = retireBottleGenie(html);
+		expect(out).not.toMatch(/Flaschengeist/);
+		expect(out).toContain('Aus 1001 Nacht');
+		expect(out).toContain('einmal entkorkt');
 	});
 });

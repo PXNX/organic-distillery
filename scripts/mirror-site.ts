@@ -17,6 +17,7 @@ import {
 import {
 	addDocumentaryPress,
 	clarifyOrderLinks,
+	retireBottleGenie,
 	extractContactForm,
 	extractRecipeLink,
 	replaceContactLogo,
@@ -69,7 +70,7 @@ while (queue.length) {
 
 	if (path === '/') {
 		header = rewrite($('.site-head').first().html() || '');
-		footer = rewrite($('.site-footer').first().html() || '');
+		footer = retireBottleGenie(rewrite($('.site-footer').first().html() || ''));
 		ageCheck = rewrite($('.o-age-check').first().html() || '');
 		order = rewrite($('.o-order').first().html() || '');
 	}
@@ -78,7 +79,9 @@ while (queue.length) {
 	content.find('.site-head, .site-footer').remove();
 	const rewritten = rewrite(content.html() || '');
 	const plated = path.startsWith('/essenzen/') ? wrapBotanicalPlates(rewritten, title) : rewritten;
-	const { html: withoutRecipe, recipe } = extractRecipeLink(clarifyOrderLinks(plated));
+	const { html: withoutRecipe, recipe } = extractRecipeLink(
+		clarifyOrderLinks(retireBottleGenie(plated))
+	);
 	const withoutContact =
 		path === '/kontakt'
 			? replaceContactLogo(extractContactForm(withoutRecipe).html)

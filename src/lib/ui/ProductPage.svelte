@@ -5,11 +5,8 @@
 	import type { ProductPage } from '#lib/content/product-page.js';
 	import type { Product } from '#lib/features/basket.js';
 
-	let {
-		page,
-		product,
-		path
-	}: { page: ProductPage; product: Product | null; path: string } = $props();
+	let { page, product, path }: { page: ProductPage; product: Product | null; path: string } =
+		$props();
 
 	let reduceMotion = $state(false);
 	onMount(() => {

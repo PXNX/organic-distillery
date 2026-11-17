@@ -57,7 +57,11 @@
 	overflow: hidden;
 	isolation: isolate;
 	background:
-		radial-gradient(ellipse at 50% 42%, color-mix(in srgb, var(--family) 16%, transparent), transparent 62%),
+		radial-gradient(
+			ellipse at 50% 42%,
+			color-mix(in srgb, var(--family) 16%, transparent),
+			transparent 62%
+		),
 		var(--stage-bg);
 	border: 1px solid var(--mystic-gold);
 	box-shadow: 0 24px 60px var(--shadow);

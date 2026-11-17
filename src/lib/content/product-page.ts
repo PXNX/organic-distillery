@@ -56,7 +56,10 @@ export function productPage(page: MirroredPage): ProductPage | null {
 
 	const afterTeaser = card.slice(card.indexOf('</div>', card.indexOf('single-teaser')) + 6);
 	const paragraphs = [...afterTeaser.matchAll(/<p>([\s\S]*?)<\/p>/g)].map((m) =>
-		(m[1] ?? '').split(/<br\s*\/?>/).map(text).filter(Boolean)
+		(m[1] ?? '')
+			.split(/<br\s*\/?>/)
+			.map(text)
+			.filter(Boolean)
 	);
 	let lead = '';
 	const sections: ProductSection[] = [];
@@ -90,7 +93,11 @@ export function productPage(page: MirroredPage): ProductPage | null {
 				}
 			: null,
 		photo:
-			kind === 'gin' ? (html.match(/class="single-column__img"[^>]*src="([^"]+)"/)?.[1] ?? html.match(/src="([^"]+)"[^>]*class="single-column__img"/)?.[1] ?? null) : null,
+			kind === 'gin'
+				? (html.match(/class="single-column__img"[^>]*src="([^"]+)"/)?.[1] ??
+					html.match(/src="([^"]+)"[^>]*class="single-column__img"/)?.[1] ??
+					null)
+				: null,
 		prev,
 		next: localPath(nextMatch)
 	};

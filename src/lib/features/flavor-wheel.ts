@@ -186,7 +186,7 @@ export function buildWheel(families: WheelFamily[] = flavorFamilies): WheelGeome
 
 /** An arc used as a textPath; runs counter-clockwise on the lower half so text stays upright. */
 export function labelArc(cx: number, cy: number, r: number, start: number, end: number): string {
-	const mid = (((start + end) / 2) % 360 + 360) % 360;
+	const mid = ((((start + end) / 2) % 360) + 360) % 360;
 	const flip = mid > 0 && mid < 180;
 	const from = polar(cx, cy, r, flip ? end : start);
 	const to = polar(cx, cy, r, flip ? start : end);

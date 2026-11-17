@@ -22,6 +22,28 @@
 				document.documentElement.dataset.theme = theme;
 				document.documentElement.style.colorScheme = theme;
 			} catch {}
+			// Age gate answers, wired before hydration so the buttons respond immediately.
+			document.addEventListener('click', (event) => {
+				const button = event.target.closest && event.target.closest('[data-age-answer]');
+				const gate = button && button.closest('.age-gate');
+				if (!gate) return;
+				const answer = button.dataset.ageAnswer;
+				if (answer !== 'yes') {
+					gate.dataset.state = answer === 'no' ? 'declined' : '';
+					const next = gate.querySelector(
+						answer === 'no' ? '[data-age-answer="retry"]' : '[data-age-answer="yes"]'
+					);
+					if (next) next.focus();
+					return;
+				}
+				try {
+					localStorage.setItem('organic-distillery:age-confirmed', 'true');
+				} catch {}
+				const release = () => (document.documentElement.dataset.ageConfirmed = 'true');
+				if (matchMedia('(prefers-reduced-motion: reduce)').matches) return release();
+				gate.dataset.state = 'leaving';
+				setTimeout(release, 450);
+			});
 		</script>
 		%sveltekit.head%
 	</head>

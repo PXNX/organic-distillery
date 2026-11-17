@@ -13,8 +13,7 @@
 
 /* "Paper" surfaces stay light in dark mode, so their text must stay dark too.
    Redefining the tokens locally also wins over the global dark-mode text rule. */
-[data-theme='dark']
-	:is(.botanical-gallery, .botanical-plate, .recipe-card) {
+[data-theme='dark'] :is(.botanical-gallery, .botanical-plate, .recipe-card) {
 	--text: #1d1d1b;
 	--muted: #6b5636;
 	color: var(--text);
@@ -89,7 +88,6 @@
 .o-products .o-product {
 	transition: transform 0.3s ease;
 }
-
 
 .o-products .o-product img {
 	transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.25, 1.2);
