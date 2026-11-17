@@ -3,7 +3,7 @@
 @import './mystic.css';
 @import './motion.css';
 @import './process.css';
-@import './aroma.css';
+@import './gin-botanicals.css';
 @import './flavor-wheel.css';
 @import './recipe.css';
 @import './product.css';
@@ -271,69 +271,6 @@ img[src*='Ginnie_'] {
 	line-height: 1.5;
 }
 
-.recipe-card {
-	display: flex;
-	align-items: center;
-	gap: 1.25rem;
-	max-width: 34rem;
-	margin: 2rem auto;
-	padding: 1.25rem 1.5rem;
-	color: var(--mystic-ink);
-	text-decoration: none;
-	background: var(--mystic-parchment);
-	border: 1px solid var(--mystic-gold);
-	box-shadow: 0 10px 26px rgb(17 17 16 / 8%);
-	transition:
-		transform 0.2s ease,
-		box-shadow 0.2s ease;
-}
-
-.recipe-card:hover {
-	border-color: var(--mystic-gold);
-	box-shadow: 0 14px 30px rgb(17 17 16 / 14%);
-}
-
-.recipe-card__icon {
-	color: var(--mystic-gold);
-	flex: none;
-}
-
-.recipe-card__body {
-	display: flex;
-	flex-direction: column;
-	gap: 0.25rem;
-	flex: 1;
-}
-
-.recipe-card__title {
-	font-family: 'Ductus W03 Medium', Georgia, serif;
-	font-size: 1.25rem;
-}
-
-.recipe-card__meta {
-	font-size: 0.7rem;
-	text-transform: uppercase;
-	letter-spacing: 0.16em;
-	color: #8a7551;
-}
-
-.recipe-card__action {
-	font-size: 1.5rem;
-	color: var(--mystic-gold);
-}
-
-.recipe-card--compact {
-	max-width: none;
-	margin: 0;
-	gap: 0.75rem;
-	padding: 0.9rem;
-	box-shadow: none;
-}
-
-.recipe-card--compact .recipe-card__title {
-	font-size: 1rem;
-}
-
 .recipe-library {
 	padding: 2rem 1.5rem;
 }
@@ -495,7 +432,7 @@ img {
 	}
 
 	.botanical-gallery__item,
-	.recipe-card {
+	.download-button {
 		transition: none;
 	}
 }

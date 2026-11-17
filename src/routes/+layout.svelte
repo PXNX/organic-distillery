@@ -73,7 +73,7 @@
 		);
 		const frame = requestAnimationFrame(() => {
 			const targets = document.querySelectorAll(
-				'.site .o-section, .site .o-text, .site .o-buyat, .site .o-contact, .site .o-press, .flavor-wheel, .recipe-section, .aroma-profile, .gin-process, .newsletter, .visit-note, .botanical-gallery, .recipe-library'
+				'.site .o-section, .site .o-text, .site .o-buyat, .site .o-contact, .site .o-press, .flavor-wheel, .recipe, .gin-botanicals, .gin-process, .newsletter, .visit-note, .botanical-gallery, .recipe-library'
 			);
 			for (const target of targets) {
 				if (target.getBoundingClientRect().top < window.innerHeight) continue;

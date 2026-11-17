@@ -1,0 +1,271 @@
+/* Gin detail: the botanicals as an engraved register beside the botanicals photo.
+   A dark panel in both themes so it sits naturally next to the dark photo. */
+.gin-botanicals {
+	--ink: #121110;
+	--paper: #f4f0e6;
+	--gold: #c9a86a;
+	margin: 3.5rem 0;
+	color: var(--paper);
+	background:
+		radial-gradient(ellipse at 80% 0%, rgb(201 168 106 / 14%), transparent 55%), var(--ink);
+	border: 1px solid rgb(201 168 106 / 60%);
+	box-shadow: 0 24px 60px var(--shadow);
+}
+
+.gin-botanicals__inner {
+	display: grid;
+	grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+}
+
+.gin-botanicals__photo {
+	position: relative;
+	margin: 0;
+	min-height: 22rem;
+	overflow: hidden;
+}
+
+.gin-botanicals__photo img {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: 60% 40%;
+}
+
+.gin-botanicals__photo::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(90deg, transparent 70%, var(--ink));
+	pointer-events: none;
+}
+
+.gin-botanicals__content {
+	padding: clamp(1.75rem, 4vw, 3rem);
+}
+
+.gin-botanicals__eyebrow {
+	margin: 0 0 0.5rem;
+	color: var(--gold);
+	font-size: 0.7rem;
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
+}
+
+.gin-botanicals h2 {
+	margin: 0 0 0.75rem;
+	color: var(--paper);
+	text-align: left;
+}
+
+.gin-botanicals h2::before,
+.gin-botanicals h2::after,
+.gin-botanicals h3::before,
+.gin-botanicals h3::after {
+	content: none !important;
+}
+
+.gin-botanicals__lead {
+	margin: 0 0 2rem;
+	max-width: 36rem;
+	color: rgb(244 240 230 / 78%);
+	line-height: 1.7;
+}
+
+.gin-botanicals__notes {
+	display: grid;
+	gap: 1.5rem;
+}
+
+.botanical-note h3 {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	margin: 0 0 0.75rem;
+	color: var(--gold);
+	font-family: inherit;
+	font-size: 0.68rem;
+	font-weight: normal;
+	letter-spacing: 0.24em;
+	text-transform: uppercase;
+}
+
+.botanical-note h3::after {
+	content: '' !important;
+	flex: 1;
+	height: 1px;
+	background: linear-gradient(90deg, rgb(201 168 106 / 45%), transparent);
+}
+
+.botanical-note ul {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+	gap: 0.75rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.botanical {
+	display: flex;
+	align-items: center;
+	gap: 0.85rem;
+}
+
+.botanical__icon {
+	display: grid;
+	flex: none;
+	place-items: center;
+	width: 3.4rem;
+	height: 3.4rem;
+	border: 1px solid rgb(201 168 106 / 55%);
+	border-radius: 50%;
+	background: radial-gradient(circle, rgb(201 168 106 / 12%), transparent 70%);
+}
+
+.botanical__icon svg {
+	width: 2.3rem;
+	height: 2.3rem;
+	fill: none;
+	stroke: var(--gold);
+	stroke-width: 1.3;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+/* Only the inner drawing moves on hover, never the item itself. */
+.botanical:hover .botanical__icon svg {
+	animation: botanical-sway 1.2s ease-in-out;
+}
+
+.botanical__text {
+	display: grid;
+	gap: 0.05rem;
+	min-width: 0;
+}
+
+.botanical__text strong {
+	font-family: 'Ductus W03 Medium', Georgia, serif;
+	font-size: 1.15rem;
+	font-weight: normal;
+	color: var(--paper);
+}
+
+.botanical__text em {
+	color: rgb(244 240 230 / 55%);
+	font-size: 0.8rem;
+}
+
+.botanical__text small {
+	color: var(--gold);
+	font-size: 0.75rem;
+}
+
+.gin-botanicals__profile {
+	display: grid;
+	gap: 1.25rem;
+	margin-top: 2.25rem;
+	padding-top: 1.75rem;
+	border-top: 1px solid rgb(201 168 106 / 30%);
+}
+
+.sense-scale {
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	align-items: center;
+	gap: 0.9rem;
+	color: rgb(244 240 230 / 70%);
+	font-size: 0.7rem;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+}
+
+.sense-scale__track {
+	position: relative;
+	height: 2px;
+	background: linear-gradient(90deg, rgb(201 168 106 / 25%), var(--gold), rgb(201 168 106 / 25%));
+}
+
+.sense-scale__track i {
+	position: absolute;
+	top: 50%;
+	left: var(--focus);
+	width: 0.9rem;
+	height: 0.9rem;
+	background: var(--gold);
+	box-shadow: 0 0 0 4px rgb(201 168 106 / 20%);
+	transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.gin-botanicals__character {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.gin-botanicals__character li {
+	padding: 0.3rem 0.8rem;
+	border: 1px solid rgb(201 168 106 / 45%);
+	color: var(--paper);
+	font-size: 0.8rem;
+	letter-spacing: 0.06em;
+}
+
+.gin-botanicals dl {
+	display: grid;
+	gap: 0.6rem;
+	margin: 0;
+}
+
+.gin-botanicals dl div {
+	display: grid;
+	grid-template-columns: 6rem 1fr;
+	gap: 1rem;
+}
+
+.gin-botanicals dt {
+	color: var(--gold);
+	font-size: 0.68rem;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	padding-top: 0.2rem;
+}
+
+.gin-botanicals dd {
+	margin: 0;
+	color: rgb(244 240 230 / 82%);
+	line-height: 1.6;
+}
+
+@keyframes botanical-sway {
+	30% {
+		transform: rotate(-6deg);
+	}
+	65% {
+		transform: rotate(4deg);
+	}
+}
+
+@media (max-width: 860px) {
+	.gin-botanicals__inner {
+		grid-template-columns: 1fr;
+	}
+
+	.gin-botanicals__photo {
+		min-height: 16rem;
+	}
+
+	.gin-botanicals__photo::after {
+		background: linear-gradient(180deg, transparent 65%, var(--ink));
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.botanical:hover .botanical__icon svg {
+		animation: none;
+	}
+}

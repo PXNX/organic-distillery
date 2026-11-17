@@ -4,13 +4,13 @@
 	import EssenceFamilies from './EssenceFamilies.svelte';
 	import FlavorWheel from './FlavorWheel.svelte';
 	import ProductPage from './ProductPage.svelte';
-	import GinAroma from './GinAroma.svelte';
+	import GinBotanicals from './GinBotanicals.svelte';
 	import GinProcess from './GinProcess.svelte';
 	import Newsletter from './Newsletter.svelte';
 	import RecipeCard from './RecipeCard.svelte';
 	import { recipeCards } from '#lib/content/recipes.js';
 	import { site } from '#lib/content/index.js';
-	import { essenceName, replaceContactLogo } from '#lib/mirror/embellish.js';
+	import { essenceName, replaceContactLogo, standardizeDownloads } from '#lib/mirror/embellish.js';
 	import { productPage } from '#lib/content/product-page.js';
 	import { productForPath } from '#lib/features/basket.js';
 	import { familyForPath } from '#lib/features/flavor-wheel.js';
@@ -40,7 +40,7 @@
 	// Render-time clean-up of WordPress leftovers: empty spacer paragraphs and the
 	// dead contact form on the home page (the working form lives on /kontakt).
 	let html = $derived(
-		replaceContactLogo(page.html)
+		standardizeDownloads(replaceContactLogo(page.html))
 			.replace(/<p>(?:&nbsp;|\s|\u00a0)*<\/p>/g, '')
 			.replace(
 				/<div class="wpcf7 no-js"[\s\S]*?<\/form>\s*<\/div>/,
@@ -55,7 +55,23 @@
 </svelte:head>
 
 {#if detail}
-	<ProductPage page={detail} {product} {path} />
+	<ProductPage page={detail} {product} {path}>
+		{#if path.startsWith('/gins/')}
+			<GinBotanicals variant={path.includes('ginnie') ? 'ginnie' : 'ginn'} />
+		{/if}
+		{#if page.recipe}
+			{@const family = familyForPath(path)}
+			<EssenceRecipe
+				recipe={page.recipe}
+				title={essenceName(page.title)}
+				{path}
+				accent={family?.color}
+				essence={family?.essences.find((entry) => entry.path === path)?.name ??
+					essenceName(page.title)}
+				family={family?.name}
+			/>
+		{/if}
+	</ProductPage>
 {:else if essenceSplit}
 	{@html essenceSplit.before}
 	<div class="essence-intro">{@html essenceSplit.families}</div>
@@ -66,27 +82,12 @@
 	{@html html}
 {/if}
 
-{#if page.recipe}
-	{@const family = familyForPath(path)}
-	<EssenceRecipe
-		recipe={page.recipe}
-		title={essenceName(page.title)}
-		accent={family?.color}
-		essence={family?.essences.find((entry) => entry.path === path)?.name ?? essenceName(page.title)}
-		family={family?.name}
-	/>
-{/if}
-
 {#if path === '/kontakt'}
 	<ContactForm />
 {/if}
 
 {#if path === '/ginn-ginnie'}
 	<GinProcess />
-{/if}
-
-{#if path.startsWith('/gins/')}
-	<GinAroma variant={path.includes('ginnie') ? 'ginnie' : 'ginn'} />
 {/if}
 
 {#if path.startsWith('/essenzen/')}

@@ -1,71 +1,128 @@
 <script lang="ts">
-	import { trackEvent } from '#lib/features/telemetry.js';
-	import { structureRecipe, titleCase } from '#lib/features/recipe-text.js';
+	import DownloadButton from './DownloadButton.svelte';
+	import { structureRecipe } from '#lib/features/recipe-text.js';
+	import { recipeView } from '#lib/features/recipe-view.js';
 	import type { RecipeLink } from '#lib/mirror/embellish.js';
+	import recipeMedia from '#lib/content/recipe-media.json';
 
 	let {
 		recipe,
 		title,
+		path = '',
 		accent = '#b08d57',
 		essence = title,
 		family = ''
 	}: {
 		recipe: RecipeLink;
 		title: string;
+		path?: string;
 		accent?: string | undefined;
 		essence?: string;
 		family?: string | undefined;
 	} = $props();
 
-	let structured = $derived(
-		recipe.text ? structureRecipe(recipe.text, essence, family ?? '') : null
+	type Media = { photo?: string; portrait?: boolean; signature?: string };
+	const media = $derived<Media>((recipeMedia as Record<string, Media>)[path] ?? {});
+	const view = $derived(
+		recipe.text ? recipeView(structureRecipe(recipe.text, essence, family ?? '')) : null
 	);
+	const familyLabel = $derived(family ? family.charAt(0) + family.slice(1).toLowerCase() : '');
+	const dish = $derived(view?.feature?.dish ?? view?.cocktail?.name);
 </script>
 
-<section class="recipe-section" style={`--accent: ${accent}`} aria-labelledby="recipe-title">
-	<header class="recipe-section__header">
-		<span class="recipe-section__ornament" aria-hidden="true">◇</span>
-		<div>
-			<p class="recipe-section__eyebrow">
-				Rezept &amp; Inspiration{#if family}<span class="recipe-section__family">{family}</span
-					>{/if}
-			</p>
-			<h2 id="recipe-title">{title}</h2>
-		</div>
+<section class="recipe" style={`--accent: ${accent}`} aria-labelledby="recipe-title">
+	<header class="recipe__header">
+		<p class="recipe__eyebrow">
+			<span aria-hidden="true">◇</span> Rezept &amp; Inspiration
+			{#if familyLabel}<span class="recipe__family">{familyLabel}</span>{/if}
+		</p>
+		<h2 id="recipe-title">Genießen mit {essence}</h2>
 	</header>
 
-	{#if structured?.intro}
-		<p class="recipe-section__text">{structured.intro}</p>
-	{/if}
+	<div class="recipe__feature" class:recipe__feature--no-photo={!media.photo}>
+		{#if media.photo}
+			<figure class="recipe__photo" class:recipe__photo--portrait={media.portrait}>
+				<img
+					src={media.photo}
+					alt={dish ?? `${title} – Rezeptidee`}
+					loading="lazy"
+					decoding="async"
+				/>
+				{#if dish}<figcaption>{dish}</figcaption>{/if}
+			</figure>
+		{/if}
 
-	{#if recipe.images && recipe.images.length > 0}
-		<div class="recipe-section__gallery">
-			{#each recipe.images as image (image)}
-				<img src={image} alt={`${title} – Rezeptmotiv`} loading="lazy" decoding="async" />
-			{/each}
+		<div class="recipe__ideas">
+			{#if view?.feature}
+				<div class="recipe__inspiration">
+					<span class="recipe__label">Inspiration</span>
+					{#if view.feature.dish && view.feature.dish !== view.cocktail?.name}<h3>
+							{view.feature.dish}
+						</h3>{/if}
+					<p>{view.feature.text}</p>
+				</div>
+			{/if}
+
+			{#if view?.cocktail}
+				<div class="recipe__cocktail">
+					<div class="recipe__cocktail-head">
+						<span class="recipe__label">Drink</span>
+						<strong>{view.cocktail.name}</strong>
+						{#if view.cocktail.credit}<small>by {view.cocktail.credit}</small>{/if}
+					</div>
+					<ul>
+						{#each view.cocktail.ingredients as ingredient, index (index)}
+							<li class:is-essence={ingredient.amount.includes('Tropfen')}>
+								<span class="recipe__amount">{ingredient.amount}</span>
+								<span>{ingredient.name}</span>
+							</li>
+						{/each}
+					</ul>
+				</div>
+			{/if}
+
+			{#if view && view.uses.length > 0}
+				<ol class="recipe__uses">
+					{#each view.uses as use, index (index)}
+						<li>
+							<div class="recipe__use-head">
+								<h3>{use.title}</h3>
+								{#if use.drops}
+									<span class="recipe__drops">
+										<svg viewBox="0 0 12 16" aria-hidden="true"
+											><path d="M6 1C6 1 1 7 1 10.5a5 5 0 0 0 10 0C11 7 6 1 6 1Z" /></svg
+										>
+										{use.drops}
+									</span>
+								{/if}
+							</div>
+							<p>{use.text}</p>
+						</li>
+					{/each}
+				</ol>
+			{/if}
 		</div>
+	</div>
+
+	{#if view?.letter}
+		<blockquote class="recipe__letter">
+			<p>{view.letter}</p>
+			<footer>
+				{#if media.signature}
+					<img src={media.signature} alt="Christine Brugger" loading="lazy" decoding="async" />
+				{:else}
+					<span>Christine Brugger</span>
+				{/if}
+			</footer>
+		</blockquote>
 	{/if}
 
-	{#if structured && structured.sections.length > 0}
-		<div class="recipe-section__steps">
-			{#each structured.sections as section, index (index)}
-				<article class="recipe-step" style:--stagger={`${index * 60}ms`}>
-					<h3>{titleCase(section.heading)}</h3>
-					{#if section.dish}
-						<p class="recipe-step__dish">{titleCase(section.dish)}</p>
-					{/if}
-					<p>{section.body}</p>
-				</article>
-			{/each}
-		</div>
-	{/if}
-
-	<a
-		class="o-button recipe-section__download"
-		href={recipe.href}
-		download
-		onclick={() => trackEvent('recipe_download', { essence: title, file: recipe.href })}
-	>
-		Rezeptkarte als PDF ↓
-	</a>
+	<div class="recipe__download">
+		<DownloadButton
+			href={recipe.href}
+			title={`Rezeptkarte ${essence}`}
+			meta="PDF · Alle Rezepte zum Ausdrucken"
+			track={title}
+		/>
+	</div>
 </section>

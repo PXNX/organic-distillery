@@ -46,16 +46,7 @@
 	}
 </script>
 
-<section class="aroma-compass" aria-labelledby="aroma-compass-title">
-	<header class="aroma-compass__header">
-		<span class="aroma-compass__ornament" aria-hidden="true">◇</span>
-		<h2 id="aroma-compass-title">Das Aromarad</h2>
-		<p>
-			Fünf Aroma-Familien, zehn Essenzen. Fahren Sie über das Rad, um Charakter und passende Aromen
-			zu entdecken – ein Klick öffnet die Essenz.
-		</p>
-	</header>
-
+<section class="aroma-compass" aria-label="Aromarad: fünf Aroma-Familien, zehn Essenzen">
 	<div class="aroma-compass__stage">
 		<div class="aroma-compass__wheel">
 			<div class="aroma-compass__sheen" aria-hidden="true"></div>

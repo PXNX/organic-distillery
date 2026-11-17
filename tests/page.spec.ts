@@ -6,7 +6,7 @@ import EssenceFamilies from '../src/lib/ui/EssenceFamilies.svelte';
 import FlavorWheel from '../src/lib/ui/FlavorWheel.svelte';
 import AgeGate from '../src/lib/ui/AgeGate.svelte';
 import BasketButton from '../src/lib/ui/BasketButton.svelte';
-import GinAroma from '../src/lib/ui/GinAroma.svelte';
+import GinBotanicals from '../src/lib/ui/GinBotanicals.svelte';
 import GinProcess from '../src/lib/ui/GinProcess.svelte';
 import MirroredPage from '../src/lib/ui/MirroredPage.svelte';
 import Newsletter from '../src/lib/ui/Newsletter.svelte';
@@ -59,22 +59,41 @@ describe('MirroredPage', () => {
 		expect(body).toContain('Shop öffnen');
 	});
 
-	it('renders an always-visible coloured recipe section with images', () => {
+	it('renders the recipe with dish photo, signature and the standard download', () => {
 		const { body } = render(EssenceRecipe, {
 			props: {
 				title: 'Eucalyptus Geist',
+				path: '/essenzen/eucalyptus-geist',
+				essence: 'Eucalyptus',
 				recipe: {
 					href: '/media/recipe.pdf',
 					label: 'Rezeptkarte',
-					text: 'Lamm und Kräuter.',
-					images: ['/media/recipes/eucalyptus-1.webp']
+					text: 'Lamm und Kräuter.'
 				}
 			}
 		});
-		expect(body).toContain('recipe-section');
+		expect(body).toContain('class="recipe"');
 		expect(body).toContain('Lamm und Kräuter.');
-		expect(body).toContain('/media/recipes/eucalyptus-1.webp');
-		expect(body).not.toContain('recipe-section__toggle');
+		expect(body).toContain('/media/recipes/eucalyptus-geist-3.webp');
+		expect(body).toContain('/media/recipes/eucalyptus-geist-4.webp');
+		expect(body).not.toContain('eucalyptus-geist-2.webp');
+		expect(body).toContain('download-button');
+		expect(body).toContain('/media/recipe.pdf');
+	});
+
+	it('shows the gin botanicals before the sibling gin, with a smaller stage bottle', () => {
+		const { body } = render(MirroredPage, { props: { path: '/gins/ginn' } });
+		expect(body.indexOf('gin-botanicals')).toBeGreaterThan(0);
+		expect(body.indexOf('gin-botanicals')).toBeLessThan(body.indexOf('Der zweite Gin'));
+		expect(body).not.toContain('detail-photo');
+	});
+
+	it('renders mirrored PDF links as standard download buttons', () => {
+		const bezug = render(MirroredPage, { props: { path: '/bezug' } }).body;
+		expect(bezug).toContain('download-button');
+		expect(bezug).toContain('Bezugsquellen DACH');
+		const press = render(MirroredPage, { props: { path: '/ueber-uns' } }).body;
+		expect(press.match(/download-button download-button--compact/g)?.length).toBe(4);
 	});
 
 	it('renders essence pages as a product stage with a shimmering drawing', () => {
@@ -111,13 +130,14 @@ describe('MirroredPage', () => {
 		expect(body).toContain('in den Warenkorb');
 	});
 
-	it('renders distinct aroma profiles for Ginn and Ginnie', () => {
-		const ginn = render(GinAroma, { props: { variant: 'ginn' } }).body;
-		const ginnie = render(GinAroma, { props: { variant: 'ginnie' } }).body;
-		expect(ginn).toContain('Wacholder');
-		expect(ginn).toContain('Gaumenmensch');
+	it('renders distinct botanicals for Ginn and Ginnie', () => {
+		const ginn = render(GinBotanicals, { props: { variant: 'ginn' } }).body;
+		const ginnie = render(GinBotanicals, { props: { variant: 'ginnie' } }).body;
+		expect(ginn).toContain('Juniperus communis');
+		expect(ginn).toContain('Gaumenmenschen');
 		expect(ginnie).toContain('Kardamom');
-		expect(ginnie).toContain('Nasenmensch');
+		expect(ginnie).toContain('Nasenmenschen');
+		expect(ginn).not.toContain('Ginn_500ml');
 	});
 
 	it('renders a newsletter signup form', () => {

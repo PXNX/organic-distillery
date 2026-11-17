@@ -19,7 +19,7 @@
 		"mirror": "bun scripts/mirror-site.ts",
 		"icons": "bun scripts/generate-icons.ts",
 		"images": "bun scripts/optimize-images.ts",
-		"recipes": "bun scripts/extract-recipes.ts",
+		"recipes": "bun scripts/extract-recipes.ts && bun scripts/classify-recipe-media.ts",
 		"check": "svelte-kit sync && bun run i18n:compile && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && bun run i18n:compile && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "bun fmt",

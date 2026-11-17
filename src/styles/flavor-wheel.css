@@ -3,33 +3,9 @@
 
 .aroma-compass {
 	max-width: 76rem;
-	margin: 3rem auto;
-	padding: clamp(2rem, 4vw, 3.5rem) 1.5rem;
+	margin: 0 auto 3rem;
+	padding: 1rem 1.5rem clamp(2rem, 4vw, 3.5rem);
 	box-sizing: border-box;
-}
-
-.aroma-compass__header {
-	max-width: 40rem;
-	margin: 0 auto 1.5rem;
-	text-align: center;
-}
-
-.aroma-compass__ornament {
-	display: inline-block;
-	color: var(--mystic-gold);
-	font-size: 1.5rem;
-	animation: ornament-shimmer 5s ease-in-out infinite;
-}
-
-.aroma-compass__header h2 {
-	margin: 0.4rem 0 0.75rem;
-	font-size: clamp(1.8rem, 3.5vw, 2.4rem);
-}
-
-.aroma-compass__header p {
-	margin: 0;
-	line-height: 1.7;
-	color: var(--muted);
 }
 
 .aroma-compass__stage {

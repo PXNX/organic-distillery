@@ -1,151 +1,462 @@
-.recipe-section {
-	max-width: 52rem;
-	margin: 3rem auto;
-	padding: 2rem;
-	position: relative;
-	background: var(--panel-bg);
-	border: 1px solid var(--hairline);
-	outline: 1px solid color-mix(in srgb, var(--mystic-gold) 25%, transparent);
-	outline-offset: -6px;
-	box-shadow: 0 14px 32px var(--shadow);
-	overflow: hidden;
+/* Recipe & inspiration on essence pages: a dish photo beside the ideas,
+   then Christine's note with her signature and the standard download button. */
+.recipe {
+	--recipe-paper: color-mix(in srgb, var(--mystic-parchment) 60%, var(--panel-bg));
+	max-width: 68rem;
+	margin: 4rem auto;
+	padding: 0 1.5rem;
 }
 
-.recipe-section__header {
-	display: flex;
-	align-items: center;
-	gap: 1rem;
-	margin-bottom: 1.25rem;
+.recipe__header {
+	margin-bottom: 2.25rem;
+	text-align: center;
 }
 
-.recipe-section::before {
-	content: '';
-	position: absolute;
-	inset: 0 0 auto;
-	height: 4px;
-	background: linear-gradient(90deg, var(--accent), var(--mystic-gold));
-}
-
-.recipe-section__ornament {
-	display: inline-block;
-	font-size: 1.6rem;
-	color: var(--mystic-gold);
-	animation: ornament-shimmer 5s ease-in-out infinite;
-}
-
-.recipe-section__eyebrow {
-	display: flex;
+.recipe__eyebrow {
+	display: inline-flex;
 	align-items: center;
 	gap: 0.6rem;
-	margin: 0;
-	font-size: 0.7rem;
-	text-transform: uppercase;
-	letter-spacing: 0.2em;
+	margin: 0 0 0.6rem;
 	color: var(--muted);
+	font-size: 0.7rem;
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
 }
 
-.recipe-section__family {
-	padding: 0.15rem 0.5rem;
-	background: var(--mystic-ink);
-	color: var(--accent);
+.recipe__eyebrow > span:first-child {
+	color: var(--mystic-gold);
+}
+
+.recipe__family {
+	padding: 0.2rem 0.6rem;
+	border: 1px solid var(--accent);
+	color: var(--text);
 	letter-spacing: 0.16em;
 }
 
-.recipe-section h2 {
-	margin: 0.2rem 0 0;
+.recipe h2 {
+	margin: 0;
 }
 
-.recipe-section h2::before,
-.recipe-section h2::after,
-.recipe-step h3::before,
-.recipe-step h3::after {
+.recipe h2::before,
+.recipe h2::after,
+.recipe h3::before,
+.recipe h3::after {
 	content: none !important;
 }
 
-.recipe-section__steps {
+.recipe__feature {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-	gap: 1rem;
-	margin: 1.5rem 0;
+	grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+	gap: clamp(1.75rem, 4vw, 3.5rem);
+	align-items: start;
 }
 
-.recipe-step {
-	padding: 1.1rem 1.2rem;
-	background: color-mix(in srgb, var(--mystic-parchment) 55%, var(--panel-bg));
-	border-top: 2px solid color-mix(in srgb, var(--accent) 70%, var(--mystic-gold));
-	animation: rise-in 0.5s ease-out both;
-	animation-delay: var(--stagger, 0ms);
-	transition:
-		transform 0.25s ease,
-		box-shadow 0.25s ease;
+.recipe__feature--no-photo {
+	grid-template-columns: minmax(0, 46rem);
+	justify-content: center;
 }
 
-.recipe-step:hover {
-	box-shadow: 0 10px 22px var(--shadow);
+/* Photo in an offset gold frame; the frame stays put while the photo zooms inside. */
+.recipe__photo {
+	position: relative;
+	margin: 0;
+	padding: 0 0 2.5rem;
 }
 
-.recipe-step h3 {
-	margin: 0 0 0.4rem;
+.recipe__photo::before {
+	content: '';
+	position: absolute;
+	inset: 1rem -1rem 3.5rem 1rem;
+	border: 1px solid var(--mystic-gold);
+	pointer-events: none;
+}
+
+.recipe__photo img {
+	position: relative;
+	display: block;
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+	box-shadow: 0 18px 40px var(--shadow);
+}
+
+.recipe__photo--portrait img {
+	aspect-ratio: 4 / 5;
+}
+
+.recipe__photo figcaption {
+	position: absolute;
+	left: 1.5rem;
+	bottom: 0.5rem;
+	padding: 0.45rem 0.9rem;
+	background: var(--mystic-ink);
+	color: var(--mystic-parchment);
+	font-family: 'Ductus W03 Medium', Georgia, serif;
+	font-size: 1rem;
+	border-left: 3px solid var(--accent);
+}
+
+.recipe__ideas {
+	display: grid;
+	gap: 1.5rem;
+}
+
+.recipe__label {
+	display: block;
+	margin-bottom: 0.35rem;
+	color: var(--muted);
+	font-size: 0.65rem;
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
+}
+
+.recipe__inspiration h3 {
+	margin: 0 0 0.5rem;
+	font-size: clamp(1.35rem, 2.6vw, 1.75rem);
+}
+
+.recipe__inspiration p {
+	margin: 0;
+	font-size: 1.05rem;
+	font-style: italic;
+	line-height: 1.6;
+}
+
+/* Bar card for the drinks. */
+.recipe__cocktail {
+	padding: 1.25rem 1.4rem;
+	background: var(--mystic-ink);
+	color: var(--mystic-parchment);
+	border-top: 3px solid var(--accent);
+}
+
+.recipe__cocktail .recipe__label {
+	color: color-mix(in srgb, var(--mystic-parchment) 60%, transparent);
+}
+
+.recipe__cocktail-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 0.25rem 0.75rem;
+	margin-bottom: 0.9rem;
+}
+
+.recipe__cocktail-head .recipe__label {
+	flex-basis: 100%;
+	margin: 0;
+}
+
+.recipe__cocktail-head strong {
+	font-family: 'Ductus W03 Medium', Georgia, serif;
+	font-size: 1.4rem;
+	font-weight: normal;
+}
+
+.recipe__cocktail-head small {
+	color: var(--mystic-gold);
+	font-size: 0.8rem;
+}
+
+.recipe__cocktail ul {
+	display: grid;
+	gap: 0.15rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.recipe__cocktail li {
+	display: grid;
+	grid-template-columns: 6.5rem 1fr;
+	gap: 0.75rem;
+	padding: 0.35rem 0;
+	border-bottom: 1px dashed color-mix(in srgb, var(--mystic-gold) 30%, transparent);
+	font-size: 0.95rem;
+}
+
+.recipe__cocktail li:last-child {
+	border-bottom: 0;
+}
+
+.recipe__amount {
+	color: var(--mystic-gold);
+	font-variant-numeric: tabular-nums;
+}
+
+.recipe__cocktail li.is-essence span:last-child {
+	color: #fff;
+	font-weight: 600;
+}
+
+/* Uses: numbered entries with a dosage badge. */
+.recipe__uses {
+	display: grid;
+	gap: 0;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	counter-reset: use;
+	border-top: 1px solid var(--hairline);
+}
+
+.recipe__uses li {
+	position: relative;
+	padding: 1rem 0 1rem 2.6rem;
+	border-bottom: 1px solid var(--hairline);
+	counter-increment: use;
+}
+
+.recipe__uses li::before {
+	content: counter(use, upper-roman);
+	position: absolute;
+	left: 0;
+	top: 1.05rem;
+	width: 1.8rem;
+	color: var(--mystic-gold);
+	font-family: 'Ductus W03 Medium', Georgia, serif;
+	font-size: 1.05rem;
+	text-align: center;
+}
+
+.recipe__use-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem 1rem;
+	margin-bottom: 0.35rem;
+}
+
+.recipe__use-head h3 {
+	margin: 0;
 	font-size: 1.15rem;
 }
 
-.recipe-step__dish {
-	margin: 0 0 0.5rem;
-	font-style: italic;
-	color: var(--mystic-gold);
-}
-
-.recipe-step p {
+.recipe__uses p {
 	margin: 0;
-	font-size: 0.92rem;
-	line-height: 1.65;
+	color: var(--muted);
+	line-height: 1.6;
 }
 
-[data-theme='dark'] .recipe-step {
-	background: color-mix(in srgb, var(--mystic-gold) 8%, var(--panel-bg));
-}
-
-.recipe-section__text {
-	line-height: 1.8;
+.recipe__drops {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.2rem 0.65rem 0.2rem 0.5rem;
+	background: color-mix(in srgb, var(--accent) 22%, transparent);
+	border: 1px solid color-mix(in srgb, var(--accent) 60%, transparent);
 	color: var(--text);
+	font-size: 0.75rem;
+	letter-spacing: 0.06em;
+	white-space: nowrap;
 }
 
-.recipe-section__gallery {
-	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
-	gap: 1rem;
-	margin: 1.75rem 0;
+.recipe__drops svg {
+	width: 0.6rem;
+	height: 0.8rem;
+	fill: var(--accent);
+	stroke: color-mix(in srgb, var(--accent) 60%, var(--mystic-ink));
+	stroke-width: 0.8;
 }
 
-.recipe-section__gallery img {
-	display: block;
-	width: 100%;
-	height: 14rem;
-	object-fit: cover;
-	background: var(--mystic-parchment);
-	border: 1px solid var(--hairline);
+/* Christine's note, set like a letter with a drop cap and her signature. */
+.recipe__letter {
+	position: relative;
+	max-width: 48rem;
+	margin: 3.5rem auto 2.5rem;
+	padding: 2.25rem clamp(1.25rem, 4vw, 3rem) 1.5rem;
+	background: var(--recipe-paper);
+	border: 1px solid color-mix(in srgb, var(--mystic-gold) 45%, transparent);
+	quotes: none;
 }
 
-.recipe-section__gallery img:first-child {
-	grid-column: 1 / -1;
-	height: 18rem;
+.recipe__letter::before {
+	content: '“';
+	position: absolute;
+	top: -1.6rem;
+	left: 50%;
+	padding: 0 0.6rem;
+	background: var(--page-bg, var(--panel-bg));
+	color: var(--mystic-gold);
+	font-family: Georgia, serif;
+	font-size: 3rem;
+	line-height: 1;
+	transform: translateX(-50%);
 }
 
-.recipe-section__download {
-	margin-top: 0.5rem;
+.recipe__letter p {
+	margin: 0;
+	color: var(--text);
+	font-size: 1rem;
+	line-height: 1.8;
 }
 
-@media (max-width: 620px) {
-	.recipe-section {
-		padding: 1.25rem;
-	}
+.recipe__letter p::first-letter {
+	float: left;
+	margin: 0.3rem 0.5rem 0 0;
+	color: var(--accent);
+	font-family: 'Ductus W03 Medium', Georgia, serif;
+	font-size: 3.4rem;
+	line-height: 0.8;
+	filter: saturate(1.2) brightness(0.85);
+}
 
-	.recipe-section__gallery {
+.recipe__letter footer {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 0.75rem;
+}
+
+.recipe__letter footer img {
+	width: min(12rem, 50%);
+	height: auto;
+	mix-blend-mode: multiply;
+}
+
+.recipe__letter footer span {
+	font-family: 'Ductus W03 Medium', Georgia, serif;
+	font-size: 1.3rem;
+}
+
+[data-theme='dark'] .recipe__letter footer img {
+	mix-blend-mode: screen;
+	filter: invert(1);
+}
+
+.recipe__download {
+	display: flex;
+	justify-content: center;
+}
+
+@media (max-width: 760px) {
+	.recipe__feature {
 		grid-template-columns: 1fr;
 	}
 
-	.recipe-section__gallery img,
-	.recipe-section__gallery img:first-child {
-		height: 13rem;
+	.recipe__photo::before {
+		inset: 0.6rem -0.6rem 3.1rem 0.6rem;
 	}
+}
+
+/* The standard download button: PDFs everywhere (recipes, price list, press). */
+.download-button {
+	display: inline-flex;
+	align-items: center;
+	gap: 1rem;
+	width: min(100%, 26rem);
+	padding: 0.85rem 0.85rem 0.85rem 1.1rem;
+	box-sizing: border-box;
+	background: var(--panel-bg);
+	border: 1px solid var(--mystic-gold);
+	color: var(--text);
+	text-align: left;
+	text-decoration: none !important;
+	letter-spacing: normal;
+	text-transform: none;
+	transition:
+		background-color 0.2s ease,
+		box-shadow 0.25s ease;
+}
+
+.download-button:hover,
+.download-button:focus-visible {
+	background: color-mix(in srgb, var(--mystic-gold) 10%, var(--panel-bg));
+	box-shadow: 0 10px 26px var(--shadow);
+}
+
+.download-button__icon {
+	flex: none;
+	width: 1.6rem;
+	color: var(--mystic-gold);
+}
+
+.download-button__icon svg,
+.download-button__arrow svg {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.download-button__text {
+	display: grid;
+	flex: 1;
+	gap: 0.2rem;
+	min-width: 0;
+}
+
+.download-button__title {
+	overflow: hidden;
+	font-family: 'Ductus W03 Medium', Georgia, serif;
+	font-size: 1.15rem;
+	line-height: 1.2;
+	text-overflow: ellipsis;
+}
+
+.download-button__meta {
+	color: var(--muted);
+	font-size: 0.68rem;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+}
+
+.download-button__arrow {
+	display: grid;
+	flex: none;
+	place-items: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	background: var(--mystic-gold);
+	color: var(--mystic-ink);
+}
+
+.download-button__arrow svg {
+	width: 1rem;
+}
+
+.download-button:hover .download-button__arrow svg {
+	animation: download-nudge 0.6s ease-in-out;
+}
+
+.download-button--compact {
+	width: auto;
+	gap: 0.7rem;
+	padding: 0.45rem 0.45rem 0.45rem 0.7rem;
+}
+
+.download-button--compact .download-button__icon {
+	width: 1.15rem;
+}
+
+.download-button--compact .download-button__title {
+	font-size: 0.95rem;
+}
+
+.download-button--compact .download-button__meta {
+	display: none;
+}
+
+.download-button--compact .download-button__arrow {
+	width: 1.9rem;
+	height: 1.9rem;
+}
+
+@keyframes download-nudge {
+	50% {
+		transform: translateY(3px);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.download-button:hover .download-button__arrow svg {
+		animation: none;
+	}
+}
+
+/* Press list: compact downloads sit right-aligned like the Film/Link buttons. */
+.o-press .download-button--compact {
+	display: flex;
+	width: fit-content;
+	margin-left: auto;
 }

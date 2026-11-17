@@ -241,8 +241,7 @@ body .o-button:active {
 
 	.stage__bottle,
 	.stage__shimmer,
-	.basket__ornament,
-	.recipe-section__ornament {
+	.basket__ornament {
 		animation: none;
 	}
 }

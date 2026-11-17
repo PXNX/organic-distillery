@@ -1,12 +1,16 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 	import AddToBasket from './AddToBasket.svelte';
 	import { catalog } from '#lib/content/catalog.js';
 	import type { ProductPage } from '#lib/content/product-page.js';
 	import type { Product } from '#lib/features/basket.js';
 
-	let { page, product, path }: { page: ProductPage; product: Product | null; path: string } =
-		$props();
+	let {
+		page,
+		product,
+		path,
+		children
+	}: { page: ProductPage; product: Product | null; path: string; children?: Snippet } = $props();
 
 	let reduceMotion = $state(false);
 	onMount(() => {
@@ -158,7 +162,7 @@
 		</div>
 	</section>
 
-	{#if notes.length > 0 || pairings.length > 0 || page.photo}
+	{#if notes.length > 0 || pairings.length > 0}
 		<section class="product__details">
 			{#each notes as note (note.title)}
 				<div class="detail-card">
@@ -186,15 +190,10 @@
 					</ul>
 				</div>
 			{/if}
-
-			{#if page.photo}
-				<figure class="detail-photo">
-					<img src={page.photo} alt="Botanicals, zur Form einer Flasche gelegt" loading="lazy" />
-					<figcaption>Die Botanicals von {page.name}</figcaption>
-				</figure>
-			{/if}
 		</section>
 	{/if}
+
+	{@render children?.()}
 
 	{#if siblings.length > 0}
 		<section class="product__siblings" aria-labelledby="siblings-title">

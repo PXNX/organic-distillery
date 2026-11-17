@@ -146,3 +146,40 @@ export function retireBottleGenie(html: string): string {
 		html
 	);
 }
+
+const escapeHtml = (value: string) =>
+	value
+		.replace(/&(?!amp;|lt;|gt;|quot;)/g, '&amp;')
+		.replace(/"/g, '&quot;')
+		.replace(/</g, '&lt;');
+
+/** Static markup of the standard download button (mirrors DownloadButton.svelte). */
+export function downloadButtonHtml(options: {
+	href: string;
+	title: string;
+	meta?: string;
+	compact?: boolean;
+}): string {
+	const { href, title, meta = 'PDF · Herunterladen', compact = false } = options;
+	const label = escapeHtml(`${title} – ${meta}`);
+	return (
+		`<a class="download-button${compact ? ' download-button--compact' : ''}" href="${escapeHtml(href)}" download aria-label="${label}">` +
+		'<span class="download-button__icon" aria-hidden="true"><svg viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M3 1h11l7 7v19H3z"/><path d="M14 1v7h7"/><text x="5.2" y="21" font-size="6" stroke="none" fill="currentColor">PDF</text></svg></span>' +
+		`<span class="download-button__text"><span class="download-button__title">${escapeHtml(title)}</span><span class="download-button__meta">${escapeHtml(meta)}</span></span>` +
+		'<span class="download-button__arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 2v9M4 7.5 8 11.5 12 7.5M3 14h10"/></svg></span>' +
+		'</a>'
+	);
+}
+
+const pdfLink = /<a class="o-button( o-button--small)?" href="([^"]+\.pdf)"[^>]*>([^<]*)<\/a>/g;
+
+/** Turns the mirrored "Download" PDF buttons (price list, press) into the standard download button. */
+export function standardizeDownloads(html: string): string {
+	return html.replace(pdfLink, (_match, small: string | undefined, href: string) =>
+		downloadButtonHtml(
+			/Bezugsquellen/i.test(href)
+				? { href, title: 'Bezugsquellen DACH', meta: 'PDF · Händler & Preisliste' }
+				: { href, title: 'Artikel', meta: 'PDF · Lesen', compact: Boolean(small) }
+		)
+	);
+}
