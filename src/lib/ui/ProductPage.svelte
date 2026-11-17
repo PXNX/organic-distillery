@@ -51,14 +51,10 @@
 			{#if page.drawing}
 				<div
 					class="stage__drawing"
-					style={`--drawing: url('${page.drawing.src}'); --outline: url('${page.drawing.outline}')`}
+					style={`--drawing: url('${page.drawing.src}')`}
+					aria-hidden="true"
 				>
-					<img
-						src={page.drawing.src}
-						alt={`Botanische Zeichnung: ${page.drawing.latin}`}
-						decoding="async"
-					/>
-					<span class="stage__lines" aria-hidden="true"></span>
+					<img src={page.drawing.src} alt="" decoding="async" />
 					<span class="stage__shimmer" aria-hidden="true"></span>
 					<span class="stage__glints" aria-hidden="true"></span>
 				</div>
@@ -101,17 +97,18 @@
 				</svg>
 			{/if}
 
-			{#if !page.drawing}
-				<div class="stage__glow" aria-hidden="true"></div>
-				<img
-					class="stage__bottle"
-					src={page.bottle}
-					alt={`${page.name} Flasche`}
-					decoding="async"
-					fetchpriority="high"
-				/>
-				<div class="stage__shadow" aria-hidden="true"></div>
+			{#if page.drawing}
+				<div class="stage__rays" aria-hidden="true"></div>
 			{/if}
+			<div class="stage__glow" aria-hidden="true"></div>
+			<img
+				class="stage__bottle"
+				src={page.bottle}
+				alt={`${page.name} Flasche`}
+				decoding="async"
+				fetchpriority="high"
+			/>
+			<div class="stage__shadow" aria-hidden="true"></div>
 
 			{#if page.prev}
 				<a class="stage__arrow stage__arrow--prev" href={page.prev} aria-label="Vorheriges Produkt">
@@ -126,16 +123,6 @@
 		</div>
 
 		<div class="product__intro">
-			{#if page.drawing}
-				<figure class="product__bottle">
-					<img
-						src={page.bottle}
-						alt={`${page.name} Flasche`}
-						decoding="async"
-						fetchpriority="high"
-					/>
-				</figure>
-			{/if}
 			<p class="product__eyebrow">
 				{#if page.family}
 					<span class="product__family">{page.family.name}</span>

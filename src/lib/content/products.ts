@@ -33,7 +33,6 @@ export const essences: Essence[] = [
 		tags: ['Desserts', 'Karotten', 'Geflügel'],
 		bottle: '/media/2017/10/organicdistillery-mandarine_front_FIN_schatten.webp',
 		drawing: '/media/2017/10/Citrus_Nobilis_Mandarine.webp',
-		outline: '/media/2017/10/Citrus_Nobilis_Mandarine-outline.webp',
 		recipe: {
 			pdf: '/media/2017/10/OD-Essenzen-Zitrus_Mandarine_2019.pdf',
 			photo: '/media/recipes/mandarine-geist-4.webp',
@@ -91,7 +90,6 @@ export const essences: Essence[] = [
 		tags: ['Couscous', 'Spargel', 'Curries'],
 		bottle: '/media/2017/11/organicdistillery-zitronen-verbena_front_FIN_schatten.webp',
 		drawing: '/media/2017/11/Aloysia_Citriodora_Zitronenverbena.webp',
-		outline: '/media/2017/11/Aloysia_Citriodora_Zitronenverbena-outline.webp',
 		recipe: {
 			pdf: '/media/2017/10/OD-Essenzen-Zitrus_Verbena_2019.pdf',
 			photo: '/media/recipes/zitronen-verbena-geist-4.webp',
@@ -155,7 +153,6 @@ export const essences: Essence[] = [
 		tags: ['Rindfleisch', 'Frischkäse', 'Radicchio'],
 		bottle: '/media/2017/10/organicdistillery-brombeer_front_FIN_schatten.webp',
 		drawing: '/media/2017/10/Rubus_Fruticosus_Brombeere.webp',
-		outline: '/media/2017/10/Rubus_Fruticosus_Brombeere-outline.webp',
 		recipe: {
 			pdf: '/media/2017/10/OD-Essenzen-Fruchtig_Brombeere_2019.pdf',
 			photo: '/media/recipes/brombeer-geist-3.webp',
@@ -212,7 +209,6 @@ export const essences: Essence[] = [
 		tags: ['Reisgerichte', 'Chutney', 'Wild'],
 		bottle: '/media/2017/10/organicdistillery-vogelbeere_front_FIN_schatten.webp',
 		drawing: '/media/2017/10/Sorbus_Aucuparia_Vogelbeere.webp',
-		outline: '/media/2017/10/Sorbus_Aucuparia_Vogelbeere-outline.webp',
 		recipe: {
 			pdf: '/media/2017/10/OD-Essenzen-Fruchtig_Vogelbeere_2019.pdf',
 			photo: '/media/recipes/vogelbeere-geist-4.webp',
@@ -287,7 +283,6 @@ export const essences: Essence[] = [
 		tags: ['Couscous', 'Fruchtsalate', 'Gemüsegerichte'],
 		bottle: '/media/2017/10/organicdistillery-rosen-monarde_front_FIN_schatten.webp',
 		drawing: '/media/2017/10/Monarda_Fistulosa_Rosenmonarde.webp',
-		outline: '/media/2017/10/Monarda_Fistulosa_Rosenmonarde-outline.webp',
 		recipe: {
 			pdf: '/media/2017/10/OD-Essenzen-Floral_Rosenmonarde_2019.pdf',
 			photo: '/media/recipes/rosen-monarde-geist-4.webp',
@@ -351,7 +346,6 @@ export const essences: Essence[] = [
 		tags: ['Apfel & Birne', 'Hülsenfrüchte', 'Wurzelgemüse'],
 		bottle: '/media/2017/10/organicdistillery-koriander_front_FIN_schatten.webp',
 		drawing: '/media/2017/10/Coriandrum_Sativum_Koriander.webp',
-		outline: '/media/2017/10/Coriandrum_Sativum_Koriander-outline.webp',
 		recipe: {
 			pdf: '/media/2017/10/OD-Essenzen-Floral_Koriander_2019.pdf',
 			photo: '/media/recipes/137-2-3.webp',
@@ -411,7 +405,6 @@ export const essences: Essence[] = [
 		tags: ['Lachs', 'Blattsalate', 'Dunkle Schokolade'],
 		bottle: '/media/2017/10/organicdistillery-minze_front_FIN_schatten.webp',
 		drawing: '/media/2017/10/Lippiapoly_Stacha_ArgMinze.webp',
-		outline: '/media/2017/10/Lippiapoly_Stacha_ArgMinze-outline.webp',
 		recipe: {
 			pdf: '/media/2017/10/OD-Essenzen-Grün_Arg-Minze_2019.pdf',
 			photo: '/media/recipes/argentinische-minze-geist-4.webp',
@@ -475,7 +468,6 @@ export const essences: Essence[] = [
 		tags: ['Lamm', 'Himbeere', 'Linsengerichte'],
 		bottle: '/media/2017/10/organicdistillery-eucalyptus_front_FIN_schatten.webp',
 		drawing: '/media/2017/10/Eucalyptus_Globulus_Eucalyptus.webp',
-		outline: '/media/2017/10/Eucalyptus_Globulus_Eucalyptus-outline.webp',
 		recipe: {
 			pdf: '/media/2017/10/OD-Essenzen-Grün_Eucalyptus_2019.pdf',
 			photo: '/media/recipes/eucalyptus-geist-3.webp',
@@ -536,7 +528,6 @@ export const essences: Essence[] = [
 		tags: ['Eintopf', 'Frischkäse', 'Wurstgerichte'],
 		bottle: '/media/2017/10/organicdistillery-cistrose_front_FIN_schatten.webp',
 		drawing: '/media/2017/10/Cistus_Ladanifer_Cistrose.webp',
-		outline: '/media/2017/10/Cistus_Ladanifer_Cistrose-outline.webp',
 		recipe: {
 			pdf: '/media/2017/10/OD-Essenzen-Herbal_Cistrose_2019.pdf',
 			photo: '/media/recipes/cistrose-geist-5.webp',
@@ -607,7 +598,6 @@ export const essences: Essence[] = [
 		tags: ['Pilzgerichte', 'Fisch & Meeresfrüchte', 'Würzige Drinks'],
 		bottle: '/media/2017/10/organicdistillery-silber-wermut_front_FIN_schatten.webp',
 		drawing: '/media/2017/10/Artemisia_Ludoviciana_Silberwermut.webp',
-		outline: '/media/2017/10/Artemisia_Ludoviciana_Silberwermut-outline.webp',
 		recipe: {
 			pdf: '/media/2017/10/OD-Essenzen-Herbal_Silber-Wermut_2019.pdf',
 			photo: '/media/recipes/silber-wermut-geist-3.webp',

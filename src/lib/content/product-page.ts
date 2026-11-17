@@ -14,7 +14,7 @@ export interface ProductPage {
 	aroma?: string;
 	pairings: { group: string; items: string[] }[];
 	bottle: string;
-	drawing: { src: string; outline: string; latin: string } | null;
+	drawing: { src: string; latin: string } | null;
 	prev: string;
 	next: string;
 }
@@ -38,7 +38,7 @@ export function essencePage(essence: Essence): ProductPage {
 		aroma: essence.aroma,
 		pairings: essence.pairings,
 		bottle: essence.bottle,
-		drawing: { src: essence.drawing, outline: essence.outline, latin: essence.latin },
+		drawing: { src: essence.drawing, latin: essence.latin },
 		...neighbours(essences, essence, essencePath)
 	};
 }

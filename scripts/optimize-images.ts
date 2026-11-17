@@ -6,9 +6,10 @@ import { readdir } from 'node:fs/promises';
 import { PDFParse } from 'pdf-parse';
 import sharp from 'sharp';
 import { cutoutBottle } from './bottle-cutout.js';
-import { drawingOutline } from './drawing-outline.js';
 
 const force = process.env.FORCE === '1';
+/** `ONLY=drawings` re-cuts just the botanical drawings. */
+const only = process.env.ONLY;
 const CUTOUTS = [
 	'media/2017/11/Ginn_200ml.jpg',
 	'media/2017/11/Ginnie_200ml.jpg',
@@ -39,8 +40,6 @@ const DRAWING_CUTOUTS = [
 	'media/2017/11/Aloysia_Citriodora_Zitronenverbena.jpg'
 ];
 
-const luminance = (r: number, g: number, b: number) => 0.299 * r + 0.587 * g + 0.114 * b;
-const saturation = (r: number, g: number, b: number) => Math.max(r, g, b) - Math.min(r, g, b);
 
 /** Recipe PDFs embed the essence bottles larger than the mirrored product shots. */
 const ESSENCE_PDF: Record<string, string> = {
@@ -85,68 +84,35 @@ async function cutout(relative: string, dest: string): Promise<void> {
 	console.log(`cutout ${fromPdf ? 'pdf' : relative} -> ${dest}`);
 }
 
-/** Removes the white paper from a botanical drawing, keeping the pencil lines. */
+/**
+ * Lifts a pencil drawing off its paper: darkness becomes opacity, so the paper
+ * disappears everywhere (also between leaves) and the shading keeps its gradation.
+ */
 async function cutoutDrawing(src: string, dest: string): Promise<void> {
-	const { data, info } = await sharp(src).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
-	const { width: w, height: h, channels } = info;
-	const pixels = w * h;
-	const background = new Uint8Array(pixels);
-	const queue = new Int32Array(pixels);
-	let head = 0;
-	let tail = 0;
-
-	const isPaper = (i: number) => {
-		const o = i * channels;
-		const r = data[o] ?? 0;
-		const g = data[o + 1] ?? 0;
-		const b = data[o + 2] ?? 0;
-		return luminance(r, g, b) > 205 && saturation(r, g, b) < 20;
-	};
-	const visit = (i: number) => {
-		if (i < 0 || i >= pixels || background[i] || !isPaper(i)) return;
-		background[i] = 1;
-		queue[tail++] = i;
-	};
-	for (let x = 0; x < w; x++) {
-		visit(x);
-		visit((h - 1) * w + x);
-	}
-	for (let y = 0; y < h; y++) {
-		visit(y * w);
-		visit(y * w + w - 1);
-	}
-	while (head < tail) {
-		const i = queue[head++] ?? 0;
-		const x = i % w;
-		if (x > 0) visit(i - 1);
-		if (x < w - 1) visit(i + 1);
-		if (i >= w) visit(i - w);
-		if (i < pixels - w) visit(i + w);
-	}
-
-	const alpha = Buffer.alloc(pixels);
-	for (let i = 0; i < pixels; i++) alpha[i] = background[i] ? 0 : 255;
-
-	// The drawn contours become the mask for the golden shimmer.
-	await drawingOutline(src, dest.replace(/\.webp$/i, '-outline.webp'));
-
-	const soft = await sharp(alpha, { raw: { width: w, height: h, channels: 1 } })
-		.blur(0.4)
+	const { data, info } = await sharp(src)
+		.flatten({ background: '#ffffff' })
+		.greyscale()
+		.extractChannel(0)
 		.raw()
-		.toBuffer();
-	const stride = soft.length / pixels;
-	const softAlpha = Buffer.from(Array.from({ length: pixels }, (_, i) => soft[i * stride] ?? 255));
-
-	const rgba = Buffer.alloc(pixels * 4);
-	for (let i = 0; i < pixels; i++) {
-		rgba[i * 4] = data[i * channels] ?? 0;
-		rgba[i * 4 + 1] = data[i * channels + 1] ?? 0;
-		rgba[i * 4 + 2] = data[i * channels + 2] ?? 0;
-		rgba[i * 4 + 3] = softAlpha[i] ?? 255;
+		.toBuffer({ resolveWithObject: true });
+	const { width: w, height: h } = info;
+	// Paper is not perfectly white; everything brighter than PAPER is fully transparent.
+	const PAPER = 238;
+	const INK = 40;
+	const rgba = Buffer.alloc(w * h * 4);
+	for (let i = 0; i < w * h; i++) {
+		const l = data[i] ?? 255;
+		const t = Math.min(1, Math.max(0, (PAPER - l) / (PAPER - INK)));
+		const alpha = Math.round(255 * Math.pow(t, 0.85));
+		// Graphite ink: a warm dark grey, the lightness lives in the alpha.
+		rgba[i * 4] = 34;
+		rgba[i * 4 + 1] = 31;
+		rgba[i * 4 + 2] = 28;
+		rgba[i * 4 + 3] = alpha;
 	}
 	await sharp(rgba, { raw: { width: w, height: h, channels: 4 } })
 		.resize(Math.round(w * 1.3), Math.round(h * 1.3), { kernel: 'mks2021' })
-		.webp({ quality: 86, effort: 5, alphaQuality: 92 })
+		.webp({ quality: 90, effort: 5, alphaQuality: 100 })
 		.toFile(dest);
 	console.log(`drawing ${src} -> ${dest}`);
 }
@@ -165,8 +131,10 @@ async function convert(src: string, dest: string): Promise<void> {
 }
 
 // Every JPEG/PNG under static/media gets a WebP sibling; the site only references the WebPs.
-const sources = new Set<string>([...CUTOUTS, ...DRAWING_CUTOUTS]);
-for (const entry of await readdir('static/media', { recursive: true })) {
+const sources = new Set<string>(
+	only === 'drawings' ? DRAWING_CUTOUTS : [...CUTOUTS, ...DRAWING_CUTOUTS]
+);
+for (const entry of only ? [] : await readdir('static/media', { recursive: true })) {
 	if (/\.(jpe?g|png)$/i.test(entry)) sources.add(`media/${entry}`);
 }
 

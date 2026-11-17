@@ -52,7 +52,6 @@ export interface Essence {
 	tags: string[];
 	bottle: string;
 	drawing: string;
-	outline: string;
 	recipe: Recipe;
 }
 

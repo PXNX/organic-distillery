@@ -89,9 +89,9 @@ describe('pages and components', () => {
 	it('renders essence pages as a product stage with a shimmering drawing', () => {
 		const { body } = render(EssencePage, { props: { data: { essence: mandarine! } } as never });
 		expect(body).toContain('stage__shimmer');
-		expect(body).toContain(
-			"--outline: url('/media/2017/10/Citrus_Nobilis_Mandarine-outline.webp')"
-		);
+		expect(body).toContain("--drawing: url('/media/2017/10/Citrus_Nobilis_Mandarine.webp')");
+		expect(body).not.toContain('-outline.webp');
+		expect(body).toContain('stage__rays');
 		expect(body).toContain('Citrus Nobilis');
 		expect(body).toContain('Passt zu');
 		expect(body).toContain('In den Warenkorb');
