@@ -2,6 +2,7 @@ import { render } from 'svelte/server';
 import { describe, expect, it } from 'vitest';
 import ContactForm from '../src/lib/ui/ContactForm.svelte';
 import EssenceRecipe from '../src/lib/ui/EssenceRecipe.svelte';
+import EssenceFamilies from '../src/lib/ui/EssenceFamilies.svelte';
 import FlavorWheel from '../src/lib/ui/FlavorWheel.svelte';
 import BasketButton from '../src/lib/ui/BasketButton.svelte';
 import GinAroma from '../src/lib/ui/GinAroma.svelte';
@@ -78,7 +79,9 @@ describe('MirroredPage', () => {
 	it('renders essence pages as a product stage with a shimmering drawing', () => {
 		const { body } = render(MirroredPage, { props: { path: '/essenzen/mandarine-geist' } });
 		expect(body).toContain('stage__shimmer');
-		expect(body).toContain("--outline: url('/media/2017/10/Citrus_Nobilis_Mandarine-outline.webp')");
+		expect(body).toContain(
+			"--outline: url('/media/2017/10/Citrus_Nobilis_Mandarine-outline.webp')"
+		);
 		expect(body).toContain('Citrus Nobilis');
 		expect(body).toContain('Passt zu');
 		expect(body).toContain('In den Warenkorb');
@@ -92,12 +95,19 @@ describe('MirroredPage', () => {
 		expect(body).toContain('Der zweite Gin');
 	});
 
-	it('renders the colour-coded flavour wheel', () => {
+	it('renders the aroma compass with every essence', () => {
 		const { body } = render(FlavorWheel);
 		expect(body).toContain('Aromarad');
-		expect(body).toContain('ZITRUS');
 		expect(body).toContain('Mandarine');
-		expect(body.match(/class="flavor-wheel__slice"/g)).toHaveLength(10);
+		expect(body.match(/class="compass__segment/g)).toHaveLength(10);
+		expect(body.match(/class="compass__family/g)).toHaveLength(5);
+	});
+
+	it('lists all essences by family on the overview', () => {
+		const { body } = render(EssenceFamilies);
+		expect(body).toContain('Alle Essenzen');
+		expect(body.match(/class="essence-tile"/g)).toHaveLength(10);
+		expect(body).toContain('in den Warenkorb');
 	});
 
 	it('renders distinct aroma profiles for Ginn and Ginnie', () => {
